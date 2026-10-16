@@ -21,7 +21,7 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 <header><div class="wrap"><h1>乃木坂46 生写真 封入パターン分析</h1><p>開封結果を記録して、封入構成・メンバー頻度・同時封入・パック間の類似度を分析。</p></div></header>
 <div class="wrap">
 <nav>
-<button class="active" data-tab="record">開封記録</button><button data-tab="overview">全体分析</button><button data-tab="members">メンバー分析</button><button data-tab="pairs">同時封入分析</button><button data-tab="packs">パック比較</button><button data-tab="settings">設定・データ</button>
+<button class="active" data-tab="record">開封記録</button><button data-tab="overview">全体分析</button><button data-tab="members">メンバー分析</button><button data-tab="generations">期別分析</button><button data-tab="pairs">同時封入分析</button><button data-tab="packs">パック比較</button><button data-tab="settings">設定・データ</button>
 </nav>
 <main>
 <section class="panel active" id="record">
@@ -44,6 +44,11 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 <div class="card"><h2>メンバー別の出現頻度</h2><p class="muted">「出現パック数」は同じパックに同一メンバーが複数枚あっても1パックとして数えます。</p><div id="memberTable"></div></div>
 <div class="card"><h2>メンバー別ポーズ内訳</h2><div id="memberPoseTable"></div></div>
 </section>
+<section class="panel" id="generations">
+<div class="card"><h2>期別ごとの出現頻度</h2><p class="muted">期別に、封入枚数・出現パック数・所属メンバーの出現状況・ヨリ／チュウ／ヒキの内訳を比較します。期別の人数差があるため、枚数だけでなくメンバー1人あたりの平均も確認してください。</p><div id="generationTable"></div></div>
+<div class="card"><h2>パック内の期別構成</h2><p class="muted">1パックに何期のメンバーが何人分含まれたか、同じ期でまとまる傾向や複数の期が混ざる傾向を確認します。</p><div id="generationMixTable"></div></div>
+<div class="card"><h2>期別の同時封入傾向</h2><p class="muted">各期のメンバーが同じパックに出た回数を比較します。少ない記録数では偶然の偏りが大きくなります。</p><div id="generationPairTable"></div></div>
+</section>
 <section class="panel" id="pairs">
 <div class="card"><h2>一緒に出たメンバーのペア</h2><p class="muted">同時封入回数、Aが出たパックでBも出た割合、独立と仮定した期待回数との比率を表示します。重複枚数ではなく「同じパックにいたか」で判定します。</p><div id="pairTable"></div></div>
 <div class="card"><h2>同時封入マトリクス</h2><p class="muted">記録があるメンバーのみ表示。対角線はそのメンバーが出たパック数です。</p><div id="matrixTable"></div></div>
@@ -55,6 +60,7 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 </section>
 <section class="panel" id="settings">
 <div class="card"><h2>メンバー一覧</h2><p class="muted">1行に1人、最大33人。名称を変更しても封入記録はそのまま保持されます。</p><textarea id="memberNames"></textarea><div class="row" style="margin-top:10px"><button class="btn" id="saveMembers">メンバー一覧を保存</button><button class="btn secondary" id="resetMembers">仮名に戻す</button></div></div>
+<div class="card"><h2>期別の設定</h2><p class="muted">1行に「メンバー名,期別」を入力します。例：五百城茉央,5期生。期別は「1期生」〜「6期生」など自由な文字列で設定できます。未設定のメンバーは「未設定」として集計されます。</p><textarea id="generationAssignments" placeholder="メンバー名,期別&#10;メンバー01,1期生&#10;メンバー02,2期生"></textarea><div class="row" style="margin-top:10px"><button class="btn" id="saveGenerations">期別設定を保存</button><button class="btn secondary" id="clearGenerations">期別設定をクリア</button></div></div>
 <div class="card"><h2>データのバックアップ</h2><p class="muted">JSONで保存・復元できます。CSVは記録済みの50枚以上のデータを表計算ソフトで分析するのに便利です。</p><div class="row"><button class="btn" id="exportJson">JSONを書き出す</button><button class="btn secondary" id="exportCsv">CSVを書き出す</button><div class="field"><label>JSONファイルを読み込む</label><input type="file" id="importJson" accept=".json,application/json"></div></div></div>
 <div class="card"><h2>分析上の注意</h2><ul class="muted"><li>10パックでは偶然の偏りが大きく出ることがあります。</li><li>同時封入はパック単位の観測です。カード配置順が不明なら、封入順や隣接関係は分析できません。</li><li>次のパックの確率は、封入方式が分からない限り過去の頻度から正確には予測できません。</li><li>メンバーごとの出現率比較は、同じ商品・同じ封入条件のパック同士で行ってください。</li></ul></div>
 </section>
@@ -65,8 +71,8 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 const KEY='nogizakaPhotoAnalyzerV1';
 const poses=['ヨリ','チュウ','ヒキ'];
 const defaultMembers=Array.from({length:33},(_,i)=>`メンバー${String(i+1).padStart(2,'0')}`);
-let state={members:defaultMembers,packs:Array.from({length:10},()=>Array.from({length:5},()=>({member:'',pose:''})))};
-function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&Array.isArray(s.members)&&Array.isArray(s.packs)){state=s;}}catch(e){}}
+let state={members:defaultMembers,generations:{},packs:Array.from({length:10},()=>Array.from({length:5},()=>({member:'',pose:''})))};
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&Array.isArray(s.members)&&Array.isArray(s.packs)){state=s;if(!state.generations)state.generations={};}}catch(e){}}
 function persist(){localStorage.setItem(KEY,JSON.stringify(state));}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function activePacks(){return state.packs.map((cards,i)=>({index:i,cards:cards.filter(c=>c.member&&c.pose)})).filter(p=>p.cards.length>0);}
@@ -99,6 +105,15 @@ function render(){
  const sorted=state.members.map(m=>({m,n:counts[m],p:packPresence[m]})).sort((a,b)=>b.n-a.n||a.m.localeCompare(b.m,'ja'));
  document.getElementById('memberTable').innerHTML=table(['順位','メンバー','封入枚数','全写真比','出現パック数','パック出現率','頻度'],sorted.map((x,i)=>[i+1,escapeHtml(x.m),x.n,pct(x.n,total),x.p,pct(x.p,packs.length),`<div class="bar"><i style="width:${used.length?100*x.n/Math.max(1,sorted[0].n):0}%"></i></div>`]));
  document.getElementById('memberPoseTable').innerHTML=table(['メンバー','ヨリ','チュウ','ヒキ','合計'],state.members.filter(m=>counts[m]).sort((a,b)=>counts[b]-counts[a]).map(m=>[escapeHtml(m),memberPose[m].ヨリ,memberPose[m].チュウ,memberPose[m].ヒキ,counts[m]]));
+ const genOf=m=>(state.generations&&state.generations[m])||'未設定';
+ const genNames=[...new Set(state.members.map(genOf))].sort((a,b)=>a.localeCompare(b,'ja'));
+ const genStats=Object.fromEntries(genNames.map(g=>[g,{cards:0,packSet:new Set(),members:new Set(),poses:{ヨリ:0,チュウ:0,ヒキ:0},mixPacks:0}]));
+ packs.forEach(p=>{const seenG=new Set();p.cards.forEach(c=>{const g=genOf(c.member);genStats[g].cards++;genStats[g].members.add(c.member);genStats[g].poses[c.pose]++;seenG.add(g)});seenG.forEach(g=>genStats[g].packSet.add(p.index));if(seenG.size>1)seenG.forEach(g=>genStats[g].mixPacks++);});
+ document.getElementById('generationTable').innerHTML=table(['期別','所属メンバー数','封入枚数','全写真比','出現パック数','期別メンバー平均枚数','ヨリ','チュウ','ヒキ'],genNames.map(g=>{const x=genStats[g],memberCount=state.members.filter(m=>genOf(m)===g).length;return [escapeHtml(g),memberCount,x.cards,pct(x.cards,total),x.packSet.size,memberCount?(x.cards/memberCount).toFixed(2):'—',x.poses.ヨリ,x.poses.チュウ,x.poses.ヒキ]}));
+ const mixRows=packs.map(p=>{const by={};p.cards.forEach(c=>{const g=genOf(c.member);by[g]=(by[g]||0)+1});const keys=Object.keys(by);return [p.index+1,keys.length,keys.map(g=>`${escapeHtml(g)} ${by[g]}人分`).join('、')||'—',keys.length===1?'単一期のみ':keys.length>1?'複数期混在':'—'];});
+ document.getElementById('generationMixTable').innerHTML=table(['パック','含まれる期の数','期別内訳','構成タイプ'],mixRows);
+ const genPairs=[];for(let i=0;i<genNames.length;i++)for(let j=i;j<genNames.length;j++){const a=genNames[i],b=genNames[j];let n=0;packs.forEach(p=>{const gs=p.cards.map(c=>genOf(c.member));if(a===b){if(gs.filter(g=>g===a).length>=2)n++;}else if(gs.includes(a)&&gs.includes(b))n++;});genPairs.push([a,b,n,a===b?'同一期が2枚以上':'同じパックに両期']);}
+ document.getElementById('generationPairTable').innerHTML=table(['期A','期B','該当パック数','判定内容'],genPairs.sort((a,b)=>b[2]-a[2]).map(x=>[escapeHtml(x[0]),escapeHtml(x[1]),x[2],x[3]]));
  const pairData=[];
  for(let i=0;i<used.length;i++)for(let j=i+1;j<used.length;j++){
    const a=used[i],b=used[j];let together=0;
@@ -122,13 +137,16 @@ document.getElementById('saveBtn').onclick=()=>{persist();render();alert('記録
 document.getElementById('clearPacks').onclick=()=>{if(confirm('すべての開封記録を消去しますか？')){state.packs=Array.from({length:Math.max(10,Number(document.getElementById('packCount').value)||10)},()=>Array.from({length:5},()=>({member:'',pose:''})));persist();renderEditor();render();}};
 document.getElementById('saveMembers').onclick=()=>{const arr=document.getElementById('memberNames').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);if(!arr.length){alert('メンバー名を1人以上入力してください。');return;}if(arr.length>100){alert('メンバー数は100人以下にしてください。');return;}state.members=arr;persist();renderEditor();render();alert('メンバー一覧を保存しました。');};
 document.getElementById('resetMembers').onclick=()=>{if(confirm('メンバー一覧を仮名に戻しますか？')){state.members=defaultMembers.slice();document.getElementById('memberNames').value=state.members.join('\n');persist();renderEditor();render();}};
+document.getElementById('saveGenerations').onclick=()=>{const map={};document.getElementById('generationAssignments').value.split(/\r?\n/).forEach(line=>{const i=line.indexOf(',');if(i>0){const name=line.slice(0,i).trim(),gen=line.slice(i+1).trim();if(name&&gen)map[name]=gen;}});state.generations=map;persist();render();alert('期別設定を保存しました。');};
+document.getElementById('clearGenerations').onclick=()=>{if(confirm('すべての期別設定をクリアしますか？')){state.generations={};document.getElementById('generationAssignments').value='';persist();render();}};
 function download(name,content,type){const a=document.createElement('a'),url=URL.createObjectURL(new Blob([content],{type}));a.href=url;a.download=name;a.click();URL.revokeObjectURL(url);}
 document.getElementById('exportJson').onclick=()=>download('nogizaka-photo-data.json',JSON.stringify(state,null,2),'application/json');
 document.getElementById('exportCsv').onclick=()=>{const rows=[['pack','slot','member','pose']];state.packs.forEach((p,i)=>p.forEach((c,j)=>{if(c.member||c.pose)rows.push([i+1,j+1,c.member,c.pose])}));const csv=rows.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\r\n');download('nogizaka-photo-data.csv','\ufeff'+csv,'text/csv;charset=utf-8');};
-document.getElementById('importJson').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(!Array.isArray(d.members)||!Array.isArray(d.packs))throw Error('形式');if(!confirm('現在の記録を読み込んだデータで置き換えますか？'))return;state=d;persist();document.getElementById('packCount').value=String([10,20,30,50,100].find(n=>n>=state.packs.length)||100);document.getElementById('memberNames').value=state.members.join('\n');renderEditor();render();alert('データを読み込みました。');}catch(err){alert('読み込めませんでした。対応するJSONファイルを選んでください。');}e.target.value='';};
+document.getElementById('importJson').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(!Array.isArray(d.members)||!Array.isArray(d.packs))throw Error('形式');if(!confirm('現在の記録を読み込んだデータで置き換えますか？'))return;state=d;persist();document.getElementById('packCount').value=String([10,20,30,50,100].find(n=>n>=state.packs.length)||100);document.getElementById('memberNames').value=state.members.join('\n');document.getElementById('generationAssignments').value=Object.entries(state.generations||{}).map(([m,g])=>`${m},${g}`).join('\n');renderEditor();render();alert('データを読み込みました。');}catch(err){alert('読み込めませんでした。対応するJSONファイルを選んでください。');}e.target.value='';};
 load();
 document.getElementById('packCount').value=String([10,20,30,50,100].find(n=>n>=state.packs.length)||100);
 document.getElementById('memberNames').value=state.members.join('\n');
+document.getElementById('generationAssignments').value=Object.entries(state.generations||{}).map(([m,g])=>`${m},${g}`).join('\n');
 renderEditor();render();
 </script>
 </body></html>
