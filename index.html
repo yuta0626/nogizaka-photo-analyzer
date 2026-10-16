@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>乃木坂46 生写真 封入パターン分析</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--ink:#202334;--muted:#697086;--line:#e2e5ef;--accent:#7457d9;--accent2:#f0ecff;--good:#167d55;--warn:#9b5b00;--bad:#b42345}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
+header{background:linear-gradient(120deg,#34215f,#7659d7);color:white;padding:26px 18px 24px}
+.wrap{max-width:1180px;margin:auto;padding:0 16px}header h1{font-size:clamp(23px,4vw,34px);margin:0 0 8px}header p{margin:0;opacity:.9}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}nav button{border:1px solid var(--line);background:white;color:var(--ink);border-radius:999px;padding:9px 14px;cursor:pointer;font-weight:650}nav button.active{background:var(--accent);border-color:var(--accent);color:white}
+main{padding:18px 0 50px}.panel{display:none}.panel.active{display:block}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 3px 14px #20233408}
+h2{font-size:20px;margin:0 0 12px}h3{font-size:16px;margin:0 0 8px}.muted{color:var(--muted);font-size:13px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.stat{padding:15px;border:1px solid var(--line);border-radius:13px;background:#fff}.stat strong{display:block;font-size:27px;line-height:1.2;margin-top:5px}.stat span{font-size:12px;color:var(--muted)}
+label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,select,textarea{width:100%;border:1px solid #cfd3e0;border-radius:9px;padding:10px;font:inherit;background:#fff;color:var(--ink)}textarea{min-height:170px;resize:vertical}.row{display:flex;gap:10px;align-items:end;flex-wrap:wrap}.field{flex:1;min-width:150px}.btn{border:0;background:var(--accent);color:white;padding:10px 14px;border-radius:9px;font-weight:700;cursor:pointer}.btn.secondary{background:#ece8fb;color:#4c359c}.btn.danger{background:#fff0f2;color:var(--bad);border:1px solid #ffd5dc}.btn:disabled{opacity:.5;cursor:not-allowed}
+.packgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.pack{border:1px solid var(--line);border-radius:12px;padding:13px;background:#fcfcff}.packhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.packhead strong{font-size:16px}.slot{display:grid;grid-template-columns:minmax(0,1fr) 100px;gap:8px;margin:8px 0}.slot select{min-width:0;padding:8px}.tablewrap{overflow:auto;max-height:560px;border:1px solid var(--line);border-radius:10px}table{border-collapse:collapse;width:100%;font-size:13px;background:white}th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}th{background:#f5f4fb;position:sticky;top:0;z-index:1}tr:last-child td{border-bottom:0}.bar{height:8px;background:#eceaf5;border-radius:99px;overflow:hidden;min-width:70px}.bar i{display:block;height:100%;background:var(--accent);border-radius:99px}.pill{display:inline-block;background:var(--accent2);color:#4c359c;border-radius:999px;padding:3px 8px;font-size:12px}.notice{background:#fff8e8;border:1px solid #f4dfad;color:#6d4b0b;border-radius:10px;padding:12px;font-size:13px}.success{color:var(--good)}.empty{padding:22px;text-align:center;color:var(--muted)}.small{font-size:12px}.matrix td{text-align:center}.matrix th:first-child{text-align:left}.matrix .heat{font-weight:700;border-radius:4px}
+@media(max-width:720px){.grid,.packgrid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.slot{grid-template-columns:minmax(0,1fr) 92px}.card{padding:14px}.wrap{padding:0 11px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1>乃木坂46 生写真 封入パターン分析</h1><p>開封結果を記録して、封入構成・メンバー頻度・同時封入・パック間の類似度を分析。</p></div></header>
+<div class="wrap">
+<nav>
+<button class="active" data-tab="record">開封記録</button><button data-tab="overview">全体分析</button><button data-tab="members">メンバー分析</button><button data-tab="pairs">同時封入分析</button><button data-tab="packs">パック比較</button><button data-tab="settings">設定・データ</button>
+</nav>
+<main>
+<section class="panel active" id="record">
+<div class="card">
+<h2>開封結果を入力</h2>
+<p class="muted">各パック5枚。メンバー名とポーズを選んでください。未開封のパックは空欄のままで構いません。入力はこのブラウザー内に保存されます。</p>
+<div class="row"><div class="field"><label>表示するパック数</label><select id="packCount"><option>10</option><option>20</option><option>30</option><option>50</option><option>100</option></select></div><button class="btn" id="buildPacks">パック欄を表示</button><button class="btn secondary" id="clearPacks">入力を全消去</button></div>
+<div class="notice" style="margin-top:12px">メンバー一覧は「設定・データ」で編集できます。最初は「メンバー01」〜「メンバー33」の仮名です。実際のメンバー名に置き換えてから入力するのがおすすめです。</div>
+</div>
+<div id="packEditor" class="packgrid"></div>
+<div class="row" style="justify-content:flex-end;margin:14px 0"><button class="btn" id="saveBtn">記録を保存・集計を更新</button></div>
+</section>
+<section class="panel" id="overview">
+<div class="stats" id="overviewStats"></div>
+<div class="card"><h2>ポーズ構成パターン</h2><p class="muted">各パックのヨリ・チュウ・ヒキ枚数の組み合わせ。記録済みパックのみ対象。</p><div id="posePatterns"></div></div>
+<div class="card"><h2>メンバー重複・パック内の特徴</h2><div id="overviewNotes"></div></div>
+<div class="card"><h2>ポーズ別の総枚数</h2><div id="poseTotals"></div></div>
+</section>
+<section class="panel" id="members">
+<div class="card"><h2>メンバー別の出現頻度</h2><p class="muted">「出現パック数」は同じパックに同一メンバーが複数枚あっても1パックとして数えます。</p><div id="memberTable"></div></div>
+<div class="card"><h2>メンバー別ポーズ内訳</h2><div id="memberPoseTable"></div></div>
+</section>
+<section class="panel" id="pairs">
+<div class="card"><h2>一緒に出たメンバーのペア</h2><p class="muted">同時封入回数、Aが出たパックでBも出た割合、独立と仮定した期待回数との比率を表示します。重複枚数ではなく「同じパックにいたか」で判定します。</p><div id="pairTable"></div></div>
+<div class="card"><h2>同時封入マトリクス</h2><p class="muted">記録があるメンバーのみ表示。対角線はそのメンバーが出たパック数です。</p><div id="matrixTable"></div></div>
+<div class="notice">「一度も同時に出ない」は、今回のデータで未観測という意味です。封入仕様として共存しないと断定するには、より多くのパックや商品仕様の確認が必要です。</div>
+</section>
+<section class="panel" id="packs">
+<div class="card"><h2>パック別の構成</h2><div id="packSummary"></div></div>
+<div class="card"><h2>パック間の類似度</h2><p class="muted">共通メンバー数とJaccard類似度（共通メンバー数 ÷ どちらかに出たメンバー数）で比較します。</p><div id="similarityTable"></div></div>
+</section>
+<section class="panel" id="settings">
+<div class="card"><h2>メンバー一覧</h2><p class="muted">1行に1人、最大33人。名称を変更しても封入記録はそのまま保持されます。</p><textarea id="memberNames"></textarea><div class="row" style="margin-top:10px"><button class="btn" id="saveMembers">メンバー一覧を保存</button><button class="btn secondary" id="resetMembers">仮名に戻す</button></div></div>
+<div class="card"><h2>データのバックアップ</h2><p class="muted">JSONで保存・復元できます。CSVは記録済みの50枚以上のデータを表計算ソフトで分析するのに便利です。</p><div class="row"><button class="btn" id="exportJson">JSONを書き出す</button><button class="btn secondary" id="exportCsv">CSVを書き出す</button><div class="field"><label>JSONファイルを読み込む</label><input type="file" id="importJson" accept=".json,application/json"></div></div></div>
+<div class="card"><h2>分析上の注意</h2><ul class="muted"><li>10パックでは偶然の偏りが大きく出ることがあります。</li><li>同時封入はパック単位の観測です。カード配置順が不明なら、封入順や隣接関係は分析できません。</li><li>次のパックの確率は、封入方式が分からない限り過去の頻度から正確には予測できません。</li><li>メンバーごとの出現率比較は、同じ商品・同じ封入条件のパック同士で行ってください。</li></ul></div>
+</section>
+</main>
+<footer class="muted" style="padding:0 0 30px">データは端末内のブラウザーに保存されます。共有端末ではJSONバックアップを安全に管理してください。</footer>
+</div>
+<script>
+const KEY='nogizakaPhotoAnalyzerV1';
+const poses=['ヨリ','チュウ','ヒキ'];
+const defaultMembers=Array.from({length:33},(_,i)=>`メンバー${String(i+1).padStart(2,'0')}`);
+let state={members:defaultMembers,packs:Array.from({length:10},()=>Array.from({length:5},()=>({member:'',pose:''})))};
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&Array.isArray(s.members)&&Array.isArray(s.packs)){state=s;}}catch(e){}}
+function persist(){localStorage.setItem(KEY,JSON.stringify(state));}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function activePacks(){return state.packs.map((cards,i)=>({index:i,cards:cards.filter(c=>c.member&&c.pose)})).filter(p=>p.cards.length>0);}
+function memberSelect(value){return `<option value="">未入力</option>`+state.members.map(m=>`<option value="${escapeHtml(m)}" ${m===value?'selected':''}>${escapeHtml(m)}</option>`).join('');}
+function renderEditor(){
+ const n=Math.max(Number(document.getElementById('packCount').value)||10,state.packs.length);
+ while(state.packs.length<n)state.packs.push(Array.from({length:5},()=>({member:'',pose:''})));
+ document.getElementById('packEditor').innerHTML=state.packs.slice(0,n).map((cards,i)=>`<div class="pack"><div class="packhead"><strong>${i+1}パック目</strong><span class="pill" id="packcount-${i}">${cards.filter(c=>c.member&&c.pose).length}/5枚</span></div>${cards.map((c,j)=>`<div class="slot"><select aria-label="${i+1}パック目 ${j+1}枚目 メンバー" data-pack="${i}" data-slot="${j}" data-key="member">${memberSelect(c.member)}</select><select aria-label="ポーズ" data-pack="${i}" data-slot="${j}" data-key="pose"><option value="">ポーズ</option>${poses.map(p=>`<option ${c.pose===p?'selected':''}>${p}</option>`).join('')}</select></div>`).join('')}</div>`).join('');
+ document.querySelectorAll('#packEditor select').forEach(el=>el.addEventListener('change',e=>{const t=e.target;state.packs[+t.dataset.pack][+t.dataset.slot][t.dataset.key]=t.value;const c=state.packs[+t.dataset.pack].filter(x=>x.member&&x.pose).length;const badge=document.getElementById('packcount-'+t.dataset.pack);if(badge)badge.textContent=c+'/5枚';persist();}));
+}
+function table(headers,rows){if(!rows.length)return '<div class="empty">まだ記録がありません。開封記録を入力してください。</div>';return `<div class="tablewrap"><table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;}
+function pct(a,b){return b?`${(100*a/b).toFixed(1)}%`:'—';}
+function render(){
+ const packs=activePacks(),cards=packs.flatMap(p=>p.cards), total=cards.length;
+ const counts=Object.fromEntries(state.members.map(m=>[m,0]));
+ const packPresence=Object.fromEntries(state.members.map(m=>[m,0]));
+ const poseCounts=Object.fromEntries(poses.map(p=>[p,0]));
+ const memberPose=Object.fromEntries(state.members.map(m=>[m,{ヨリ:0,チュウ:0,ヒキ:0}]));
+ packs.forEach(p=>{const seen=new Set();p.cards.forEach(c=>{counts[c.member]=(counts[c.member]||0)+1;memberPose[c.member][c.pose]++;poseCounts[c.pose]++;seen.add(c.member)});seen.forEach(m=>packPresence[m]=(packPresence[m]||0)+1)});
+ const used=state.members.filter(m=>counts[m]>0);
+ const repeatedPacks=packs.filter(p=>{const ms=p.cards.map(c=>c.member);return new Set(ms).size<ms.length}).length;
+ const poseKeys={};packs.forEach(p=>{const n={ヨリ:0,チュウ:0,ヒキ:0};p.cards.forEach(c=>n[c.pose]++);const k=`ヨリ${n.ヨリ}・チュウ${n.チュウ}・ヒキ${n.ヒキ}`;poseKeys[k]=(poseKeys[k]||0)+1;});
+ document.getElementById('overviewStats').innerHTML=[
+ ['記録済みパック',packs.length,'パック'],['記録済み写真',total,'枚'],['出現したメンバー',used.length,'/ 33人'],['同一メンバー重複パック',repeatedPacks,'パック']
+ ].map(x=>`<div class="stat"><span>${x[0]}</span><strong>${x[1]}</strong><span>${x[2]}</span></div>`).join('');
+ document.getElementById('posePatterns').innerHTML=table(['構成パターン','パック数','記録済みパック比'],Object.entries(poseKeys).sort((a,b)=>b[1]-a[1]).map(([k,v])=>[k,v,pct(v,packs.length)]));
+ document.getElementById('poseTotals').innerHTML=table(['ポーズ','枚数','写真全体に占める割合','内訳'],poses.map(p=>[p,poseCounts[p],pct(poseCounts[p],total),`<div class="bar"><i style="width:${total?100*poseCounts[p]/total:0}%"></i></div>`]));
+ const full=packs.filter(p=>p.cards.length===5).length;
+ document.getElementById('overviewNotes').innerHTML=`<ul><li>5枚すべて入力済みのパック：<b>${full}</b> / ${packs.length}</li><li>同一メンバーが同じパックに複数枚入ったパック：<b>${repeatedPacks}</b></li><li>記録上のメンバー平均出現枚数（33人）：<b>${(total/33).toFixed(2)}</b>枚</li><li>全員均等と仮定した単純期待値：1人あたり約${(total/33).toFixed(2)}枚。ただし封入方式や重複可否により、この比較は参考値です。</li></ul>`;
+ const sorted=state.members.map(m=>({m,n:counts[m],p:packPresence[m]})).sort((a,b)=>b.n-a.n||a.m.localeCompare(b.m,'ja'));
+ document.getElementById('memberTable').innerHTML=table(['順位','メンバー','封入枚数','全写真比','出現パック数','パック出現率','頻度'],sorted.map((x,i)=>[i+1,escapeHtml(x.m),x.n,pct(x.n,total),x.p,pct(x.p,packs.length),`<div class="bar"><i style="width:${used.length?100*x.n/Math.max(1,sorted[0].n):0}%"></i></div>`]));
+ document.getElementById('memberPoseTable').innerHTML=table(['メンバー','ヨリ','チュウ','ヒキ','合計'],state.members.filter(m=>counts[m]).sort((a,b)=>counts[b]-counts[a]).map(m=>[escapeHtml(m),memberPose[m].ヨリ,memberPose[m].チュウ,memberPose[m].ヒキ,counts[m]]));
+ const pairData=[];
+ for(let i=0;i<used.length;i++)for(let j=i+1;j<used.length;j++){
+   const a=used[i],b=used[j];let together=0;
+   packs.forEach(p=>{const set=new Set(p.cards.map(c=>c.member));if(set.has(a)&&set.has(b))together++});
+   const expected=packs.length?(packPresence[a]*packPresence[b]/packs.length):0;
+   pairData.push({a,b,together,condA:packPresence[a]?together/packPresence[a]:0,condB:packPresence[b]?together/packPresence[b]:0,expected,ratio:expected?together/expected:null});
+ }
+ pairData.sort((a,b)=>b.together-a.together||(b.ratio||0)-(a.ratio||0));
+ document.getElementById('pairTable').innerHTML=table(['メンバーA','メンバーB','同時封入','Aが出た時Bも','Bが出た時Aも','独立時期待回数','実績/期待'],pairData.slice(0,100).map(x=>[escapeHtml(x.a),escapeHtml(x.b),x.together,pct(x.together,packPresence[x.a]),pct(x.together,packPresence[x.b]),x.expected.toFixed(2),x.ratio===null?'—':x.ratio.toFixed(2)+'倍']));
+ const zero=pairData.filter(x=>x.together===0);
+ document.getElementById('matrixTable').innerHTML=used.length?`<div class="tablewrap"><table class="matrix"><thead><tr><th>メンバー</th>${used.map(m=>`<th>${escapeHtml(m)}</th>`).join('')}</tr></thead><tbody>${used.map(a=>`<tr><th>${escapeHtml(a)}</th>${used.map(b=>{let n;if(a===b)n=packPresence[a];else n=pairData.find(x=>(x.a===a&&x.b===b)||(x.a===b&&x.b===a))?.together||0;return `<td style="background:rgba(116,87,217,${.04+.7*n/Math.max(1,packs.length)});">${n}</td>`}).join('')}</tr>`).join('')}</tbody></table></div><p class="muted">未同時封入のペア：${zero.length}組（記録されたメンバー間）。</p>`:'<div class="empty">まだ記録がありません。</div>';
+ document.getElementById('packSummary').innerHTML=table(['パック','入力枚数','ヨリ','チュウ','ヒキ','メンバー重複','メンバー一覧'],packs.map(p=>{const n={ヨリ:0,チュウ:0,ヒキ:0};p.cards.forEach(c=>n[c.pose]++);const ms=p.cards.map(c=>c.member);return [p.index+1, p.cards.length,n.ヨリ,n.チュウ,n.ヒキ,new Set(ms).size<ms.length?'あり':'なし',ms.map(escapeHtml).join('、')]}));
+ const sims=[];
+ for(let i=0;i<packs.length;i++)for(let j=i+1;j<packs.length;j++){const a=new Set(packs[i].cards.map(c=>c.member)),b=new Set(packs[j].cards.map(c=>c.member));const inter=[...a].filter(x=>b.has(x)).length,union=new Set([...a,...b]).size;sims.push([i+1,j+1,inter,union?`${(100*inter/union).toFixed(1)}%`:'—',inter===0?'共通なし':'共通あり']);}
+ sims.sort((a,b)=>b[2]-a[2]);
+ document.getElementById('similarityTable').innerHTML=table(['パックA','パックB','共通メンバー数','Jaccard類似度','メモ'],sims.slice(0,100));
+}
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.panel').forEach(x=>x.classList.toggle('active',x.id===b.dataset.tab));if(b.dataset.tab!=='record')render();}));
+document.getElementById('buildPacks').onclick=()=>renderEditor();
+document.getElementById('saveBtn').onclick=()=>{persist();render();alert('記録を保存し、集計を更新しました。');};
+document.getElementById('clearPacks').onclick=()=>{if(confirm('すべての開封記録を消去しますか？')){state.packs=Array.from({length:Math.max(10,Number(document.getElementById('packCount').value)||10)},()=>Array.from({length:5},()=>({member:'',pose:''})));persist();renderEditor();render();}};
+document.getElementById('saveMembers').onclick=()=>{const arr=document.getElementById('memberNames').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);if(!arr.length){alert('メンバー名を1人以上入力してください。');return;}if(arr.length>100){alert('メンバー数は100人以下にしてください。');return;}state.members=arr;persist();renderEditor();render();alert('メンバー一覧を保存しました。');};
+document.getElementById('resetMembers').onclick=()=>{if(confirm('メンバー一覧を仮名に戻しますか？')){state.members=defaultMembers.slice();document.getElementById('memberNames').value=state.members.join('\n');persist();renderEditor();render();}};
+function download(name,content,type){const a=document.createElement('a'),url=URL.createObjectURL(new Blob([content],{type}));a.href=url;a.download=name;a.click();URL.revokeObjectURL(url);}
+document.getElementById('exportJson').onclick=()=>download('nogizaka-photo-data.json',JSON.stringify(state,null,2),'application/json');
+document.getElementById('exportCsv').onclick=()=>{const rows=[['pack','slot','member','pose']];state.packs.forEach((p,i)=>p.forEach((c,j)=>{if(c.member||c.pose)rows.push([i+1,j+1,c.member,c.pose])}));const csv=rows.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\r\n');download('nogizaka-photo-data.csv','\ufeff'+csv,'text/csv;charset=utf-8');};
+document.getElementById('importJson').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(!Array.isArray(d.members)||!Array.isArray(d.packs))throw Error('形式');if(!confirm('現在の記録を読み込んだデータで置き換えますか？'))return;state=d;persist();document.getElementById('packCount').value=String([10,20,30,50,100].find(n=>n>=state.packs.length)||100);document.getElementById('memberNames').value=state.members.join('\n');renderEditor();render();alert('データを読み込みました。');}catch(err){alert('読み込めませんでした。対応するJSONファイルを選んでください。');}e.target.value='';};
+load();
+document.getElementById('packCount').value=String([10,20,30,50,100].find(n=>n>=state.packs.length)||100);
+document.getElementById('memberNames').value=state.members.join('\n');
+renderEditor();render();
+</script>
+</body></html>
