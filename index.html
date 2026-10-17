@@ -328,6 +328,38 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
  #inventoryList .inventory-table.five-poses td[data-pose]{width:46px!important;min-width:46px!important;max-width:46px!important;}
  #inventoryList .inventory-table .member-cell strong{font-size:7px!important;letter-spacing:-.4px!important;}
 }
+
+/* final17: メンバー欄はシリーズ・ポーズ数によらず一定幅。吉田綾乃クリスティーも他メンバーと同じ文字サイズ */
+#inventoryList .inventory-table .member-col,
+#inventoryList .inventory-table.compact-poses .member-col,
+#inventoryList .inventory-table.long-member-five .member-col,
+#inventoryList .inventory-table.five-poses .member-col{
+  width:68px!important;min-width:68px!important;max-width:68px!important;
+  box-sizing:border-box!important;padding-left:1px!important;padding-right:1px!important;
+}
+#inventoryList .inventory-table .member-cell strong,
+#inventoryList .inventory-table .member-cell strong.member-yoshida{
+  font-size:7.5px!important;letter-spacing:-.35px!important;line-height:8px!important;
+}
+#inventoryList .inventory-table .member-cell strong.member-yoshida{
+  display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:flex-start!important;
+  height:16px!important;min-height:16px!important;max-height:16px!important;
+  white-space:nowrap!important;overflow-wrap:normal!important;word-break:keep-all!important;
+}
+#inventoryList .inventory-table .member-cell strong.member-yoshida span{
+  display:block!important;height:8px!important;line-height:8px!important;font-size:inherit!important;
+}
+@media(max-width:380px){
+  #inventoryList .inventory-table .member-col,
+  #inventoryList .inventory-table.compact-poses .member-col,
+  #inventoryList .inventory-table.long-member-five .member-col,
+  #inventoryList .inventory-table.five-poses .member-col{
+    width:68px!important;min-width:68px!important;max-width:68px!important;
+  }
+  #inventoryList .inventory-table .member-cell strong,
+  #inventoryList .inventory-table .member-cell strong.member-yoshida{font-size:7.5px!important;letter-spacing:-.35px!important;}
+}
+
 </style>
 </head>
 <body>
