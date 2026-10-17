@@ -21,8 +21,8 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
  body{font-size:14px;line-height:1.45;overflow-x:hidden}
  header{padding:17px 12px 15px}header h1{font-size:21px;line-height:1.25;margin-bottom:6px}header p{font-size:12px}
  .wrap{width:100%;max-width:100%;padding:0 8px}main{padding:10px 0 28px}
- nav{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:6px;margin:10px 0 12px;padding:2px 0 7px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
- nav button{flex:0 0 auto;font-size:12px;padding:8px 11px;white-space:nowrap}
+ nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));overflow:visible;gap:6px;margin:10px 0 12px;padding:2px 0 4px;width:100%}
+ nav button{min-width:0;width:100%;font-size:12px;padding:8px 5px;min-height:38px;white-space:normal;line-height:1.25;text-align:center;overflow-wrap:anywhere}
  .card{padding:11px;border-radius:12px;margin-bottom:10px;box-shadow:none}.panel-heading{align-items:flex-start}.panel-heading h2{flex:1 1 100%}.undo-button{font-size:12px;min-height:34px;padding:6px 9px}.inventory-total-line strong{font-size:20px}.inventory-total-line span{font-size:11px}
  h2{font-size:17px;margin-bottom:8px}h3{font-size:14px;margin-bottom:6px}
  .muted{font-size:12px;line-height:1.45}.small{font-size:11px}
