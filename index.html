@@ -76,11 +76,32 @@ let state={members:defaultMembers,series:[{id:'series-1',name:'フレンチガ�
 function normalizeSeriesData(s){
  if(Array.isArray(s.series)&&s.series.length){state={members:Array.isArray(s.members)?s.members:defaultMembers.slice(),series:s.series.filter(x=>x&&typeof x==='object').map((x,i)=>({id:String(x.id||`series-${i+1}`),name:String((x.name||'').trim()|| (i===0?'フレンチガーリー':`シリーズ${i+1}`)),packs:Array.isArray(x.packs)?x.packs:emptyPacks(10),coverMembers:x.coverMembers&&typeof x.coverMembers==='object'?x.coverMembers:{}})),currentSeriesId:String(s.currentSeriesId||s.series[0]?.id||'series-1')};if(!state.series.length)state.series=[{id:'series-1',name:'フレンチガーリー',packs:emptyPacks(10),coverMembers:{}}];if(!state.series.some(x=>x.id===state.currentSeriesId))state.currentSeriesId=state.series[0].id;}
  else if(Array.isArray(s.packs)){state={members:Array.isArray(s.members)?s.members:defaultMembers.slice(),series:[{id:'series-1',name:'フレンチガーリー',packs:s.packs,coverMembers:s.coverMembers&&typeof s.coverMembers==='object'?s.coverMembers:{}}],currentSeriesId:'series-1'};}
- // 既存データの初期シリーズ名を変更し、記録はそのまま保持する。
- state.series.forEach((sr,i)=>{if(!sr.name||sr.name==='シリーズ1')sr.name=i===0?'フレンチガーリー':`シリーズ${i+1}`;});
+ // 旧データを安全に整える。旧「シリーズ1」は「フレンチガーリー」に改名。
+ state.series.forEach((sr,i)=>{if(!sr.name||sr.name==='シリーズ1')sr.name='フレンチガーリー';});
+ // 同名シリーズは1つにまとめ、既存カードは空欄を埋める形で保持する。
+ const merged=[];
+ for(const sr of state.series){
+   if(sr.name.trim().toLocaleLowerCase()==='ex') continue; // お試しシリーズを削除
+   const existing=merged.find(x=>x.name.trim().toLocaleLowerCase()===sr.name.trim().toLocaleLowerCase());
+   if(!existing){merged.push(sr);continue;}
+   const count=Math.max(existing.packs.length,sr.packs.length);
+   while(existing.packs.length<count)existing.packs.push(Array.from({length:5},()=>({member:'',pose:''})));
+   for(let i=0;i<sr.packs.length;i++){
+     while(existing.packs[i].length<5)existing.packs[i].push({member:'',pose:''});
+     for(let j=0;j<5;j++){
+       const from=sr.packs[i][j]||{member:'',pose:''},to=existing.packs[i][j];
+       if(!to.member&&from.member)to.member=from.member;
+       if(!to.pose&&from.pose)to.pose=from.pose;
+     }
+   }
+   if(state.currentSeriesId===sr.id)state.currentSeriesId=existing.id;
+ }
+ state.series=merged;
+ if(!state.series.length)state.series=[{id:'series-1',name:'フレンチガーリー',packs:emptyPacks(10),coverMembers:{}}];
+ if(!state.series.some(x=>x.id===state.currentSeriesId))state.currentSeriesId=state.series[0].id;
  const placeholders=state.members.length>0&&state.members.every(m=>/^メンバー\d+$/.test(m));const noEntries=state.series.every(sr=>sr.packs.every(p=>p.every(c=>!c.member&&!c.pose)));if(placeholders&&noEntries)state.members=defaultMembers.slice();
 }
-function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&Array.isArray(s.members)&&(Array.isArray(s.packs)||Array.isArray(s.series)))normalizeSeriesData(s);}catch(e){}}
+function load(){try{const raw=localStorage.getItem(KEY);const s=raw?JSON.parse(raw):null;if(s&&Array.isArray(s.members)&&(Array.isArray(s.packs)||Array.isArray(s.series))){normalizeSeriesData(s);persist();}}catch(e){}}
 function persist(){localStorage.setItem(KEY,JSON.stringify(state));}
 function currentSeries(){return state.series.find(s=>s.id===state.currentSeriesId)||state.series[0];}
 function activePacks(){return state.series.flatMap(sr=>sr.packs.map((cards,i)=>({index:i,seriesId:sr.id,seriesName:sr.name,cover:cards[0]?.member&&cards[0]?.pose?cards[0].member:'',label:`${sr.name}・${i+1}パック目`,cards:cards.filter(c=>c.member&&c.pose),remainingCards:cards.slice(1).filter(c=>c.member&&c.pose)})).filter(p=>p.cards.length>0));}
@@ -147,6 +168,7 @@ function render(){
 document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.panel').forEach(x=>x.classList.toggle('active',x.id===b.dataset.tab));if(b.dataset.tab!=='record')render();}));
 document.getElementById('coverAnalysisMember').addEventListener('change',()=>render());
 document.getElementById('buildPacks').onclick=()=>renderEditor();
+document.getElementById('packCount').addEventListener('change',()=>renderEditor());
 document.getElementById('saveBtn').onclick=()=>{persist();render();alert('記録を保存し、集計を更新しました。');};
 document.getElementById('clearPacks').onclick=()=>{if(confirm(`「${currentSeries().name}」の開封記録をすべて消去しますか？他のシリーズは消去されません。`)){currentSeries().packs=emptyPacks(Math.max(10,Number(document.getElementById('packCount').value)||10));persist();renderEditor();render();}};
 function switchCurrentSeries(){const id=document.getElementById('seriesSelect').value;if(state.series.some(sr=>sr.id===id)){state.currentSeriesId=id;document.getElementById('packCount').value=String([10,20,30,50,100].find(n=>n>=currentSeries().packs.length)||100);persist();renderEditor();render();}}
