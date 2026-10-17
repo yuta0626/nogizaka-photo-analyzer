@@ -360,6 +360,56 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
   #inventoryList .inventory-table .member-cell strong.member-yoshida{font-size:7.5px!important;letter-spacing:-.35px!important;}
 }
 
+
+/* final18: メンバー欄は全組み合わせで固定幅。名前は欄内で折り返し、はみ出し禁止。5ポーズは余白に応じてポーズ欄を伸縮。 */
+#inventoryList .inventory-table,
+#inventoryList .inventory-table.compact-poses,
+#inventoryList .inventory-table.long-member-five,
+#inventoryList .inventory-table.five-poses{
+  width:100%!important;min-width:0!important;max-width:560px!important;table-layout:fixed!important;
+}
+#inventoryList .inventory-table .member-col,
+#inventoryList .inventory-table.compact-poses .member-col,
+#inventoryList .inventory-table.long-member-five .member-col,
+#inventoryList .inventory-table.five-poses .member-col{
+  width:68px!important;min-width:68px!important;max-width:68px!important;
+  padding-left:1px!important;padding-right:1px!important;box-sizing:border-box!important;
+}
+#inventoryList .inventory-table .member-cell{
+  display:flex!important;align-items:center!important;flex-wrap:nowrap!important;gap:1px!important;
+  width:100%!important;min-width:0!important;max-width:100%!important;overflow:hidden!important;box-sizing:border-box!important;
+}
+#inventoryList .inventory-table .member-cell .inv-lock,
+#inventoryList .inventory-table .member-cell .inv-fav{
+  flex:0 0 10px!important;width:10px!important;min-width:10px!important;max-width:10px!important;box-sizing:border-box!important;
+}
+#inventoryList .inventory-table .member-cell .inv-lock{height:10px!important;}
+#inventoryList .inventory-table .member-cell strong,
+#inventoryList .inventory-table .member-cell strong.member-yoshida{
+  display:block!important;flex:1 1 0!important;width:0!important;min-width:0!important;max-width:100%!important;
+  height:auto!important;min-height:0!important;max-height:none!important;
+  font-size:7.5px!important;letter-spacing:-.25px!important;line-height:8px!important;
+  white-space:normal!important;overflow-wrap:anywhere!important;word-break:break-word!important;
+}
+#inventoryList .inventory-table .member-cell strong.member-yoshida{display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:flex-start!important;}
+#inventoryList .inventory-table .member-cell strong.member-yoshida span{display:block!important;font-size:inherit!important;line-height:8px!important;height:8px!important;white-space:nowrap!important;}
+#inventoryList .inventory-table.five-poses .inv-pose-head,
+#inventoryList .inventory-table.five-poses td[data-pose]{
+  width:auto!important;min-width:0!important;max-width:none!important;padding-left:1px!important;padding-right:1px!important;box-sizing:border-box!important;
+}
+#inventoryList .inventory-table.five-poses .inv-qty{width:100%!important;min-width:0!important;grid-template-columns:minmax(8px,1fr) minmax(4px,auto) minmax(8px,1fr)!important;gap:0!important;}
+#inventoryList .inventory-table.five-poses .inv-qty button{width:100%!important;min-width:0!important;padding:0!important;font-size:11px!important;}
+#inventoryList .inventory-table.five-poses .inv-count{min-width:0!important;font-size:9px!important;}
+#inventoryList .inventory-table-wrap{width:100%!important;max-width:100%!important;overflow-x:hidden!important;}
+@media(max-width:380px){
+ #inventoryList .inventory-table .member-col,
+ #inventoryList .inventory-table.compact-poses .member-col,
+ #inventoryList .inventory-table.long-member-five .member-col,
+ #inventoryList .inventory-table.five-poses .member-col{width:68px!important;min-width:68px!important;max-width:68px!important;}
+ #inventoryList .inventory-table .member-cell strong,
+ #inventoryList .inventory-table .member-cell strong.member-yoshida{font-size:7.5px!important;letter-spacing:-.25px!important;}
+}
+
 </style>
 </head>
 <body>
