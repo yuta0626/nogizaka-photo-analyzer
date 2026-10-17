@@ -628,8 +628,12 @@ function renderInventory(){
  const seriesMembers=Array.isArray(sr.members)&&sr.members.length?sr.members:state.members;const members=seriesMembers.filter(m=>{const favorite=state.favoriteMembers.includes(m);return inventoryFilter==='all'||(inventoryFilter==='favorite'&&favorite)||(inventoryFilter==='nonfavorite'&&!favorite);});
  const allLocked=seriesMembers.length>0&&seriesMembers.every(m=>(sr.inventoryPrefs[m]||{}).locked);
  const hasLongMember=seriesMembers.includes('吉田綾乃クリスティー');
- const longestMemberLength=Math.max(0,...seriesMembers.map(m=>Array.from(String(m)).length));
- const memberColWidth=Math.max(58,Math.min(112,42+longestMemberLength*5));
+ // メンバー欄は、鍵・お気に入りマーク・表示される名前の幅を合算してシリーズごとに決定。
+ // 吉田綾乃クリスティーがいる場合は、2行表示のうち長い「クリスティー」に合わせる。
+ const longestDisplayedNameLength=hasLongMember
+   ? Array.from('クリスティー').length
+   : Math.max(0,...seriesMembers.map(m=>Array.from(String(m)).length));
+ const memberColWidth=Math.max(48,Math.min(112,29+longestDisplayedNameLength*7.5));
  const poseColWidth=Math.max(42,(Math.min(560,document.getElementById('inventoryList').clientWidth||560)-memberColWidth)/5);
  const inventoryLayoutClass=(poses.length===5?'five-poses ':'compact-poses ')+(poses.length===5&&hasLongMember?'long-member-five':'');
  const bulkLockButton=document.getElementById('toggleAllLocks');if(bulkLockButton)bulkLockButton.textContent=allLocked?'全メンバーのロックを解除':'全メンバーをロック';
