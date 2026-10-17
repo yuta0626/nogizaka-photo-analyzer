@@ -633,7 +633,8 @@ function renderInventory(){
  const longestDisplayedNameLength=hasLongMember
    ? Array.from('クリスティー').length
    : Math.max(0,...seriesMembers.map(m=>Array.from(String(m)).length));
- const memberColWidth=Math.max(48,Math.min(112,29+longestDisplayedNameLength*7.5));
+ // 鍵チェックボックス・お気に入りマーク・名前・余白を確保。5文字名でも名前がボックス外へ出ない幅にする。
+ const memberColWidth=Math.max(64,Math.min(120,39+longestDisplayedNameLength*8.5));
  const poseColWidth=Math.max(42,(Math.min(560,document.getElementById('inventoryList').clientWidth||560)-memberColWidth)/5);
  const inventoryLayoutClass=(poses.length===5?'five-poses ':'compact-poses ')+(poses.length===5&&hasLongMember?'long-member-five':'');
  const bulkLockButton=document.getElementById('toggleAllLocks');if(bulkLockButton)bulkLockButton.textContent=allLocked?'全メンバーのロックを解除':'全メンバーをロック';
