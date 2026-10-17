@@ -410,6 +410,49 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
  #inventoryList .inventory-table .member-cell strong.member-yoshida{font-size:7.5px!important;letter-spacing:-.25px!important;}
 }
 
+
+
+/* final19: 最長メンバー名を基準に全シリーズでメンバー欄を統一。5ポーズの増減ボタンも3ポーズと同寸法に統一 */
+#inventoryList .inventory-table,
+#inventoryList .inventory-table.compact-poses,
+#inventoryList .inventory-table.long-member-five,
+#inventoryList .inventory-table.five-poses{
+  width:100%!important;min-width:0!important;max-width:560px!important;table-layout:fixed!important;
+}
+#inventoryList .inventory-table .member-col,
+#inventoryList .inventory-table.compact-poses .member-col,
+#inventoryList .inventory-table.long-member-five .member-col,
+#inventoryList .inventory-table.five-poses .member-col{
+  width:92px!important;min-width:92px!important;max-width:92px!important;
+  padding-left:2px!important;padding-right:2px!important;box-sizing:border-box!important;
+}
+#inventoryList .inventory-table.five-poses .inv-qty,
+#inventoryList .inventory-table.compact-poses .inv-qty{
+  display:grid!important;grid-template-columns:minmax(11px,14px) minmax(5px,1fr) minmax(11px,14px)!important;
+  align-items:center!important;justify-items:stretch!important;gap:1px!important;
+  width:100%!important;min-width:0!important;max-width:100%!important;padding:0!important;box-sizing:border-box!important;
+}
+#inventoryList .inventory-table.five-poses .inv-qty button,
+#inventoryList .inventory-table.compact-poses .inv-qty button{
+  display:block!important;box-sizing:border-box!important;width:100%!important;min-width:0!important;max-width:100%!important;
+  height:19px!important;min-height:19px!important;padding:0!important;margin:0!important;
+  border-radius:4px!important;font-size:11px!important;line-height:17px!important;overflow:hidden!important;
+}
+#inventoryList .inventory-table.five-poses .inv-qty .inv-count,
+#inventoryList .inventory-table.compact-poses .inv-qty .inv-count{
+  display:block!important;min-width:0!important;width:100%!important;text-align:center!important;overflow:hidden!important;font-size:10px!important;line-height:1.1!important;
+}
+@media(max-width:380px){
+ #inventoryList .inventory-table .member-col,
+ #inventoryList .inventory-table.compact-poses .member-col,
+ #inventoryList .inventory-table.long-member-five .member-col,
+ #inventoryList .inventory-table.five-poses .member-col{width:92px!important;min-width:92px!important;max-width:92px!important;}
+ #inventoryList .inventory-table.five-poses .inv-qty,
+ #inventoryList .inventory-table.compact-poses .inv-qty{grid-template-columns:11px minmax(4px,1fr) 11px!important;gap:0!important;}
+ #inventoryList .inventory-table.five-poses .inv-qty button,
+ #inventoryList .inventory-table.compact-poses .inv-qty button{height:17px!important;min-height:17px!important;font-size:10px!important;line-height:15px!important;}
+}
+
 </style>
 </head>
 <body>
