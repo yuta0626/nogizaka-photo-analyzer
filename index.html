@@ -287,6 +287,47 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 @media(max-width:600px){#inventoryList .inventory-table .member-col{width:76px!important;min-width:76px!important;max-width:76px!important;}}
 @media(max-width:380px){#inventoryList .inventory-table .member-col{width:72px!important;min-width:72px!important;max-width:72px!important;} #inventoryList .inventory-table .member-cell strong{font-size:7.5px!important;}}
 
+
+/* 最終調整：メンバー欄は最長名が折り返せる最小幅に統一。5ポーズでもiPhone幅に収める */
+#inventoryList .inventory-table .member-col,
+#inventoryList .inventory-table.compact-poses .member-col,
+#inventoryList .inventory-table.long-member-five .member-col,
+#inventoryList .inventory-table.five-poses .member-col{
+  width:68px!important;min-width:68px!important;max-width:68px!important;
+  padding-left:1px!important;padding-right:1px!important;box-sizing:border-box!important;
+}
+#inventoryList .inventory-table .member-cell{
+  display:flex!important;flex-wrap:nowrap!important;align-items:center!important;gap:1px!important;
+  min-width:0!important;max-width:100%!important;overflow:hidden!important;box-sizing:border-box!important;
+}
+#inventoryList .inventory-table .member-cell .inv-lock,
+#inventoryList .inventory-table .member-cell .inv-fav{
+  flex:0 0 11px!important;width:11px!important;min-width:11px!important;box-sizing:border-box!important;
+}
+#inventoryList .inventory-table .member-cell .inv-lock{height:11px!important;}
+#inventoryList .inventory-table .member-cell strong{
+  flex:1 1 0!important;min-width:0!important;max-width:100%!important;
+  white-space:normal!important;overflow-wrap:anywhere!important;word-break:normal!important;
+  font-size:7.5px!important;letter-spacing:-.35px!important;line-height:1.05!important;
+}
+#inventoryList .inventory-table .member-cell strong.member-yoshida{
+  flex:1 1 0!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;
+  justify-content:center!important;height:16px!important;min-height:16px!important;max-height:16px!important;
+  white-space:nowrap!important;font-size:7px!important;line-height:8px!important;overflow-wrap:normal!important;word-break:keep-all!important;
+}
+#inventoryList .inventory-table .member-cell strong.member-yoshida span{display:block!important;height:8px!important;line-height:8px!important;}
+#inventoryList .inventory-table.five-poses{width:max-content!important;max-width:100%!important;table-layout:fixed!important;margin-left:auto!important;margin-right:auto!important;}
+#inventoryList .inventory-table.five-poses .inv-pose-head,
+#inventoryList .inventory-table.five-poses td[data-pose]{width:46px!important;min-width:46px!important;max-width:46px!important;padding-left:1px!important;padding-right:1px!important;box-sizing:border-box!important;}
+#inventoryList .inventory-table.five-poses .member-col{width:68px!important;min-width:68px!important;max-width:68px!important;}
+#inventoryList .inventory-table-wrap{max-width:100%!important;overflow-x:auto!important;}
+@media(max-width:380px){
+ #inventoryList .inventory-table .member-col,
+ #inventoryList .inventory-table.five-poses .member-col{width:64px!important;min-width:64px!important;max-width:64px!important;}
+ #inventoryList .inventory-table.five-poses .inv-pose-head,
+ #inventoryList .inventory-table.five-poses td[data-pose]{width:46px!important;min-width:46px!important;max-width:46px!important;}
+ #inventoryList .inventory-table .member-cell strong{font-size:7px!important;letter-spacing:-.4px!important;}
+}
 </style>
 </head>
 <body>
@@ -428,7 +469,7 @@ function renderInventory(){
  const seriesMembers=Array.isArray(sr.members)&&sr.members.length?sr.members:state.members;const members=seriesMembers.filter(m=>{const favorite=state.favoriteMembers.includes(m);return inventoryFilter==='all'||(inventoryFilter==='favorite'&&favorite)||(inventoryFilter==='nonfavorite'&&!favorite);});
  const allLocked=seriesMembers.length>0&&seriesMembers.every(m=>(sr.inventoryPrefs[m]||{}).locked);
  const hasLongMember=seriesMembers.includes('吉田綾乃クリスティー');
- const inventoryLayoutClass=(poses.length===5&&hasLongMember)?'long-member-five':'compact-poses';
+ const inventoryLayoutClass=(poses.length===5?'five-poses ':'compact-poses ')+(poses.length===5&&hasLongMember?'long-member-five':'');
  const bulkLockButton=document.getElementById('toggleAllLocks');if(bulkLockButton)bulkLockButton.textContent=allLocked?'全メンバーのロックを解除':'全メンバーをロック';
  const filterButton=document.getElementById('cycleInventoryFilter');if(filterButton){const labels={all:'表示：全メンバー',favorite:'表示：お気に入りのみ',nonfavorite:'表示：お気に入り以外'};filterButton.textContent=labels[inventoryFilter]||labels.all;}
  document.getElementById('inventoryList').innerHTML=`<div class="inventory-table-wrap"><table class="inventory-table ${inventoryLayoutClass}"><thead><tr><th class="member-col">メンバー</th>${poses.map(p=>`<th class="inv-pose-head">${escapeHtml(p)}</th>`).join('')}</tr></thead><tbody>${members.map(member=>{const pref=sr.inventoryPrefs[member]||{};return `<tr><td class="member-col ${generationClass(member)}"><div class="member-cell"><input type="checkbox" class="inv-lock" title="${pref.locked?'ロック中':'ロック解除中'}" aria-label="${escapeHtml(member)}をロック" data-inv-lock="${escapeHtml(member)}" ${pref.locked?'checked':''}><span class="inv-fav ${state.favoriteMembers.includes(member)?'on':''}" title="${state.favoriteMembers.includes(member)?'お気に入り':'通常メンバー'}">${state.favoriteMembers.includes(member)?'★':'☆'}</span><strong class="member-name ${generationClass(member)} ${member==='吉田綾乃クリスティー'?'member-yoshida':''}">${member==='吉田綾乃クリスティー'?'吉田綾乃<span>クリスティー</span>':escapeHtml(member)}</strong></div></td>${poses.map(p=>{const k=member+'\\u0000'+p;const rec=recorded[k]||0,man=manual[k]||0,adj=Number(adjustments[k])||0,total=Math.max(0,rec+man+adj);return `<td data-pose="${escapeHtml(p)}" class="${total===0?'inv-empty':''}"><div class="inv-qty"><button type="button" class="inv-minus" data-inv-minus-member="${escapeHtml(member)}" data-inv-minus-pose="${escapeHtml(p)}" ${pref.locked||total===0?'disabled':''} aria-label="${escapeHtml(member)} ${escapeHtml(p)} 1枚減らす（トレード等）">−</button><span class="inv-count ${total===0?'zero':''}">${total}</span><button type="button" class="inv-plus" data-inv-plus-member="${escapeHtml(member)}" data-inv-plus-pose="${escapeHtml(p)}" ${pref.locked?'disabled':''} aria-label="${escapeHtml(member)} ${escapeHtml(p)} 1枚増やす（トレード等）">＋</button></div></td>`}).join('')}</tr>`}).join('')}</tbody></table></div>`;
