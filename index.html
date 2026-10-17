@@ -226,6 +226,34 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
  #inventoryList .inventory-table .inv-qty{grid-template-columns:9px minmax(4px,1fr) 9px!important;}
 }
 
+
+/* Inventory layout adapts to the selected series: keep long member names on one line when five poses are shown, otherwise avoid stretching pose columns. */
+#inventoryList .inventory-table{table-layout:auto!important;width:auto!important;max-width:100%!important;}
+#inventoryList .inventory-table.long-member-five{width:min(100%,560px)!important;table-layout:fixed!important;}
+#inventoryList .inventory-table.long-member-five .member-col{width:116px!important;min-width:116px!important;max-width:116px!important;}
+#inventoryList .inventory-table.long-member-five .inv-pose-head,
+#inventoryList .inventory-table.long-member-five td[data-pose]{width:auto!important;}
+#inventoryList .inventory-table.compact-poses{width:max-content!important;max-width:100%!important;table-layout:auto!important;margin-left:auto!important;margin-right:auto!important;}
+#inventoryList .inventory-table.compact-poses .member-col{width:82px!important;min-width:82px!important;max-width:82px!important;}
+#inventoryList .inventory-table.compact-poses .inv-pose-head,
+#inventoryList .inventory-table.compact-poses td[data-pose]{width:64px!important;min-width:64px!important;max-width:84px!important;}
+#inventoryList .inventory-table.compact-poses .member-cell strong{white-space:normal!important;overflow-wrap:anywhere!important;word-break:normal!important;}
+@media(max-width:600px){
+ #inventoryList .inventory-table.long-member-five{width:100%!important;max-width:520px!important;table-layout:fixed!important;}
+ #inventoryList .inventory-table.long-member-five .member-col{width:112px!important;min-width:112px!important;max-width:112px!important;}
+ #inventoryList .inventory-table.long-member-five .member-cell strong{font-size:8px!important;white-space:nowrap!important;word-break:normal!important;overflow-wrap:normal!important;letter-spacing:-.35px!important;}
+ #inventoryList .inventory-table.compact-poses{width:max-content!important;max-width:100%!important;}
+ #inventoryList .inventory-table.compact-poses .member-col{width:76px!important;min-width:76px!important;max-width:76px!important;}
+ #inventoryList .inventory-table.compact-poses .inv-pose-head,
+ #inventoryList .inventory-table.compact-poses td[data-pose]{width:58px!important;min-width:58px!important;max-width:72px!important;}
+}
+@media(max-width:380px){
+ #inventoryList .inventory-table.long-member-five .member-col{width:104px!important;min-width:104px!important;max-width:104px!important;}
+ #inventoryList .inventory-table.long-member-five .member-cell strong{font-size:7.5px!important;letter-spacing:-.45px!important;}
+ #inventoryList .inventory-table.compact-poses .member-col{width:68px!important;min-width:68px!important;max-width:68px!important;}
+ #inventoryList .inventory-table.compact-poses .inv-pose-head,
+ #inventoryList .inventory-table.compact-poses td[data-pose]{width:52px!important;min-width:52px!important;max-width:62px!important;}
+}
 </style>
 </head>
 <body>
@@ -366,9 +394,11 @@ function renderInventory(){
  document.getElementById('inventorySummary').innerHTML=`<span class="pill">${escapeHtml(sr.name)}</span><div class="inventory-total-line"><strong>${allTotal}枚 / ${grandTotal}枚</strong><span>選択中のシリーズ / 全シリーズの所持枚数</span></div><p class="muted" style="margin:5px 0 0">開封記録：${recordedTotal}枚／手入力：${manualTotal}枚／トレード調整：${adjustmentTotal>=0?'+':''}${adjustmentTotal}枚</p>`;
  const seriesMembers=Array.isArray(sr.members)&&sr.members.length?sr.members:state.members;const members=seriesMembers.filter(m=>{const favorite=state.favoriteMembers.includes(m);return inventoryFilter==='all'||(inventoryFilter==='favorite'&&favorite)||(inventoryFilter==='nonfavorite'&&!favorite);});
  const allLocked=seriesMembers.length>0&&seriesMembers.every(m=>(sr.inventoryPrefs[m]||{}).locked);
+ const hasLongMember=seriesMembers.includes('吉田綾乃クリスティー');
+ const inventoryLayoutClass=(poses.length===5&&hasLongMember)?'long-member-five':'compact-poses';
  const bulkLockButton=document.getElementById('toggleAllLocks');if(bulkLockButton)bulkLockButton.textContent=allLocked?'全メンバーのロックを解除':'全メンバーをロック';
  const filterButton=document.getElementById('cycleInventoryFilter');if(filterButton){const labels={all:'表示：全メンバー',favorite:'表示：お気に入りのみ',nonfavorite:'表示：お気に入り以外'};filterButton.textContent=labels[inventoryFilter]||labels.all;}
- document.getElementById('inventoryList').innerHTML=`<div class="inventory-table-wrap"><table class="inventory-table"><thead><tr><th class="member-col">メンバー</th>${poses.map(p=>`<th class="inv-pose-head">${escapeHtml(p)}</th>`).join('')}</tr></thead><tbody>${members.map(member=>{const pref=sr.inventoryPrefs[member]||{};return `<tr><td class="member-col ${generationClass(member)}"><div class="member-cell"><input type="checkbox" class="inv-lock" title="${pref.locked?'ロック中':'ロック解除中'}" aria-label="${escapeHtml(member)}をロック" data-inv-lock="${escapeHtml(member)}" ${pref.locked?'checked':''}><span class="inv-fav ${state.favoriteMembers.includes(member)?'on':''}" title="${state.favoriteMembers.includes(member)?'お気に入り':'通常メンバー'}">${state.favoriteMembers.includes(member)?'★':'☆'}</span><strong class="member-name ${generationClass(member)}">${escapeHtml(member)}</strong></div></td>${poses.map(p=>{const k=member+'\\u0000'+p;const rec=recorded[k]||0,man=manual[k]||0,adj=Number(adjustments[k])||0,total=Math.max(0,rec+man+adj);return `<td data-pose="${escapeHtml(p)}" class="${total===0?'inv-empty':''}"><div class="inv-qty"><button type="button" class="inv-minus" data-inv-minus-member="${escapeHtml(member)}" data-inv-minus-pose="${escapeHtml(p)}" ${pref.locked||total===0?'disabled':''} aria-label="${escapeHtml(member)} ${escapeHtml(p)} 1枚減らす（トレード等）">−</button><span class="inv-count ${total===0?'zero':''}">${total}</span><button type="button" class="inv-plus" data-inv-plus-member="${escapeHtml(member)}" data-inv-plus-pose="${escapeHtml(p)}" ${pref.locked?'disabled':''} aria-label="${escapeHtml(member)} ${escapeHtml(p)} 1枚増やす（トレード等）">＋</button></div></td>`}).join('')}</tr>`}).join('')}</tbody></table></div>`;
+ document.getElementById('inventoryList').innerHTML=`<div class="inventory-table-wrap"><table class="inventory-table ${inventoryLayoutClass}"><thead><tr><th class="member-col">メンバー</th>${poses.map(p=>`<th class="inv-pose-head">${escapeHtml(p)}</th>`).join('')}</tr></thead><tbody>${members.map(member=>{const pref=sr.inventoryPrefs[member]||{};return `<tr><td class="member-col ${generationClass(member)}"><div class="member-cell"><input type="checkbox" class="inv-lock" title="${pref.locked?'ロック中':'ロック解除中'}" aria-label="${escapeHtml(member)}をロック" data-inv-lock="${escapeHtml(member)}" ${pref.locked?'checked':''}><span class="inv-fav ${state.favoriteMembers.includes(member)?'on':''}" title="${state.favoriteMembers.includes(member)?'お気に入り':'通常メンバー'}">${state.favoriteMembers.includes(member)?'★':'☆'}</span><strong class="member-name ${generationClass(member)}">${escapeHtml(member)}</strong></div></td>${poses.map(p=>{const k=member+'\\u0000'+p;const rec=recorded[k]||0,man=manual[k]||0,adj=Number(adjustments[k])||0,total=Math.max(0,rec+man+adj);return `<td data-pose="${escapeHtml(p)}" class="${total===0?'inv-empty':''}"><div class="inv-qty"><button type="button" class="inv-minus" data-inv-minus-member="${escapeHtml(member)}" data-inv-minus-pose="${escapeHtml(p)}" ${pref.locked||total===0?'disabled':''} aria-label="${escapeHtml(member)} ${escapeHtml(p)} 1枚減らす（トレード等）">−</button><span class="inv-count ${total===0?'zero':''}">${total}</span><button type="button" class="inv-plus" data-inv-plus-member="${escapeHtml(member)}" data-inv-plus-pose="${escapeHtml(p)}" ${pref.locked?'disabled':''} aria-label="${escapeHtml(member)} ${escapeHtml(p)} 1枚増やす（トレード等）">＋</button></div></td>`}).join('')}</tr>`}).join('')}</tbody></table></div>`;
  const _newInventoryWrap=document.querySelector("#inventoryList .inventory-table-wrap");if(_newInventoryWrap){_newInventoryWrap.scrollTop=_inventoryScrollTop;_newInventoryWrap.scrollLeft=_inventoryScrollLeft;}window.scrollTo(window.scrollX,_inventoryScrollY);requestAnimationFrame(()=>window.scrollTo(window.scrollX,_inventoryScrollY));
  const filterClickButton=document.getElementById('cycleInventoryFilter');if(filterClickButton)filterClickButton.onclick=()=>{const order=['all','favorite','nonfavorite'];inventoryFilter=order[(order.indexOf(inventoryFilter)+1)%order.length];renderInventory();};
  if(bulkLockButton)bulkLockButton.onclick=()=>{const lock=!allLocked;seriesMembers.forEach(m=>{sr.inventoryPrefs[m]=sr.inventoryPrefs[m]||{};sr.inventoryPrefs[m].locked=lock;});persist();renderInventory();};
