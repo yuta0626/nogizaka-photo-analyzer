@@ -165,6 +165,20 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
  .inventory-table .inv-pose-head,.inventory-table td[data-pose]{width:61px;min-width:61px;max-width:61px;}
 }
 
+
+/* iPhoneで表が画面幅以内に収まる場合は中央寄せ。列数・長いメンバー名が増えても画面外へはみ出さず、必要な場合だけ表内スクロール。 */
+#inventoryList .inventory-table-wrap{width:100%;max-width:100%;overflow-x:auto;}
+#inventoryList .inventory-table{margin-left:auto!important;margin-right:auto!important;}
+@media(max-width:600px){
+ #inventoryList .inventory-table-wrap{display:flex;justify-content:center;}
+ #inventoryList .inventory-table{flex:0 0 auto;width:max-content!important;min-width:0!important;max-width:none!important;margin-left:0!important;margin-right:0!important;}
+ #inventoryList .inventory-table .member-col{width:clamp(78px,25vw,94px)!important;min-width:clamp(78px,25vw,94px)!important;max-width:clamp(78px,25vw,94px)!important;}
+ #inventoryList .inventory-table .inv-pose-head,
+ #inventoryList .inventory-table td[data-pose]{width:clamp(54px,17vw,68px)!important;min-width:clamp(54px,17vw,68px)!important;max-width:clamp(54px,17vw,68px)!important;}
+ #inventoryList .inventory-table .member-name{white-space:normal!important;overflow-wrap:anywhere;line-height:1.2;}
+ #inventoryList .inventory-table .member-cell{white-space:normal!important;gap:4px!important;}
+}
+
 </style>
 </head>
 <body>
