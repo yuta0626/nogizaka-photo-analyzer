@@ -93,16 +93,41 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
  .inventory-table .inv-stepper{gap:3px !important;}
 }
 
+
+/* 最終調整：お気に入り星は小さな黄色の輪郭、所持数の右に縦並びの操作ボタン */
+.inventory-table .member-cell .inv-fav,
+.inventory-table .member-col.gen3 .inv-fav,
+.inventory-table .member-col.gen4 .inv-fav,
+.inventory-table .member-col.gen5 .inv-fav,
+.inventory-table .member-col.gen6 .inv-fav{
+  width:14px !important;height:18px !important;flex:0 0 14px !important;
+  padding:0 !important;border:0 !important;border-radius:0 !important;
+  background:transparent !important;box-shadow:none !important;
+  font-size:16px !important;line-height:1 !important;text-shadow:none !important;
+}
+.inventory-table .member-cell .inv-fav.on{color:#ffd21f !important;-webkit-text-stroke:0.45px #8a6500;text-shadow:0 0 1px #8a6500 !important;font-weight:900 !important;}
+.inventory-table .member-cell .inv-fav:not(.on){color:#8b8b98 !important;-webkit-text-stroke:0 !important;}
+.inventory-table .inv-qty{display:flex !important;flex-direction:row !important;align-items:center !important;justify-content:center !important;gap:5px !important;width:100%;min-width:0;}
+.inventory-table .inv-count{flex:0 0 auto;min-width:14px;text-align:center;}
+.inventory-table .inv-stepper{display:flex !important;flex-direction:column !important;align-items:stretch !important;justify-content:center !important;gap:3px !important;padding:0 !important;width:23px !important;min-width:23px !important;max-width:23px !important;}
+.inventory-table .inv-qty .inv-stepper button{flex:none !important;width:23px !important;min-width:23px !important;max-width:23px !important;height:22px !important;padding:0 !important;font-size:13px !important;line-height:1 !important;border-radius:5px !important;}
+@media(max-width:600px){
+ .inventory-table .member-cell .inv-fav{width:14px !important;flex-basis:14px !important;font-size:15px !important;}
+ .inventory-table .inv-qty{gap:4px !important;}
+ .inventory-table .inv-stepper{width:21px !important;min-width:21px !important;max-width:21px !important;gap:3px !important;}
+ .inventory-table .inv-qty .inv-stepper button{width:21px !important;min-width:21px !important;max-width:21px !important;height:21px !important;font-size:12px !important;}
+}
+
 </style>
 </head>
 <body>
 <header><div class="wrap"><h1>乃木坂46 生写真 封入パターン分析</h1><p>開封結果を記録して、封入構成・メンバー頻度・同時封入・パック間の類似度を分析。</p></div></header>
 <div class="wrap">
 <nav>
-<button data-tab="inventory">所持生写真一覧</button><button class="active" data-tab="record">開封記録</button><button data-tab="overview">全体分析</button><button data-tab="members">メンバー分析</button><button data-tab="pairs">同時封入分析</button><button data-tab="cover">表紙メンバー分析</button><button data-tab="packs">パック比較</button><button data-tab="settings">設定・データ</button>
+<button class="active" data-tab="inventory">所持生写真一覧</button><button data-tab="record">開封記録</button><button data-tab="overview">全体分析</button><button data-tab="members">メンバー分析</button><button data-tab="pairs">同時封入分析</button><button data-tab="cover">表紙メンバー分析</button><button data-tab="packs">パック比較</button><button data-tab="settings">設定・データ</button>
 </nav>
 <main>
-<section class="panel active" id="record">
+<section class="panel" id="record">
 <div class="card">
 <div class="panel-heading"><h2>開封結果を入力</h2><button type="button" class="btn secondary undo-button" data-undo>↶ 1つ戻る</button></div>
 <p class="muted">シリーズごとに開封結果を記録できます。分析タブでは全シリーズを合算して集計します。各パック5枚です。各パック5枚分の入力欄を常に表示します。不要な場合はシリーズ単位で開封結果全体を非表示にできます。</p>
@@ -114,7 +139,7 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 <div class="row" style="justify-content:flex-end;margin:14px 0"><button class="btn" id="saveBtn">記録を保存・集計を更新</button></div>
 </div>
 </section>
-<section class="panel" id="inventory">
+<section class="panel active" id="inventory">
 <div class="card"><div class="panel-heading"><h2>所持生写真一覧</h2><button type="button" class="btn secondary undo-button" data-undo>↶ 1つ戻る</button></div><p class="muted">上のプルダウンからシリーズを選択できます。開封記録の枚数に、手入力分とトレード調整を加えて所持枚数を表示します。「＋」はトレード等で増えた枚数、「−」はトレード等で手放した枚数として調整できます。🔒ロック中は誤操作防止のため、所持数・お気に入りを変更できません。</p><div class="row" style="margin:10px 0"><div class="field"><label for="inventorySeriesSelect">表示するシリーズ</label><select id="inventorySeriesSelect"></select></div></div><div class="row inventory-actions" style="align-items:center;margin:10px 0"><button type="button" class="btn secondary" id="toggleAllLocks">全メンバーをロック</button><button type="button" class="btn secondary" id="cycleInventoryFilter">表示：お気に入りのみ</button></div><div id="inventorySummary" style="margin:12px 0"></div><div id="inventoryList"></div></div>
 </section>
 <section class="panel" id="overview">
