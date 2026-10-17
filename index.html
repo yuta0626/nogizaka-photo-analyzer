@@ -122,6 +122,13 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 @media(max-width:380px){.inventory-table .inv-qty{grid-template-columns:11px minmax(6px,1fr) 11px!important;gap:0!important}.inventory-table .inv-qty button{height:17px!important;min-height:17px!important;font-size:10px!important;line-height:15px!important}}
 
 
+/* 今回の調整：所持一覧のボタンをさらに内側へ、行ごとの横罫線を明瞭に */
+.inventory-table .inv-qty{padding:0 7px!important;box-sizing:border-box!important;}
+.inventory-table th,.inventory-table td{border-bottom:1px solid #c8c5d6!important;}
+.inventory-table thead th{border-bottom:2px solid #aaa5c2!important;}
+.inventory-table tbody tr:last-child td{border-bottom:0!important;}
+@media(max-width:600px){.inventory-table .inv-qty{padding:0 5px!important;}}
+@media(max-width:380px){.inventory-table .inv-qty{padding:0 4px!important;}}
 /* 今回の調整：所持一覧のボタンを枠の端から少し内側へ */
 .inventory-table .inv-qty{grid-template-columns:minmax(12px,16px) minmax(8px,1fr) minmax(12px,16px)!important;gap:2px!important;padding:0 4px!important;width:100%!important;box-sizing:border-box!important;}
 .inventory-table .inv-qty button{width:100%!important;max-width:100%!important;justify-self:center!important;border-radius:4px!important;}
