@@ -16,21 +16,51 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 .packgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.pack{border:1px solid var(--line);border-radius:12px;padding:13px;background:#fcfcff}.packhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.add-slot-row{display:flex;justify-content:flex-end;margin-top:10px}.add-slot-row button{font-size:12px;padding:6px 10px}.packhead strong{font-size:16px}.slot{display:grid;grid-template-columns:minmax(0,1fr) 120px;gap:8px;margin:8px 0;align-items:center}.slot>span{grid-column:1/-1}.slot select{min-width:0;padding:8px}.slot.favorite-member select[data-key="member"]{background:#fff0b8;border-color:#e5b43c;box-shadow:inset 0 0 0 1px #f0d16d}.slot.favorite-member>span{color:#8a6500;font-weight:700}.favorite-member-settings{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:7px}.favorite-member-option{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;padding:8px;background:#fff}.favorite-member-option:has(input:checked){background:#fff0b8;border-color:#e5b43c}.favorite-member-option input{accent-color:#d59b00}.inventory-form{display:grid;grid-template-columns:minmax(0,1fr) 150px auto;gap:10px;align-items:end}.inventory-list{display:grid;gap:8px}.inventory-item{display:grid;grid-template-columns:minmax(0,1fr) 120px auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff}.series-tabs{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 14px}.series-tab{border:1px solid var(--line);border-radius:999px;background:#fff;padding:8px 13px;cursor:pointer;font-weight:650}.series-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}.inventory-table-wrap{overflow:auto;max-height:70vh;border:1px solid var(--line);border-radius:10px}.inventory-table{border-collapse:separate;border-spacing:0;width:max-content;min-width:100%;font-size:13px}.inventory-table th,.inventory-table td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:8px;text-align:center;background:#fff}.inventory-table th{position:sticky;top:0;background:#f5f4fb;z-index:2}.inventory-table .member-col{position:sticky;left:0;text-align:left;z-index:3;min-width:180px;background:#fff}.inventory-table thead .member-col{z-index:4;background:#f5f4fb}.member-cell{display:flex;align-items:center;gap:7px;white-space:nowrap}.inv-lock,.inv-fav{border:0;background:transparent;cursor:pointer;font-size:18px;padding:3px;line-height:1}.inv-lock.locked{color:#7457d9}.inv-fav{color:#c3c6d2}.inv-fav.on{color:#e3a008}.inv-qty{display:flex;align-items:center;justify-content:center;gap:5px;min-width:112px}.inv-qty button{border:1px solid #d6d2e6;background:#f6f3ff;border-radius:7px;min-width:27px;height:28px;cursor:pointer;font-weight:800}.inv-qty button:disabled,.inv-lock:disabled,.inv-fav:disabled{opacity:1;cursor:not-allowed}.inv-qty button:disabled{cursor:not-allowed}.inv-have:disabled{opacity:1;filter:none;cursor:not-allowed}.inv-count{min-width:20px;font-weight:750}.inv-count.zero{color:#b8bdc8;font-weight:500}.inventory-table td.inv-empty{background:#fafafd}.inventory-table td.inv-empty .inv-qty button{background:#fafafa;color:#b8bdc8;border-color:#ececf1}.inventory-table td.inv-empty .inv-have{opacity:.45}.inv-have{width:17px;height:17px;accent-color:var(--accent)}.inv-pose-head{min-width:140px}.pose-settings{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}@media(max-width:720px){.slot{grid-template-columns:72px minmax(0,1fr) 100px}.inventory-form,.inventory-item{grid-template-columns:minmax(0,1fr) 100px}.inventory-item button{grid-column:1/-1}.pose-settings{grid-template-columns:repeat(2,minmax(0,1fr))}}.slot select{min-width:0;padding:8px}.slot.favorite-member select[data-key="member"]{background:#fff0b8;border-color:#e5b43c;box-shadow:inset 0 0 0 1px #f0d16d}.slot.favorite-member>span{color:#8a6500;font-weight:700}.favorite-member-settings{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:7px}.favorite-member-option{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;padding:8px;background:#fff}.favorite-member-option:has(input:checked){background:#fff0b8;border-color:#e5b43c}.favorite-member-option input{accent-color:#d59b00}.tablewrap{overflow:auto;max-height:560px;border:1px solid var(--line);border-radius:10px}table{border-collapse:collapse;width:100%;font-size:13px;background:white}th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}th{background:#f5f4fb;position:sticky;top:0;z-index:1}tr:last-child td{border-bottom:0}.bar{height:8px;background:#eceaf5;border-radius:99px;overflow:hidden;min-width:70px}.bar i{display:block;height:100%;background:var(--accent);border-radius:99px}.pill{display:inline-block;background:var(--accent2);color:#4c359c;border-radius:999px;padding:3px 8px;font-size:12px}.notice{background:#fff8e8;border:1px solid #f4dfad;color:#6d4b0b;border-radius:10px;padding:12px;font-size:13px}.success{color:var(--good)}.empty{padding:22px;text-align:center;color:var(--muted)}.small{font-size:12px}.matrix td{text-align:center}.matrix th:first-child{text-align:left}.matrix .heat{font-weight:700;border-radius:4px}
 @media(max-width:720px){.grid,.packgrid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.slot{grid-template-columns:minmax(0,1fr) 92px}.card{padding:14px}.wrap{padding:0 11px}}
 @media(max-width:600px){
- .inventory-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;width:100%}.inventory-actions .btn{font-size:12px;padding:9px 7px;min-width:0;white-space:normal}
- /* iPhoneでも従来の表形式を維持し、メンバー列とポーズ列を画面幅に合わせて圧縮 */
+ /* iPhone向け共通レイアウト：全タブで画面幅を超えにくくし、タップ領域も確保 */
+ body{font-size:14px;line-height:1.45;overflow-x:hidden}
+ header{padding:17px 12px 15px}header h1{font-size:21px;line-height:1.25;margin-bottom:6px}header p{font-size:12px}
+ .wrap{width:100%;max-width:100%;padding:0 8px}main{padding:10px 0 28px}
+ nav{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:6px;margin:10px 0 12px;padding:2px 0 7px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+ nav button{flex:0 0 auto;font-size:12px;padding:8px 11px;white-space:nowrap}
+ .card{padding:11px;border-radius:12px;margin-bottom:10px;box-shadow:none}
+ h2{font-size:17px;margin-bottom:8px}h3{font-size:14px;margin-bottom:6px}
+ .muted{font-size:12px;line-height:1.45}.small{font-size:11px}
+ input,select,textarea{font-size:14px;padding:8px;border-radius:8px;min-width:0}
+ label{font-size:12px;margin-bottom:4px}.field{min-width:0;flex:1 1 130px}
+ .row{gap:7px;align-items:stretch}.row>.field{flex-basis:100%}.btn{font-size:13px;padding:9px 10px;min-height:38px;white-space:normal}
+ .grid,.packgrid{grid-template-columns:minmax(0,1fr);gap:9px}.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.stat{padding:10px;border-radius:10px}.stat strong{font-size:22px}.stat span{font-size:11px}
+ .pack{padding:9px}.packhead{gap:6px;align-items:flex-start}.packhead strong{font-size:14px}.slot{grid-template-columns:62px minmax(0,1fr) 88px;gap:5px;margin:6px 0}.slot>span{font-size:11px!important;min-width:0!important}.slot select{padding:7px 5px;font-size:12px}
+ .favorite-member-settings{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.favorite-member-option{font-size:12px;padding:7px;gap:5px;min-width:0}.favorite-member-option span{overflow-wrap:anywhere}.favorite-member-option input{width:16px;height:16px;flex:0 0 16px}
+ .series-tabs{gap:5px;margin:8px 0 10px}.series-tab{font-size:12px;padding:7px 10px}
+ .inventory-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%}.inventory-actions .btn{font-size:11px;padding:8px 4px;min-width:0;min-height:38px}
+ /* 所持一覧は縦型カードにせず、従来の表を画面幅内に圧縮 */
  .inventory-table-wrap{overflow-x:hidden;max-height:none;width:100%;}
- .inventory-table{width:100%;min-width:0;table-layout:fixed;font-size:11px;}
- .inventory-table th,.inventory-table td{padding:4px 1px;}
- .inventory-table .member-col{width:108px;min-width:0;max-width:108px;}
- .inventory-table .member-cell{gap:2px;white-space:normal;min-width:0;}
- .inventory-table .member-cell strong{font-size:11px;overflow-wrap:anywhere;}
- .inv-lock,.inv-fav{font-size:14px;padding:1px;flex:0 0 auto;}
- .inv-pose-head{min-width:0;width:auto;overflow-wrap:anywhere;font-size:10px;}
- .inventory-table td[data-pose]{min-width:0;}
- .inv-qty{min-width:0;gap:1px;flex-wrap:nowrap;}
- .inv-have{width:12px;height:12px;flex:0 0 12px;margin:0;}
- .inv-qty button{min-width:17px;height:22px;padding:0 1px;border-radius:4px;font-size:12px;line-height:1;}
- .inv-count{min-width:11px;font-size:11px;}
+ .inventory-table{width:100%;min-width:0;table-layout:fixed;font-size:10px;}
+ .inventory-table th,.inventory-table td{padding:4px 1px;overflow-wrap:anywhere;}
+ .inventory-table .member-col{width:96px;min-width:0;max-width:96px;}
+ .inventory-table .member-cell{gap:1px;white-space:normal;min-width:0;flex-wrap:wrap}
+ .inventory-table .member-cell strong{font-size:10px;overflow-wrap:anywhere;word-break:break-word}
+ .inv-lock,.inv-fav{font-size:12px;padding:0;flex:0 0 auto}
+ .inv-pose-head{min-width:0;width:auto;overflow-wrap:anywhere;font-size:9px;line-height:1.15}
+ .inventory-table td[data-pose]{min-width:0}
+ .inv-qty{min-width:0;gap:0;flex-wrap:nowrap}
+ .inv-have{width:11px;height:11px;flex:0 0 11px;margin:0}
+ .inv-qty button{min-width:15px;height:21px;padding:0;border-radius:3px;font-size:11px;line-height:1}
+ .inv-count{min-width:9px;font-size:10px}
+ /* 分析表は文字を小さくし、必要な場合のみ表の中で横スクロール */
+ .tablewrap{max-width:100%;overflow-x:auto;overflow-y:auto;max-height:55vh;-webkit-overflow-scrolling:touch}
+ .tablewrap table{font-size:11px;width:max-content;min-width:100%}
+ .tablewrap th,.tablewrap td{padding:6px 7px;white-space:nowrap}
+ .bar{min-width:45px;height:6px}.pill{font-size:10px;padding:2px 6px}.notice{font-size:12px;padding:9px}
+ .pose-settings{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+ #seriesMemberNames,#memberNames{min-height:130px}
+}
+@media(max-width:380px){
+ .wrap{padding:0 6px}.card{padding:9px}header h1{font-size:19px}
+ .inventory-table .member-col{width:88px;max-width:88px}.inventory-table{font-size:9px}
+ .inv-qty button{min-width:13px;font-size:10px}.inv-have{width:10px;height:10px;flex-basis:10px}
+ .slot{grid-template-columns:55px minmax(0,1fr) 78px;gap:4px}
+ .inventory-actions .btn{font-size:10px}
 }
 </style>
 </head>
@@ -96,7 +126,7 @@ function seriesPoses(sr){return Array.isArray(sr.poses)&&sr.poses.length>=3?sr.p
 const defaultMembers=["伊藤理々杏", "岩本蓮加", "遠藤さくら", "賀喜遥香", "金川紗耶", "黒見明香", "柴田柚菜", "田村真佑", "筒井あやめ", "林瑠奈", "弓木奈於", "五百城茉央", "池田瑛紗", "一ノ瀬美空", "井上和", "岡本姫奈", "小川彩", "奥田いろは", "川﨑桜", "菅原咲月", "冨里奈央", "中西アルノ", "愛宕心響", "大越ひなの", "小津玲奈", "海邉朱莉", "川端晃菜", "鈴木佑捺", "瀬戸口心月", "長嶋凛桜", "増田三莉音", "森平麗心", "矢田萌華"];
 const emptyPacks=n=>Array.from({length:n},()=>Array.from({length:5},()=>({member:'',pose:''})));
 function escapeHtml(value){return String(value??'').replace(/[&<>\"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch]));}
-let inventoryFilter='favorite';
+let inventoryFilter='all';
 let state={members:defaultMembers,favoriteMembers:[],series:[{id:'series-1',name:'フレンチガーリー',packs:emptyPacks(10),coverMembers:{},poses:defaultPoses.slice(0,3),inventory:[],inventoryPrefs:{},inventoryAdjustments:{},openingHidden:false}],currentSeriesId:'series-1'};
 function normalizeSeriesData(s){
  const sourceSeries=Array.isArray(s.series)&&s.series.length?s.series:(Array.isArray(s.packs)?[{id:'series-1',name:'フレンチガーリー',packs:s.packs,coverMembers:s.coverMembers}]:[]);
@@ -157,10 +187,10 @@ function renderInventory(){
  const seriesMembers=Array.isArray(sr.members)&&sr.members.length?sr.members:state.members;const members=seriesMembers.filter(m=>{const favorite=state.favoriteMembers.includes(m);return inventoryFilter==='all'||(inventoryFilter==='favorite'&&favorite)||(inventoryFilter==='nonfavorite'&&!favorite);});
  const allLocked=seriesMembers.length>0&&seriesMembers.every(m=>(sr.inventoryPrefs[m]||{}).locked);
  const bulkLockButton=document.getElementById('toggleAllLocks');if(bulkLockButton)bulkLockButton.textContent=allLocked?'全メンバーのロックを解除':'全メンバーをロック';
- const filterButton=document.getElementById('cycleInventoryFilter');if(filterButton){const labels={favorite:'表示：お気に入りのみ',nonfavorite:'表示：お気に入り以外',all:'表示：全メンバー'};filterButton.textContent=labels[inventoryFilter]||labels.favorite;}
+ const filterButton=document.getElementById('cycleInventoryFilter');if(filterButton){const labels={all:'表示：全メンバー',favorite:'表示：お気に入りのみ',nonfavorite:'表示：お気に入り以外'};filterButton.textContent=labels[inventoryFilter]||labels.all;}
  document.getElementById('inventoryList').innerHTML=`<div class="inventory-table-wrap"><table class="inventory-table"><thead><tr><th class="member-col">ロック／お気に入り／メンバー</th>${poses.map(p=>`<th class="inv-pose-head">${escapeHtml(p)}</th>`).join('')}</tr></thead><tbody>${members.map(member=>{const pref=sr.inventoryPrefs[member]||{};return `<tr><td class="member-col"><div class="member-cell"><button type="button" class="inv-lock ${pref.locked?'locked':''}" title="${pref.locked?'ロック解除':'ロック'}" data-inv-lock="${escapeHtml(member)}">${pref.locked?'🔒':'🔓'}</button><span class="inv-fav ${state.favoriteMembers.includes(member)?'on':''}" title="${state.favoriteMembers.includes(member)?'お気に入り':'通常メンバー'}">${state.favoriteMembers.includes(member)?'★':'☆'}</span><strong>${escapeHtml(member)}</strong></div></td>${poses.map(p=>{const k=member+'\\u0000'+p;const rec=recorded[k]||0,man=manual[k]||0,adj=Number(adjustments[k])||0,total=Math.max(0,rec+man+adj);return `<td data-pose="${escapeHtml(p)}" class="${total===0?'inv-empty':''}"><div class="inv-qty"><input class="inv-have" type="checkbox" aria-label="${escapeHtml(member)} ${escapeHtml(p)} 所持" data-inv-check-member="${escapeHtml(member)}" data-inv-check-pose="${escapeHtml(p)}" ${total>0?'checked':''} ${pref.locked?'disabled':''}><button type="button" data-inv-minus-member="${escapeHtml(member)}" data-inv-minus-pose="${escapeHtml(p)}" ${pref.locked||total===0?'disabled':''} aria-label="${escapeHtml(member)} ${escapeHtml(p)} 1枚減らす（トレード等）">−</button><span class="inv-count ${total===0?'zero':''}">${total}</span><button type="button" data-inv-plus-member="${escapeHtml(member)}" data-inv-plus-pose="${escapeHtml(p)}" ${pref.locked?'disabled':''} aria-label="${escapeHtml(member)} ${escapeHtml(p)} 1枚増やす（トレード等）">＋</button></div></td>`}).join('')}</tr>`}).join('')}</tbody></table></div>`;
  document.querySelectorAll('[data-inventory-series]').forEach(btn=>btn.onclick=()=>{state.inventorySeriesId=btn.dataset.inventorySeries;persist();renderInventory();});
- const filterClickButton=document.getElementById('cycleInventoryFilter');if(filterClickButton)filterClickButton.onclick=()=>{const order=['favorite','nonfavorite','all'];inventoryFilter=order[(order.indexOf(inventoryFilter)+1)%order.length];renderInventory();};
+ const filterClickButton=document.getElementById('cycleInventoryFilter');if(filterClickButton)filterClickButton.onclick=()=>{const order=['all','favorite','nonfavorite'];inventoryFilter=order[(order.indexOf(inventoryFilter)+1)%order.length];renderInventory();};
  if(bulkLockButton)bulkLockButton.onclick=()=>{const lock=!allLocked;seriesMembers.forEach(m=>{sr.inventoryPrefs[m]=sr.inventoryPrefs[m]||{};sr.inventoryPrefs[m].locked=lock;});persist();renderInventory();};
  document.querySelectorAll('[data-inv-lock]').forEach(btn=>btn.onclick=()=>{const m=btn.dataset.invLock;sr.inventoryPrefs[m]=sr.inventoryPrefs[m]||{};sr.inventoryPrefs[m].locked=!sr.inventoryPrefs[m].locked;persist();renderInventory();});
  document.querySelectorAll('[data-inv-plus-member]').forEach(btn=>btn.onclick=()=>{const m=btn.dataset.invPlusMember,p=btn.dataset.invPlusPose,k=m+'\\u0000'+p;sr.inventoryAdjustments[k]=(Number(sr.inventoryAdjustments[k])||0)+1;persist();renderInventory();});
