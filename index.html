@@ -29,7 +29,7 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 <h2>開封結果を入力</h2>
 <p class="muted">シリーズごとに開封結果を記録できます。分析タブでは全シリーズを合算して集計します。各パック5枚を入力してください。</p>
 <div class="card" style="background:#faf9ff;margin:12px 0"><h3>シリーズ管理</h3><div class="row"><div class="field"><label for="seriesSelect">記録するシリーズ</label><select id="seriesSelect"></select></div><button class="btn secondary" id="switchSeries">シリーズを切り替え</button><button class="btn danger" id="deleteSeries">選択中のシリーズを削除</button></div><div class="row" style="margin-top:10px"><div class="field"><label for="newSeriesName">新しいシリーズ名</label><input id="newSeriesName" placeholder="例：2026 Halloween" /></div><button class="btn" id="addSeries">新規シリーズを追加</button></div><p class="muted" style="margin-bottom:0">シリーズ名は自由に設定できます。シリーズを切り替えると、そのシリーズ専用のパック記録が表示されます。</p></div>
-<div class="row"><div class="field"><label for="packCount">表示するパック数（現在のシリーズ）</label><input id="packCount" type="number" min="1" max="500" step="1" value="10" /></div><button class="btn" id="buildPacks">パック欄を更新</button><button class="btn secondary" id="clearPacks">このシリーズの入力を全消去</button></div><p class="muted">パック数は1〜500の範囲で自由に指定できます。表示数を減らしても、隠れたパックの記録は削除されません。</p>
+<div class="row"><div class="field"><label for="packCount">表示するパック数（現在のシリーズ）</label><input id="packCount" type="number" inputmode="numeric" min="1" max="500" step="1" value="10" autocomplete="off" /></div><button class="btn" id="buildPacks">パック欄を更新</button><button class="btn secondary" id="clearPacks">このシリーズの入力を全消去</button></div><p class="muted">パック数は1〜500の範囲で自由に指定できます。表示数を減らしても、隠れたパックの記録は削除されません。</p>
 <div class="notice" style="margin-top:12px">メンバー名は乃木坂46公式サイト掲載の現メンバー33人を初期設定しています。各パックの1枚目に入力したメンバーを表紙メンバーとして自動判定し、残り4枚を分析します。すべての分析結果はシリーズを問わず全記録を合算します。</div>
 </div>
 <div id="packEditor" class="packgrid"></div>
@@ -69,10 +69,11 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 </div>
 <script>
 const KEY='nogizakaPhotoAnalyzerV1';
-const FRESH_START_KEY='nogizakaPhotoAnalyzerFreshStart20261017';
+const FRESH_START_KEY='nogizakaPhotoAnalyzerFreshStart20261017v2';
 const poses=['ヨリ','チュウ','ヒキ'];
 const defaultMembers=["伊藤理々杏", "岩本蓮加", "遠藤さくら", "賀喜遥香", "金川紗耶", "黒見明香", "柴田柚菜", "田村真佑", "筒井あやめ", "林瑠奈", "弓木奈於", "五百城茉央", "池田瑛紗", "一ノ瀬美空", "井上和", "岡本姫奈", "小川彩", "奥田いろは", "川﨑桜", "菅原咲月", "冨里奈央", "中西アルノ", "愛宕心響", "大越ひなの", "小津玲奈", "海邉朱莉", "川端晃菜", "鈴木佑捺", "瀬戸口心月", "長嶋凛桜", "増田三莉音", "森平麗心", "矢田萌華"];
 const emptyPacks=n=>Array.from({length:n},()=>Array.from({length:5},()=>({member:'',pose:''})));
+function escapeHtml(value){return String(value??'').replace(/[&<>\"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch]));}
 let state={members:defaultMembers,series:[{id:'series-1',name:'フレンチガーリー',packs:emptyPacks(10),coverMembers:{}}],currentSeriesId:'series-1'};
 function normalizeSeriesData(s){
  if(Array.isArray(s.series)&&s.series.length){state={members:Array.isArray(s.members)?s.members:defaultMembers.slice(),series:s.series.filter(x=>x&&typeof x==='object').map((x,i)=>({id:String(x.id||`series-${i+1}`),name:String((x.name||'').trim()|| (i===0?'フレンチガーリー':`シリーズ${i+1}`)),packs:Array.isArray(x.packs)?x.packs:emptyPacks(10),coverMembers:x.coverMembers&&typeof x.coverMembers==='object'?x.coverMembers:{}})),currentSeriesId:String(s.currentSeriesId||s.series[0]?.id||'series-1')};if(!state.series.length)state.series=[{id:'series-1',name:'フレンチガーリー',packs:emptyPacks(10),coverMembers:{}}];if(!state.series.some(x=>x.id===state.currentSeriesId))state.currentSeriesId=state.series[0].id;}
@@ -138,6 +139,7 @@ function renderEditor(){
  renderSeriesSelect();
  const rawN=Number(document.getElementById('packCount').value);const n=Math.max(1,Math.min(500,Number.isFinite(rawN)&&rawN>0?Math.floor(rawN):10));document.getElementById('packCount').value=String(n);
  while(sr.packs.length<n)sr.packs.push(Array.from({length:5},()=>({member:'',pose:''})));
+ document.getElementById('packEditor').style.display='grid';
  document.getElementById('packEditor').innerHTML=sr.packs.slice(0,n).map((cards,i)=>`<div class="pack"><div class="packhead"><strong>${escapeHtml(sr.name)}・${i+1}パック目</strong><span class="pill" id="packcount-${i}">${cards.filter(c=>c.member&&c.pose).length}/5枚</span></div>${cards.map((c,j)=>`<div class="slot"><span class="muted" style="min-width:70px;font-size:12px">${j===0?'1枚目・表紙':`${j+1}枚目`}</span><select aria-label="${i+1}パック目 ${j+1}枚目 メンバー" data-pack="${i}" data-slot="${j}" data-key="member">${memberSelect(c.member)}</select><select aria-label="${i+1}パック目 ${j+1}枚目 ポーズ" data-pack="${i}" data-slot="${j}" data-key="pose"><option value="">ポーズ</option>${poses.map(p=>`<option ${c.pose===p?'selected':''}>${p}</option>`).join('')}</select></div>`).join('')}</div>`).join('');
  document.querySelectorAll('#packEditor select[data-pack]').forEach(el=>el.addEventListener('change',e=>{const t=e.target;currentSeries().packs[+t.dataset.pack][+t.dataset.slot][t.dataset.key]=t.value;const c=currentSeries().packs[+t.dataset.pack].filter(x=>x.member&&x.pose).length;const badge=document.getElementById('packcount-'+t.dataset.pack);if(badge)badge.textContent=c+'/5枚';persist();}));
 }
@@ -212,6 +214,7 @@ document.getElementById('importJson').onchange=async e=>{const f=e.target.files[
 load();
 document.getElementById('packCount').value=String(Math.max(1,Math.min(500,currentSeries().packs.length||10)));
 document.getElementById('memberNames').value=state.members.join('\n');
-renderEditor();render();
+try{renderEditor();}catch(err){console.error('入力欄の描画エラー:',err);document.getElementById('packEditor').innerHTML='<div class="notice">入力欄の表示に失敗しました。ページを再読み込みしてください。</div>';document.getElementById('packEditor').style.display='grid';}
+try{render();}catch(err){console.error('分析画面の描画エラー:',err);}
 </script>
 </body></html>
