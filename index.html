@@ -76,28 +76,32 @@ let state={members:defaultMembers,series:[{id:'series-1',name:'フレンチガ�
 function normalizeSeriesData(s){
  if(Array.isArray(s.series)&&s.series.length){state={members:Array.isArray(s.members)?s.members:defaultMembers.slice(),series:s.series.filter(x=>x&&typeof x==='object').map((x,i)=>({id:String(x.id||`series-${i+1}`),name:String((x.name||'').trim()|| (i===0?'フレンチガーリー':`シリーズ${i+1}`)),packs:Array.isArray(x.packs)?x.packs:emptyPacks(10),coverMembers:x.coverMembers&&typeof x.coverMembers==='object'?x.coverMembers:{}})),currentSeriesId:String(s.currentSeriesId||s.series[0]?.id||'series-1')};if(!state.series.length)state.series=[{id:'series-1',name:'フレンチガーリー',packs:emptyPacks(10),coverMembers:{}}];if(!state.series.some(x=>x.id===state.currentSeriesId))state.currentSeriesId=state.series[0].id;}
  else if(Array.isArray(s.packs)){state={members:Array.isArray(s.members)?s.members:defaultMembers.slice(),series:[{id:'series-1',name:'フレンチガーリー',packs:s.packs,coverMembers:s.coverMembers&&typeof s.coverMembers==='object'?s.coverMembers:{}}],currentSeriesId:'series-1'};}
- // 旧データを安全に整える。旧「シリーズ1」は「フレンチガーリー」に改名。
- state.series.forEach((sr,i)=>{if(!sr.name||sr.name==='シリーズ1')sr.name='フレンチガーリー';});
- // 同名シリーズは1つにまとめ、既存カードは空欄を埋める形で保持する。
- const merged=[];
+ // 旧データを整える。空名・旧「シリーズ1」は「フレンチガーリー」に統合。
+ state.series.forEach(sr=>{if(!sr.name||sr.name==='シリーズ1')sr.name='フレンチガーリー';});
+ // すべての既存記録を「フレンチガーリー」に集約する。重複する同名シリーズは
+ // 同じパック番号の空欄だけを補完し、別シリーズにある記録済みパックは末尾へ移す。
+ const canonical=state.series.find(sr=>sr.name.trim()==='フレンチガーリー')||state.series[0];
+ canonical.name='フレンチガーリー';
+ const blankCard=()=>({member:'',pose:''});
+ const hasData=p=>Array.isArray(p)&&p.some(c=>c&&(c.member||c.pose));
+ const mergeSamePack=(target,source)=>{
+   while(target.length<5)target.push(blankCard());
+   for(let j=0;j<5;j++){const from=source?.[j]||blankCard();if(!target[j].member&&from.member)target[j].member=from.member;if(!target[j].pose&&from.pose)target[j].pose=from.pose;}
+ };
  for(const sr of state.series){
-   const existing=merged.find(x=>x.name.trim().toLocaleLowerCase()===sr.name.trim().toLocaleLowerCase());
-   if(!existing){merged.push(sr);continue;}
-   const count=Math.max(existing.packs.length,sr.packs.length);
-   while(existing.packs.length<count)existing.packs.push(Array.from({length:5},()=>({member:'',pose:''})));
-   for(let i=0;i<sr.packs.length;i++){
-     while(existing.packs[i].length<5)existing.packs[i].push({member:'',pose:''});
-     for(let j=0;j<5;j++){
-       const from=sr.packs[i][j]||{member:'',pose:''},to=existing.packs[i][j];
-       if(!to.member&&from.member)to.member=from.member;
-       if(!to.pose&&from.pose)to.pose=from.pose;
-     }
+   if(sr.id===canonical.id)continue;
+   const sameName=sr.name.trim().toLocaleLowerCase()==='フレンチガーリー';
+   if(sameName){
+     while(canonical.packs.length<sr.packs.length)canonical.packs.push(emptyPacks(1)[0]);
+     for(let i=0;i<sr.packs.length;i++)mergeSamePack(canonical.packs[i],sr.packs[i]);
+   }else{
+     // 他シリーズの入力済みパックは失わず、フレンチガーリーの後ろに追加する。
+     for(const pack of sr.packs){if(hasData(pack)){const copy=Array.from({length:5},(_,j)=>({...((pack&&pack[j])||blankCard())}));canonical.packs.push(copy);}}
    }
-   if(state.currentSeriesId===sr.id)state.currentSeriesId=existing.id;
  }
- state.series=merged;
- if(!state.series.length)state.series=[{id:'series-1',name:'フレンチガーリー',packs:emptyPacks(10),coverMembers:{}}];
- if(!state.series.some(x=>x.id===state.currentSeriesId))state.currentSeriesId=state.series[0].id;
+ state.series=[canonical];
+ state.currentSeriesId=canonical.id;
+ if(!canonical.packs.length)canonical.packs=emptyPacks(10);
  const placeholders=state.members.length>0&&state.members.every(m=>/^メンバー\d+$/.test(m));const noEntries=state.series.every(sr=>sr.packs.every(p=>p.every(c=>!c.member&&!c.pose)));if(placeholders&&noEntries)state.members=defaultMembers.slice();
 }
 function load(){try{const raw=localStorage.getItem(KEY);const s=raw?JSON.parse(raw):null;if(s&&Array.isArray(s.members)&&(Array.isArray(s.packs)||Array.isArray(s.series))){normalizeSeriesData(s);persist();}}catch(e){}}
