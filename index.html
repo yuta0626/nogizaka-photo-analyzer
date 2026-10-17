@@ -69,6 +69,7 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 </div>
 <script>
 const KEY='nogizakaPhotoAnalyzerV1';
+const FRESH_START_KEY='nogizakaPhotoAnalyzerFreshStart20261017';
 const poses=['ヨリ','チュウ','ヒキ'];
 const defaultMembers=["伊藤理々杏", "岩本蓮加", "遠藤さくら", "賀喜遥香", "金川紗耶", "黒見明香", "柴田柚菜", "田村真佑", "筒井あやめ", "林瑠奈", "弓木奈於", "五百城茉央", "池田瑛紗", "一ノ瀬美空", "井上和", "岡本姫奈", "小川彩", "奥田いろは", "川﨑桜", "菅原咲月", "冨里奈央", "中西アルノ", "愛宕心響", "大越ひなの", "小津玲奈", "海邉朱莉", "川端晃菜", "鈴木佑捺", "瀬戸口心月", "長嶋凛桜", "増田三莉音", "森平麗心", "矢田萌華"];
 const emptyPacks=n=>Array.from({length:n},()=>Array.from({length:5},()=>({member:'',pose:''})));
@@ -77,7 +78,16 @@ function normalizeSeriesData(s){
  if(Array.isArray(s.series)&&s.series.length){state={members:Array.isArray(s.members)?s.members:defaultMembers.slice(),series:s.series.filter(x=>x&&typeof x==='object').map((x,i)=>({id:String(x.id||`series-${i+1}`),name:String((x.name||'').trim()|| (i===0?'フレンチガーリー':`シリーズ${i+1}`)),packs:Array.isArray(x.packs)?x.packs:emptyPacks(10),coverMembers:x.coverMembers&&typeof x.coverMembers==='object'?x.coverMembers:{}})),currentSeriesId:String(s.currentSeriesId||s.series[0]?.id||'series-1')};if(!state.series.length)state.series=[{id:'series-1',name:'フレンチガーリー',packs:emptyPacks(10),coverMembers:{}}];if(!state.series.some(x=>x.id===state.currentSeriesId))state.currentSeriesId=state.series[0].id;}
  else if(Array.isArray(s.packs)){state={members:Array.isArray(s.members)?s.members:defaultMembers.slice(),series:[{id:'series-1',name:'フレンチガーリー',packs:s.packs,coverMembers:s.coverMembers&&typeof s.coverMembers==='object'?s.coverMembers:{}}],currentSeriesId:'series-1'};}
  // 旧データを整える。空名・旧「シリーズ1」は「フレンチガーリー」に統合。
- state.series.forEach(sr=>{if(!sr.name||sr.name==='シリーズ1')sr.name='フレンチガーリー';});
+ state.series.forEach((sr,si)=>{
+   if(!sr.name||sr.name==='シリーズ1')sr.name='フレンチガーリー';
+   // 古い/部分的な保存データでも入力欄の描画が止まらないよう、各パックを5枚に正規化。
+   if(!Array.isArray(sr.packs))sr.packs=[];
+   sr.packs=sr.packs.map(pack=>Array.from({length:5},(_,j)=>{
+     const c=Array.isArray(pack)?pack[j]:null;
+     return {member:String(c?.member||''),pose:String(c?.pose||'')};
+   }));
+   if(!sr.packs.length)sr.packs=emptyPacks(10);
+ });
  // すべての既存記録を「フレンチガーリー」に集約する。重複する同名シリーズは
  // 同じパック番号の空欄だけを補完し、別シリーズにある記録済みパックは末尾へ移す。
  const canonical=state.series.find(sr=>sr.name.trim()==='フレンチガーリー')||state.series[0];
@@ -104,14 +114,28 @@ function normalizeSeriesData(s){
  if(!canonical.packs.length)canonical.packs=emptyPacks(10);
  const placeholders=state.members.length>0&&state.members.every(m=>/^メンバー\d+$/.test(m));const noEntries=state.series.every(sr=>sr.packs.every(p=>p.every(c=>!c.member&&!c.pose)));if(placeholders&&noEntries)state.members=defaultMembers.slice();
 }
-function load(){try{const raw=localStorage.getItem(KEY);const s=raw?JSON.parse(raw):null;if(s&&Array.isArray(s.members)&&(Array.isArray(s.packs)||Array.isArray(s.series))){normalizeSeriesData(s);persist();}}catch(e){}}
+function load(){try{
+ // ユーザーの希望により、今回の更新を最初に開いた時だけ以前の記録をリセットして新規開始する。
+ if(localStorage.getItem(FRESH_START_KEY)!=='done'){
+   state={members:defaultMembers.slice(),series:[{id:'series-1',name:'フレンチガーリー',packs:emptyPacks(10),coverMembers:{}}],currentSeriesId:'series-1'};
+   localStorage.removeItem(KEY);
+   localStorage.setItem(FRESH_START_KEY,'done');
+   persist();
+   return;
+ }
+ const raw=localStorage.getItem(KEY);const s=raw?JSON.parse(raw):null;if(s&&Array.isArray(s.members)&&(Array.isArray(s.packs)||Array.isArray(s.series))){normalizeSeriesData(s);persist();}
+ }catch(e){console.error('データ初期化エラー:',e);}}
 function persist(){localStorage.setItem(KEY,JSON.stringify(state));}
 function currentSeries(){return state.series.find(s=>s.id===state.currentSeriesId)||state.series[0];}
 function activePacks(){return state.series.flatMap(sr=>sr.packs.map((cards,i)=>({index:i,seriesId:sr.id,seriesName:sr.name,cover:cards[0]?.member&&cards[0]?.pose?cards[0].member:'',label:`${sr.name}・${i+1}パック目`,cards:cards.filter(c=>c.member&&c.pose),remainingCards:cards.slice(1).filter(c=>c.member&&c.pose)})).filter(p=>p.cards.length>0));}
 function renderSeriesSelect(){const el=document.getElementById('seriesSelect');if(!state.series.length)state.series=[{id:'series-1',name:'フレンチガーリー',packs:emptyPacks(10),coverMembers:{}}];const current=currentSeries();el.replaceChildren();state.series.forEach(sr=>{const opt=document.createElement('option');opt.value=sr.id;opt.textContent=sr.name||'名称未設定シリーズ';opt.selected=sr.id===current.id;el.appendChild(opt);});if(!el.options.length){const opt=document.createElement('option');opt.value='series-1';opt.textContent='フレンチガーリー';el.appendChild(opt);}}
 function memberSelect(value){return `<option value="">未入力</option>`+state.members.map(m=>`<option value="${escapeHtml(m)}" ${m===value?'selected':''}>${escapeHtml(m)}</option>`).join('');}
 function renderEditor(){
- const sr=currentSeries();if(!sr)return;renderSeriesSelect();
+ if(!Array.isArray(state.series)||!state.series.length){state.series=[{id:'series-1',name:'フレンチガーリー',packs:emptyPacks(10),coverMembers:{}}];state.currentSeriesId='series-1';}
+ let sr=currentSeries();if(!sr){state.currentSeriesId=state.series[0].id;sr=currentSeries();}
+ if(!Array.isArray(sr.packs))sr.packs=emptyPacks(10);
+ sr.packs=sr.packs.map(pack=>Array.from({length:5},(_,j)=>({member:String((Array.isArray(pack)?pack[j]?.member:'')||''),pose:String((Array.isArray(pack)?pack[j]?.pose:'')||'')})));
+ renderSeriesSelect();
  const rawN=Number(document.getElementById('packCount').value);const n=Math.max(1,Math.min(500,Number.isFinite(rawN)&&rawN>0?Math.floor(rawN):10));document.getElementById('packCount').value=String(n);
  while(sr.packs.length<n)sr.packs.push(Array.from({length:5},()=>({member:'',pose:''})));
  document.getElementById('packEditor').innerHTML=sr.packs.slice(0,n).map((cards,i)=>`<div class="pack"><div class="packhead"><strong>${escapeHtml(sr.name)}・${i+1}パック目</strong><span class="pill" id="packcount-${i}">${cards.filter(c=>c.member&&c.pose).length}/5枚</span></div>${cards.map((c,j)=>`<div class="slot"><span class="muted" style="min-width:70px;font-size:12px">${j===0?'1枚目・表紙':`${j+1}枚目`}</span><select aria-label="${i+1}パック目 ${j+1}枚目 メンバー" data-pack="${i}" data-slot="${j}" data-key="member">${memberSelect(c.member)}</select><select aria-label="${i+1}パック目 ${j+1}枚目 ポーズ" data-pack="${i}" data-slot="${j}" data-key="pose"><option value="">ポーズ</option>${poses.map(p=>`<option ${c.pose===p?'selected':''}>${p}</option>`).join('')}</select></div>`).join('')}</div>`).join('');
@@ -174,7 +198,7 @@ document.getElementById('buildPacks').onclick=()=>renderEditor();
 document.getElementById('packCount').addEventListener('change',()=>renderEditor());
 document.getElementById('saveBtn').onclick=()=>{persist();render();alert('記録を保存し、集計を更新しました。');};
 document.getElementById('clearPacks').onclick=()=>{if(confirm(`「${currentSeries().name}」の開封記録をすべて消去しますか？他のシリーズは消去されません。`)){currentSeries().packs=emptyPacks(Math.max(10,Number(document.getElementById('packCount').value)||10));persist();renderEditor();render();}};
-function switchCurrentSeries(){const id=document.getElementById('seriesSelect').value;if(state.series.some(sr=>sr.id===id)){state.currentSeriesId=id;document.getElementById('packCount').value=String(Math.max(1,Math.min(500,currentSeries().packs.length||10)));persist();renderEditor();render();}}
+function switchCurrentSeries(){const id=document.getElementById('seriesSelect').value;if(state.series.some(sr=>sr.id===id)){state.currentSeriesId=id;document.getElementById('packCount').value=String(Math.max(1,Math.min(500,currentSeries().packs.length||10)));persist();renderEditor();try{render();}catch(err){console.error('集計更新エラー:',err);}document.getElementById('packEditor').style.display='grid';}}
 document.getElementById('switchSeries').onclick=switchCurrentSeries;
 document.getElementById('seriesSelect').addEventListener('change',switchCurrentSeries);
 document.getElementById('addSeries').onclick=()=>{const name=document.getElementById('newSeriesName').value.trim();if(!name){alert('シリーズ名を入力してください。');return;}if(state.series.some(sr=>sr.name.toLocaleLowerCase()===name.toLocaleLowerCase())){alert('同じ名前のシリーズがすでにあります。');return;}const id='series-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);state.series.push({id,name,packs:emptyPacks(10)});state.currentSeriesId=id;document.getElementById('newSeriesName').value='';document.getElementById('packCount').value='10';persist();renderEditor();render();};
