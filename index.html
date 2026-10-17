@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>乃木坂46 生写真 封入パターン分析</title>
+<title>乃木坂46 生写真管理</title>
 <style>
 :root{--bg:#f6f7fb;--card:#fff;--ink:#202334;--muted:#697086;--line:#e2e5ef;--accent:#7457d9;--accent2:#f0ecff;--good:#167d55;--warn:#9b5b00;--bad:#b42345}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
@@ -94,34 +94,26 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 }
 
 
-/* 最終調整：お気に入り星は小さな黄色の輪郭、所持数の右に縦並びの操作ボタン */
-.inventory-table .member-cell .inv-fav,
-.inventory-table .member-col.gen3 .inv-fav,
-.inventory-table .member-col.gen4 .inv-fav,
-.inventory-table .member-col.gen5 .inv-fav,
-.inventory-table .member-col.gen6 .inv-fav{
-  width:14px !important;height:18px !important;flex:0 0 14px !important;
-  padding:0 !important;border:0 !important;border-radius:0 !important;
-  background:transparent !important;box-shadow:none !important;
-  font-size:16px !important;line-height:1 !important;text-shadow:none !important;
-}
-.inventory-table .member-cell .inv-fav.on{color:#ffd21f !important;-webkit-text-stroke:0.45px #8a6500;text-shadow:0 0 1px #8a6500 !important;font-weight:900 !important;}
-.inventory-table .member-cell .inv-fav:not(.on){color:#8b8b98 !important;-webkit-text-stroke:0 !important;}
-.inventory-table .inv-qty{display:flex !important;flex-direction:row !important;align-items:center !important;justify-content:center !important;gap:5px !important;width:100%;min-width:0;}
-.inventory-table .inv-count{flex:0 0 auto;min-width:14px;text-align:center;}
-.inventory-table .inv-stepper{display:flex !important;flex-direction:column !important;align-items:stretch !important;justify-content:center !important;gap:3px !important;padding:0 !important;width:23px !important;min-width:23px !important;max-width:23px !important;}
-.inventory-table .inv-qty .inv-stepper button{flex:none !important;width:23px !important;min-width:23px !important;max-width:23px !important;height:22px !important;padding:0 !important;font-size:13px !important;line-height:1 !important;border-radius:5px !important;}
+/* 仕上げ：ボタンをセル内に収め、数字の右側に縦並び */
+.inventory-table .inv-qty{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:3px;width:100%;min-width:0;}
+.inventory-table .inv-count{flex:0 1 auto;min-width:10px;width:auto;line-height:1.1;font-size:12px;white-space:nowrap;}
+.inventory-table .inv-stepper{display:flex;flex:0 0 20px;flex-direction:column;align-items:stretch;justify-content:center;gap:2px !important;width:20px;max-width:20px;min-width:0;padding:0;}
+.inventory-table .inv-qty .inv-stepper button{box-sizing:border-box;display:block;flex:0 0 19px;width:19px;min-width:19px;max-width:19px;height:19px;min-height:19px;padding:0;margin:0;border-radius:4px;font-size:12px;line-height:17px;overflow:hidden;}
 @media(max-width:600px){
- .inventory-table .member-cell .inv-fav{width:14px !important;flex-basis:14px !important;font-size:15px !important;}
- .inventory-table .inv-qty{gap:4px !important;}
- .inventory-table .inv-stepper{width:21px !important;min-width:21px !important;max-width:21px !important;gap:3px !important;}
- .inventory-table .inv-qty .inv-stepper button{width:21px !important;min-width:21px !important;max-width:21px !important;height:21px !important;font-size:12px !important;}
+ .inventory-table .inv-qty{flex-direction:row;gap:2px;}
+ .inventory-table .inv-count{font-size:10px;}
+ .inventory-table .inv-stepper{flex:0 0 17px;width:17px;max-width:17px;gap:2px !important;}
+ .inventory-table .inv-qty .inv-stepper button{flex-basis:17px;width:17px;min-width:17px;max-width:17px;height:17px;min-height:17px;font-size:11px;line-height:15px;border-radius:3px;}
+ .inventory-table th,.inventory-table td{padding:3px 1px;}
 }
-
+@media(max-width:380px){
+ .inventory-table .inv-stepper{flex-basis:15px;width:15px;max-width:15px;}
+ .inventory-table .inv-qty .inv-stepper button{flex-basis:15px;width:15px;min-width:15px;max-width:15px;height:16px;min-height:16px;font-size:10px;line-height:14px;}
+}
 </style>
 </head>
 <body>
-<header><div class="wrap"><h1>乃木坂46 生写真 封入パターン分析</h1><p>開封結果を記録して、封入構成・メンバー頻度・同時封入・パック間の類似度を分析。</p></div></header>
+<header><div class="wrap"><h1>乃木坂46 生写真管理</h1><p>開封結果を記録して、封入構成・メンバー頻度・同時封入・パック間の類似度を分析。</p></div></header>
 <div class="wrap">
 <nav>
 <button class="active" data-tab="inventory">所持生写真一覧</button><button data-tab="record">開封記録</button><button data-tab="overview">全体分析</button><button data-tab="members">メンバー分析</button><button data-tab="pairs">同時封入分析</button><button data-tab="cover">表紙メンバー分析</button><button data-tab="packs">パック比較</button><button data-tab="settings">設定・データ</button>
