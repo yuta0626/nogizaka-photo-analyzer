@@ -121,6 +121,26 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 @media(max-width:600px){.inventory-table .inv-qty{grid-template-columns:minmax(11px,14px) minmax(7px,1fr) minmax(11px,14px)!important;gap:1px!important}.inventory-table .inv-qty button{height:19px!important;min-height:19px!important;font-size:11px!important;line-height:17px!important}.inventory-table .inv-qty .inv-count{font-size:10px!important}}
 @media(max-width:380px){.inventory-table .inv-qty{grid-template-columns:11px minmax(6px,1fr) 11px!important;gap:0!important}.inventory-table .inv-qty button{height:17px!important;min-height:17px!important;font-size:10px!important;line-height:15px!important}}
 
+
+/* 今回の調整：所持一覧のボタンを枠の端から少し内側へ */
+.inventory-table .inv-qty{grid-template-columns:minmax(12px,16px) minmax(8px,1fr) minmax(12px,16px)!important;gap:2px!important;padding:0 4px!important;width:100%!important;box-sizing:border-box!important;}
+.inventory-table .inv-qty button{width:100%!important;max-width:100%!important;justify-self:center!important;border-radius:4px!important;}
+/* 開封記録：メンバー欄を広く、ポーズ欄をコンパクトに */
+#packEditor .slot{grid-template-columns:minmax(0,1.65fr) minmax(76px,.75fr)!important;column-gap:8px!important;}
+#packEditor .slot>span{grid-column:1/-1!important;}
+#packEditor .slot select[data-key="member"]{grid-column:1!important;width:100%;min-width:0;}
+#packEditor .slot select[data-key="pose"]{grid-column:2!important;width:100%;min-width:0;}
+#packEditor .packhead strong{display:flex;flex-direction:column;align-items:flex-start;gap:1px;line-height:1.3;}
+#packEditor .pack-series-name,#packEditor .pack-number{display:block;}
+#packEditor .pack-number{font-size:.9em;font-weight:600;color:var(--muted);}
+@media(max-width:600px){
+ .inventory-table .inv-qty{grid-template-columns:minmax(11px,14px) minmax(7px,1fr) minmax(11px,14px)!important;gap:1px!important;padding:0 3px!important;}
+ #packEditor .slot{grid-template-columns:minmax(0,1.5fr) minmax(72px,.8fr)!important;gap:5px!important;}
+ #packEditor .slot select{padding:7px 4px;font-size:12px;}
+ #packEditor .packhead strong{font-size:13px;}
+}
+@media(max-width:380px){.inventory-table .inv-qty{padding:0 2px!important;}}
+
 </style>
 </head>
 <body>
@@ -229,7 +249,7 @@ function renderEditor(){
  const rawN=Number(document.getElementById('packCount').value);const n=Math.max(1,Math.min(500,Number.isFinite(rawN)&&rawN>0?Math.floor(rawN):10));document.getElementById('packCount').value=String(n);
  while(sr.packs.length<n)sr.packs.push(Array.from({length:5},()=>({member:'',pose:''})));
  document.getElementById('packEditor').style.display='grid';
- document.getElementById('packEditor').innerHTML=sr.packs.slice(0,n).map((cards,i)=>`<div class="pack"><div class="packhead"><strong>${escapeHtml(sr.name)}・${i+1}パック目</strong><span class="pill" id="packcount-${i}">${cards.filter(c=>c.member&&c.pose).length}/5枚</span></div>${cards.map((c,j)=>`<div class="slot ${c.member&&state.favoriteMembers.includes(c.member)?'favorite-member':''}"><span class="muted" style="min-width:70px;font-size:12px">${j===0?'1枚目・表紙':`${j+1}枚目`}</span><select aria-label="${i+1}パック目 ${j+1}枚目 メンバー" data-pack="${i}" data-slot="${j}" data-key="member">${memberSelect(c.member,seriesMembers)}</select><select aria-label="${i+1}パック目 ${j+1}枚目 ポーズ" data-pack="${i}" data-slot="${j}" data-key="pose"><option value="">ポーズ</option>${poses.map(p=>`<option ${c.pose===p?'selected':''}>${p}</option>`).join('')}</select></div>`).join('')}</div>`).join('');
+ document.getElementById('packEditor').innerHTML=sr.packs.slice(0,n).map((cards,i)=>`<div class="pack"><div class="packhead"><strong><span class="pack-series-name">${escapeHtml(sr.name)}</span><span class="pack-number">${i+1}パック目</span></strong><span class="pill" id="packcount-${i}">${cards.filter(c=>c.member&&c.pose).length}/5枚</span></div>${cards.map((c,j)=>`<div class="slot ${c.member&&state.favoriteMembers.includes(c.member)?'favorite-member':''}"><span class="muted" style="min-width:70px;font-size:12px">${j===0?'1枚目・表紙':`${j+1}枚目`}</span><select aria-label="${i+1}パック目 ${j+1}枚目 メンバー" data-pack="${i}" data-slot="${j}" data-key="member">${memberSelect(c.member,seriesMembers)}</select><select aria-label="${i+1}パック目 ${j+1}枚目 ポーズ" data-pack="${i}" data-slot="${j}" data-key="pose"><option value="">ポーズ</option>${poses.map(p=>`<option ${c.pose===p?'selected':''}>${p}</option>`).join('')}</select></div>`).join('')}</div>`).join('');
  document.querySelectorAll('#packEditor select[data-pack]').forEach(el=>el.addEventListener('change',e=>{const t=e.target;currentSeries().packs[+t.dataset.pack][+t.dataset.slot][t.dataset.key]=t.value;const packIndex=+t.dataset.pack;const c=currentSeries().packs[packIndex].filter(x=>x.member&&x.pose).length;const badge=document.getElementById('packcount-'+packIndex);if(badge)badge.textContent=c+'/5枚';persist();renderInventory();renderEditor();}));
 }
 function fillSeriesSelect(id){const el=document.getElementById(id);if(!el)return;const old=el.value;el.innerHTML=state.series.map(sr=>`<option value="${escapeHtml(sr.id)}">${escapeHtml(sr.name)}</option>`).join('');if(state.series.some(sr=>sr.id===old))el.value=old;else el.value=currentSeries().id;}
