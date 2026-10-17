@@ -13,7 +13,7 @@ nav{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}nav button{border:1px soli
 main{padding:18px 0 50px}.panel{display:none}.panel.active{display:block}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 3px 14px #20233408}
 h2{font-size:20px;margin:0 0 12px}h3{font-size:16px;margin:0 0 8px}.muted{color:var(--muted);font-size:13px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.stat{padding:15px;border:1px solid var(--line);border-radius:13px;background:#fff}.stat strong{display:block;font-size:27px;line-height:1.2;margin-top:5px}.stat span{font-size:12px;color:var(--muted)}
 label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,select,textarea{width:100%;border:1px solid #cfd3e0;border-radius:9px;padding:10px;font:inherit;background:#fff;color:var(--ink)}textarea{min-height:170px;resize:vertical}.row{display:flex;gap:10px;align-items:end;flex-wrap:wrap}.field{flex:1;min-width:150px}.btn{border:0;background:var(--accent);color:white;padding:10px 14px;border-radius:9px;font-weight:700;cursor:pointer}.btn.secondary{background:#ece8fb;color:#4c359c}.btn.danger{background:#fff0f2;color:var(--bad);border:1px solid #ffd5dc}.btn:disabled{opacity:.5;cursor:not-allowed}
-.packgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.pack{border:1px solid var(--line);border-radius:12px;padding:13px;background:#fcfcff}.packhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.packhead strong{font-size:16px}.slot{display:grid;grid-template-columns:minmax(0,1fr) 100px;gap:8px;margin:8px 0}.slot select{min-width:0;padding:8px}.tablewrap{overflow:auto;max-height:560px;border:1px solid var(--line);border-radius:10px}table{border-collapse:collapse;width:100%;font-size:13px;background:white}th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}th{background:#f5f4fb;position:sticky;top:0;z-index:1}tr:last-child td{border-bottom:0}.bar{height:8px;background:#eceaf5;border-radius:99px;overflow:hidden;min-width:70px}.bar i{display:block;height:100%;background:var(--accent);border-radius:99px}.pill{display:inline-block;background:var(--accent2);color:#4c359c;border-radius:999px;padding:3px 8px;font-size:12px}.notice{background:#fff8e8;border:1px solid #f4dfad;color:#6d4b0b;border-radius:10px;padding:12px;font-size:13px}.success{color:var(--good)}.empty{padding:22px;text-align:center;color:var(--muted)}.small{font-size:12px}.matrix td{text-align:center}.matrix th:first-child{text-align:left}.matrix .heat{font-weight:700;border-radius:4px}
+.packgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.pack{border:1px solid var(--line);border-radius:12px;padding:13px;background:#fcfcff}.packhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.packhead strong{font-size:16px}.slot{display:grid;grid-template-columns:minmax(0,1fr) 120px;gap:8px;margin:8px 0;align-items:center}.slot>span{grid-column:1/-1}.slot select{min-width:0;padding:8px}.inventory-form{display:grid;grid-template-columns:minmax(0,1fr) 150px auto;gap:10px;align-items:end}.inventory-list{display:grid;gap:8px}.inventory-item{display:grid;grid-template-columns:minmax(0,1fr) 120px auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff}.pose-settings{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}@media(max-width:720px){.slot{grid-template-columns:72px minmax(0,1fr) 100px}.inventory-form,.inventory-item{grid-template-columns:minmax(0,1fr) 100px}.inventory-item button{grid-column:1/-1}.pose-settings{grid-template-columns:repeat(2,minmax(0,1fr))}}.slot select{min-width:0;padding:8px}.tablewrap{overflow:auto;max-height:560px;border:1px solid var(--line);border-radius:10px}table{border-collapse:collapse;width:100%;font-size:13px;background:white}th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}th{background:#f5f4fb;position:sticky;top:0;z-index:1}tr:last-child td{border-bottom:0}.bar{height:8px;background:#eceaf5;border-radius:99px;overflow:hidden;min-width:70px}.bar i{display:block;height:100%;background:var(--accent);border-radius:99px}.pill{display:inline-block;background:var(--accent2);color:#4c359c;border-radius:999px;padding:3px 8px;font-size:12px}.notice{background:#fff8e8;border:1px solid #f4dfad;color:#6d4b0b;border-radius:10px;padding:12px;font-size:13px}.success{color:var(--good)}.empty{padding:22px;text-align:center;color:var(--muted)}.small{font-size:12px}.matrix td{text-align:center}.matrix th:first-child{text-align:left}.matrix .heat{font-weight:700;border-radius:4px}
 @media(max-width:720px){.grid,.packgrid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.slot{grid-template-columns:minmax(0,1fr) 92px}.card{padding:14px}.wrap{padding:0 11px}}
 </style>
 </head>
@@ -21,7 +21,7 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 <header><div class="wrap"><h1>乃木坂46 生写真 封入パターン分析</h1><p>開封結果を記録して、封入構成・メンバー頻度・同時封入・パック間の類似度を分析。</p></div></header>
 <div class="wrap">
 <nav>
-<button class="active" data-tab="record">開封記録</button><button data-tab="overview">全体分析</button><button data-tab="members">メンバー分析</button><button data-tab="pairs">同時封入分析</button><button data-tab="cover">表紙メンバー分析</button><button data-tab="packs">パック比較</button><button data-tab="settings">設定・データ</button>
+<button class="active" data-tab="record">開封記録</button><button data-tab="inventory">所持生写真一覧</button><button data-tab="overview">全体分析</button><button data-tab="members">メンバー分析</button><button data-tab="pairs">同時封入分析</button><button data-tab="cover">表紙メンバー分析</button><button data-tab="packs">パック比較</button><button data-tab="settings">設定・データ</button>
 </nav>
 <main>
 <section class="panel active" id="record">
@@ -34,6 +34,12 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 </div>
 <div id="packEditor" class="packgrid"></div>
 <div class="row" style="justify-content:flex-end;margin:14px 0"><button class="btn" id="saveBtn">記録を保存・集計を更新</button></div>
+</section>
+<section class="panel" id="inventory">
+<div class="card"><h2>所持している生写真を登録</h2><p class="muted">パックごとの開封結果が分からなくても、手元にある写真を1枚ずつ登録できます。シリーズ別に保存し、下の一覧で確認できます。この一覧は開封記録・封入分析とは別管理です。</p>
+<div class="row"><div class="field"><label for="inventorySeries">登録するシリーズ</label><select id="inventorySeries"></select></div></div>
+<div class="inventory-form" style="margin-top:12px"><div class="field"><label for="inventoryMember">メンバー（左）</label><select id="inventoryMember"></select></div><div class="field"><label for="inventoryPose">ポーズ（右）</label><select id="inventoryPose"></select></div><button class="btn" id="addInventory">写真を追加</button></div>
+</div><div class="card"><h2>所持生写真一覧</h2><div class="row"><div class="field"><label for="inventoryFilter">表示するシリーズ</label><select id="inventoryFilter"></select></div><div class="field"><label for="inventorySearch">メンバー名で絞り込み</label><input id="inventorySearch" placeholder="メンバー名を入力"></div></div><div id="inventorySummary" style="margin:12px 0"></div><div id="inventoryList" class="inventory-list"></div></div>
 </section>
 <section class="panel" id="overview">
 <div class="stats" id="overviewStats"></div>
@@ -61,7 +67,7 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 </section>
 <section class="panel" id="settings">
 <div class="card"><h2>メンバー一覧</h2><p class="muted">乃木坂46公式サイト掲載の現メンバー33人を初期設定しています。1行に1人、名称を変更しても封入記録はそのまま保持されます。</p><textarea id="memberNames"></textarea><div class="row" style="margin-top:10px"><button class="btn" id="saveMembers">メンバー一覧を保存</button><button class="btn secondary" id="resetMembers">公式掲載の初期メンバーに戻す</button></div></div>
-<div class="card"><h2>データのバックアップ</h2><p class="muted">JSONで保存・復元できます。CSVは記録済みの50枚以上のデータを表計算ソフトで分析するのに便利です。</p><div class="row"><button class="btn" id="exportJson">JSONを書き出す</button><button class="btn secondary" id="exportCsv">CSVを書き出す</button><div class="field"><label>JSONファイルを読み込む</label><input type="file" id="importJson" accept=".json,application/json"></div></div></div>
+<div class="card"><h2>シリーズごとのポーズ設定</h2><p class="muted">シリーズを選び、使用するポーズを3〜5種類に設定できます。4種目・5種目は仮の名前で、あとから変更できます。</p><div class="row"><div class="field"><label for="poseSeries">シリーズ</label><select id="poseSeries"></select></div></div><div class="pose-settings" id="poseSettings" style="margin-top:12px"></div><div class="row" style="margin-top:10px"><button class="btn" id="savePoses">ポーズ設定を保存</button></div></div><div class="card"><h2>データのバックアップ</h2><p class="muted">JSONで保存・復元できます。CSVは記録済みの50枚以上のデータを表計算ソフトで分析するのに便利です。</p><div class="row"><button class="btn" id="exportJson">JSONを書き出す</button><button class="btn secondary" id="exportCsv">CSVを書き出す</button><div class="field"><label>JSONファイルを読み込む</label><input type="file" id="importJson" accept=".json,application/json"></div></div></div>
 <div class="card"><h2>分析上の注意</h2><ul class="muted"><li>10パックでは偶然の偏りが大きく出ることがあります。</li><li>同時封入はパック単位の観測です。カード配置順が不明なら、封入順や隣接関係は分析できません。</li><li>次のパックの確率は、封入方式が分からない限り過去の頻度から正確には予測できません。</li><li>全体分析はシリーズを合算します。シリーズ間で封入条件が異なる場合、全体の頻度は参考値として解釈してください。</li></ul></div>
 </section>
 </main>
@@ -70,55 +76,26 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 <script>
 const KEY='nogizakaPhotoAnalyzerV1';
 const FRESH_START_KEY='nogizakaPhotoAnalyzerFreshStart20261017v2';
-const poses=['ヨリ','チュウ','ヒキ'];
+const defaultPoses=['ヨリ','チュウ','ヒキ','4種目','5種目'];
+function seriesPoses(sr){return Array.isArray(sr.poses)&&sr.poses.length>=3?sr.poses.slice(0,5):defaultPoses.slice(0,3);}
 const defaultMembers=["伊藤理々杏", "岩本蓮加", "遠藤さくら", "賀喜遥香", "金川紗耶", "黒見明香", "柴田柚菜", "田村真佑", "筒井あやめ", "林瑠奈", "弓木奈於", "五百城茉央", "池田瑛紗", "一ノ瀬美空", "井上和", "岡本姫奈", "小川彩", "奥田いろは", "川﨑桜", "菅原咲月", "冨里奈央", "中西アルノ", "愛宕心響", "大越ひなの", "小津玲奈", "海邉朱莉", "川端晃菜", "鈴木佑捺", "瀬戸口心月", "長嶋凛桜", "増田三莉音", "森平麗心", "矢田萌華"];
 const emptyPacks=n=>Array.from({length:n},()=>Array.from({length:5},()=>({member:'',pose:''})));
 function escapeHtml(value){return String(value??'').replace(/[&<>\"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch]));}
-let state={members:defaultMembers,series:[{id:'series-1',name:'フレンチガーリー',packs:emptyPacks(10),coverMembers:{}}],currentSeriesId:'series-1'};
+let state={members:defaultMembers,series:[{id:'series-1',name:'フレンチガーリー',packs:emptyPacks(10),coverMembers:{},poses:defaultPoses.slice(0,3),inventory:[]}],currentSeriesId:'series-1'};
 function normalizeSeriesData(s){
- if(Array.isArray(s.series)&&s.series.length){state={members:Array.isArray(s.members)?s.members:defaultMembers.slice(),series:s.series.filter(x=>x&&typeof x==='object').map((x,i)=>({id:String(x.id||`series-${i+1}`),name:String((x.name||'').trim()|| (i===0?'フレンチガーリー':`シリーズ${i+1}`)),packs:Array.isArray(x.packs)?x.packs:emptyPacks(10),coverMembers:x.coverMembers&&typeof x.coverMembers==='object'?x.coverMembers:{}})),currentSeriesId:String(s.currentSeriesId||s.series[0]?.id||'series-1')};if(!state.series.length)state.series=[{id:'series-1',name:'フレンチガーリー',packs:emptyPacks(10),coverMembers:{}}];if(!state.series.some(x=>x.id===state.currentSeriesId))state.currentSeriesId=state.series[0].id;}
- else if(Array.isArray(s.packs)){state={members:Array.isArray(s.members)?s.members:defaultMembers.slice(),series:[{id:'series-1',name:'フレンチガーリー',packs:s.packs,coverMembers:s.coverMembers&&typeof s.coverMembers==='object'?s.coverMembers:{}}],currentSeriesId:'series-1'};}
- // 旧データを整える。空名・旧「シリーズ1」は「フレンチガーリー」に統合。
- state.series.forEach((sr,si)=>{
-   if(!sr.name||sr.name==='シリーズ1')sr.name='フレンチガーリー';
-   // 古い/部分的な保存データでも入力欄の描画が止まらないよう、各パックを5枚に正規化。
-   if(!Array.isArray(sr.packs))sr.packs=[];
-   sr.packs=sr.packs.map(pack=>Array.from({length:5},(_,j)=>{
-     const c=Array.isArray(pack)?pack[j]:null;
-     return {member:String(c?.member||''),pose:String(c?.pose||'')};
-   }));
-   if(!sr.packs.length)sr.packs=emptyPacks(10);
- });
- // すべての既存記録を「フレンチガーリー」に集約する。重複する同名シリーズは
- // 同じパック番号の空欄だけを補完し、別シリーズにある記録済みパックは末尾へ移す。
- const canonical=state.series.find(sr=>sr.name.trim()==='フレンチガーリー')||state.series[0];
- canonical.name='フレンチガーリー';
- const blankCard=()=>({member:'',pose:''});
- const hasData=p=>Array.isArray(p)&&p.some(c=>c&&(c.member||c.pose));
- const mergeSamePack=(target,source)=>{
-   while(target.length<5)target.push(blankCard());
-   for(let j=0;j<5;j++){const from=source?.[j]||blankCard();if(!target[j].member&&from.member)target[j].member=from.member;if(!target[j].pose&&from.pose)target[j].pose=from.pose;}
- };
- for(const sr of state.series){
-   if(sr.id===canonical.id)continue;
-   const sameName=sr.name.trim().toLocaleLowerCase()==='フレンチガーリー';
-   if(sameName){
-     while(canonical.packs.length<sr.packs.length)canonical.packs.push(emptyPacks(1)[0]);
-     for(let i=0;i<sr.packs.length;i++)mergeSamePack(canonical.packs[i],sr.packs[i]);
-   }else{
-     // 他シリーズの入力済みパックは失わず、フレンチガーリーの後ろに追加する。
-     for(const pack of sr.packs){if(hasData(pack)){const copy=Array.from({length:5},(_,j)=>({...((pack&&pack[j])||blankCard())}));canonical.packs.push(copy);}}
-   }
- }
- state.series=[canonical];
- state.currentSeriesId=canonical.id;
- if(!canonical.packs.length)canonical.packs=emptyPacks(10);
- const placeholders=state.members.length>0&&state.members.every(m=>/^メンバー\d+$/.test(m));const noEntries=state.series.every(sr=>sr.packs.every(p=>p.every(c=>!c.member&&!c.pose)));if(placeholders&&noEntries)state.members=defaultMembers.slice();
+ const sourceSeries=Array.isArray(s.series)&&s.series.length?s.series:(Array.isArray(s.packs)?[{id:'series-1',name:'フレンチガーリー',packs:s.packs,coverMembers:s.coverMembers}]:[]);
+ state={members:Array.isArray(s.members)&&s.members.length?s.members.slice():defaultMembers.slice(),series:sourceSeries.filter(x=>x&&typeof x==='object').map((x,i)=>{
+  const sr={id:String(x.id||`series-${i+1}`),name:String((x.name||'').trim()||(i===0?'フレンチガーリー':`シリーズ${i+1}`)),packs:Array.isArray(x.packs)?x.packs:emptyPacks(10),coverMembers:x.coverMembers&&typeof x.coverMembers==='object'?x.coverMembers:{},poses:Array.isArray(x.poses)&&x.poses.length>=3?x.poses.slice(0,5):defaultPoses.slice(0,3),inventory:Array.isArray(x.inventory)?x.inventory.map(v=>({id:String(v.id||`${Date.now()}-${Math.random()}`),member:String(v.member||''),pose:String(v.pose||'')})).filter(v=>v.member&&v.pose):[]};
+  if(!Array.isArray(sr.packs))sr.packs=[];sr.packs=sr.packs.map(pack=>Array.from({length:5},(_,j)=>{const c=Array.isArray(pack)?pack[j]:null;return {member:String(c?.member||''),pose:String(c?.pose||'')};}));if(!sr.packs.length)sr.packs=emptyPacks(10);return sr;
+ }),currentSeriesId:String(s.currentSeriesId||sourceSeries[0]?.id||'series-1')};
+ if(!state.series.length)state.series=[{id:'series-1',name:'フレンチガーリー',packs:emptyPacks(10),coverMembers:{},poses:defaultPoses.slice(0,3),inventory:[]}];
+ state.series.forEach((sr,i)=>{if(!sr.name||sr.name==='シリーズ1')sr.name=i===0?'フレンチガーリー':`シリーズ${i+1}`;if(!Array.isArray(sr.poses)||sr.poses.length<3)sr.poses=defaultPoses.slice(0,3);sr.poses=sr.poses.slice(0,5);if(!Array.isArray(sr.inventory))sr.inventory=[];});
+ if(!state.series.some(x=>x.id===state.currentSeriesId))state.currentSeriesId=state.series[0].id;
 }
 function load(){try{
  // ユーザーの希望により、今回の更新を最初に開いた時だけ以前の記録をリセットして新規開始する。
  if(localStorage.getItem(FRESH_START_KEY)!=='done'){
-   state={members:defaultMembers.slice(),series:[{id:'series-1',name:'フレンチガーリー',packs:emptyPacks(10),coverMembers:{}}],currentSeriesId:'series-1'};
+   state={members:defaultMembers.slice(),series:[{id:'series-1',name:'フレンチガーリー',packs:emptyPacks(10),coverMembers:{},poses:defaultPoses.slice(0,3),inventory:[]}],currentSeriesId:'series-1'};
    localStorage.removeItem(KEY);
    localStorage.setItem(FRESH_START_KEY,'done');
    persist();
@@ -136,6 +113,7 @@ function renderEditor(){
  let sr=currentSeries();if(!sr){state.currentSeriesId=state.series[0].id;sr=currentSeries();}
  if(!Array.isArray(sr.packs))sr.packs=emptyPacks(10);
  sr.packs=sr.packs.map(pack=>Array.from({length:5},(_,j)=>({member:String((Array.isArray(pack)?pack[j]?.member:'')||''),pose:String((Array.isArray(pack)?pack[j]?.pose:'')||'')})));
+ const poses=seriesPoses(sr);
  renderSeriesSelect();
  const rawN=Number(document.getElementById('packCount').value);const n=Math.max(1,Math.min(500,Number.isFinite(rawN)&&rawN>0?Math.floor(rawN):10));document.getElementById('packCount').value=String(n);
  while(sr.packs.length<n)sr.packs.push(Array.from({length:5},()=>({member:'',pose:''})));
@@ -143,10 +121,14 @@ function renderEditor(){
  document.getElementById('packEditor').innerHTML=sr.packs.slice(0,n).map((cards,i)=>`<div class="pack"><div class="packhead"><strong>${escapeHtml(sr.name)}・${i+1}パック目</strong><span class="pill" id="packcount-${i}">${cards.filter(c=>c.member&&c.pose).length}/5枚</span></div>${cards.map((c,j)=>`<div class="slot"><span class="muted" style="min-width:70px;font-size:12px">${j===0?'1枚目・表紙':`${j+1}枚目`}</span><select aria-label="${i+1}パック目 ${j+1}枚目 メンバー" data-pack="${i}" data-slot="${j}" data-key="member">${memberSelect(c.member)}</select><select aria-label="${i+1}パック目 ${j+1}枚目 ポーズ" data-pack="${i}" data-slot="${j}" data-key="pose"><option value="">ポーズ</option>${poses.map(p=>`<option ${c.pose===p?'selected':''}>${p}</option>`).join('')}</select></div>`).join('')}</div>`).join('');
  document.querySelectorAll('#packEditor select[data-pack]').forEach(el=>el.addEventListener('change',e=>{const t=e.target;currentSeries().packs[+t.dataset.pack][+t.dataset.slot][t.dataset.key]=t.value;const c=currentSeries().packs[+t.dataset.pack].filter(x=>x.member&&x.pose).length;const badge=document.getElementById('packcount-'+t.dataset.pack);if(badge)badge.textContent=c+'/5枚';persist();}));
 }
+function fillSeriesSelect(id){const el=document.getElementById(id);if(!el)return;const old=el.value;el.innerHTML=state.series.map(sr=>`<option value="${escapeHtml(sr.id)}">${escapeHtml(sr.name)}</option>`).join('');if(state.series.some(sr=>sr.id===old))el.value=old;else el.value=currentSeries().id;}
+function renderInventory(){['inventorySeries','inventoryFilter','poseSeries'].forEach(fillSeriesSelect);const invSeries=state.series.find(sr=>sr.id===document.getElementById('inventorySeries').value)||currentSeries();document.getElementById('inventoryMember').innerHTML=memberSelect('');document.getElementById('inventoryPose').innerHTML='<option value="">ポーズを選択</option>'+seriesPoses(invSeries).map(p=>`<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');const sr=state.series.find(x=>x.id===document.getElementById('inventoryFilter').value)||currentSeries();const q=(document.getElementById('inventorySearch').value||'').trim().toLocaleLowerCase();const list=sr.inventory.filter(x=>!q||x.member.toLocaleLowerCase().includes(q));document.getElementById('inventorySummary').innerHTML=`<span class="pill">${escapeHtml(sr.name)}</span>　所持登録：<strong>${sr.inventory.length}枚</strong>　表示：${list.length}枚`;
+ document.getElementById('inventoryList').innerHTML=list.length?list.map(item=>`<div class="inventory-item"><strong>${escapeHtml(item.member)}</strong><span class="pill">${escapeHtml(item.pose)}</span><button class="btn danger" data-remove-inventory="${escapeHtml(item.id)}">削除</button></div>`).join(''):'<div class="empty">このシリーズの所持写真はまだ登録されていません。</div>';document.querySelectorAll('[data-remove-inventory]').forEach(btn=>btn.onclick=()=>{if(confirm('この所持写真の登録を削除しますか？')){sr.inventory=sr.inventory.filter(x=>x.id!==btn.dataset.removeInventory);persist();renderInventory();}});}
+function renderPoseSettings(){fillSeriesSelect('poseSeries');const sr=state.series.find(x=>x.id===document.getElementById('poseSeries').value)||currentSeries();const ps=seriesPoses(sr);document.getElementById('poseSettings').innerHTML=Array.from({length:5},(_,i)=>`<div class="field"><label>${i+1}種目${i<3?'（基本）':'（仮名・変更可）'}</label><input data-pose-index="${i}" value="${escapeHtml(ps[i]||'')}" placeholder="${i===3?'4種目':i===4?'5種目':'ポーズ名'}" ${i<3?'required':''}></div>`).join('');}
 function table(headers,rows){if(!rows.length)return '<div class="empty">まだ記録がありません。開封記録を入力してください。</div>';return `<div class="tablewrap"><table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;}
 function pct(a,b){return b?`${(100*a/b).toFixed(1)}%`:'—';}
 function render(){
- const packs=activePacks(),cards=packs.flatMap(p=>p.cards), total=cards.length;
+ const packs=activePacks(),cards=packs.flatMap(p=>p.cards), total=cards.length;const poses=[...new Set(state.series.flatMap(seriesPoses))];
  const counts=Object.fromEntries(state.members.map(m=>[m,0]));
  const packPresence=Object.fromEntries(state.members.map(m=>[m,0]));
  const poseCounts=Object.fromEntries(poses.map(p=>[p,0]));
@@ -196,15 +178,24 @@ function render(){
 }
 document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.panel').forEach(x=>x.classList.toggle('active',x.id===b.dataset.tab));if(b.dataset.tab!=='record')render();}));
 document.getElementById('coverAnalysisMember').addEventListener('change',()=>render());
+document.getElementById('inventorySeries').addEventListener('change',()=>renderInventory());
+document.getElementById('inventoryFilter').addEventListener('change',()=>renderInventory());
+document.getElementById('inventorySearch').addEventListener('input',()=>renderInventory());
+document.getElementById('inventoryMember').addEventListener('change',()=>{});
+document.getElementById('inventorySeries').addEventListener('change',()=>{const sr=state.series.find(x=>x.id===document.getElementById('inventorySeries').value)||currentSeries();document.getElementById('inventoryPose').innerHTML='<option value="">ポーズを選択</option>'+seriesPoses(sr).map(p=>`<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');});
+document.getElementById('addInventory').onclick=()=>{const sr=state.series.find(x=>x.id===document.getElementById('inventorySeries').value)||currentSeries();const member=document.getElementById('inventoryMember').value,pose=document.getElementById('inventoryPose').value;if(!member||!pose){alert('メンバーとポーズを選択してください。');return;}sr.inventory.push({id:'inv-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,6),member,pose});persist();renderInventory();document.getElementById('inventoryMember').value='';document.getElementById('inventoryPose').value='';};
+document.getElementById('poseSeries').addEventListener('change',renderPoseSettings);
+document.getElementById('savePoses').onclick=()=>{const sr=state.series.find(x=>x.id===document.getElementById('poseSeries').value)||currentSeries();const vals=[...document.querySelectorAll('[data-pose-index]')].map(el=>el.value.trim());if(vals.slice(0,3).some(x=>!x)){alert('最初の3種類のポーズ名は必須です。');return;}const selected=vals.filter(Boolean);if(selected.length<3||selected.length>5){alert('ポーズは3〜5種類にしてください。');return;}if(new Set(selected).size!==selected.length){alert('ポーズ名が重複しています。');return;}sr.poses=selected;persist();renderPoseSettings();renderEditor();renderInventory();try{render();}catch(e){console.error(e);}alert('このシリーズのポーズ設定を保存しました。');};
+
 document.getElementById('buildPacks').onclick=()=>renderEditor();
 document.getElementById('packCount').addEventListener('change',()=>renderEditor());
 document.getElementById('saveBtn').onclick=()=>{persist();render();alert('記録を保存し、集計を更新しました。');};
 document.getElementById('clearPacks').onclick=()=>{if(confirm(`「${currentSeries().name}」の開封記録をすべて消去しますか？他のシリーズは消去されません。`)){currentSeries().packs=emptyPacks(Math.max(10,Number(document.getElementById('packCount').value)||10));persist();renderEditor();render();}};
-function switchCurrentSeries(){const id=document.getElementById('seriesSelect').value;if(state.series.some(sr=>sr.id===id)){state.currentSeriesId=id;document.getElementById('packCount').value=String(Math.max(1,Math.min(500,currentSeries().packs.length||10)));persist();renderEditor();try{render();}catch(err){console.error('集計更新エラー:',err);}document.getElementById('packEditor').style.display='grid';}}
+function switchCurrentSeries(){const id=document.getElementById('seriesSelect').value;if(state.series.some(sr=>sr.id===id)){state.currentSeriesId=id;document.getElementById('packCount').value=String(Math.max(1,Math.min(500,currentSeries().packs.length||10)));persist();renderEditor();renderPoseSettings();renderInventory();try{render();}catch(err){console.error('集計更新エラー:',err);}document.getElementById('packEditor').style.display='grid';}}
 document.getElementById('switchSeries').onclick=switchCurrentSeries;
 document.getElementById('seriesSelect').addEventListener('change',switchCurrentSeries);
-document.getElementById('addSeries').onclick=()=>{const name=document.getElementById('newSeriesName').value.trim();if(!name){alert('シリーズ名を入力してください。');return;}if(state.series.some(sr=>sr.name.toLocaleLowerCase()===name.toLocaleLowerCase())){alert('同じ名前のシリーズがすでにあります。');return;}const id='series-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);state.series.push({id,name,packs:emptyPacks(10)});state.currentSeriesId=id;document.getElementById('newSeriesName').value='';document.getElementById('packCount').value='10';persist();renderEditor();render();};
-document.getElementById('deleteSeries').onclick=()=>{const sr=currentSeries();if(!sr)return;if(state.series.length<=1){alert('最後の1シリーズは削除できません。別のシリーズを追加してから削除してください。');return;}if(!confirm(`シリーズ「${sr.name}」と、そのシリーズ内の全パック記録を削除します。元に戻せません。削除前に「設定・データ」からJSONバックアップを保存してください。よろしいですか？`))return;state.series=state.series.filter(x=>x.id!==sr.id);state.currentSeriesId=state.series[0].id;document.getElementById('packCount').value=String(Math.max(1,Math.min(500,currentSeries().packs.length||10)));persist();renderSeriesSelect();renderEditor();render();};
+document.getElementById('addSeries').onclick=()=>{const name=document.getElementById('newSeriesName').value.trim();if(!name){alert('シリーズ名を入力してください。');return;}if(state.series.some(sr=>sr.name.toLocaleLowerCase()===name.toLocaleLowerCase())){alert('同じ名前のシリーズがすでにあります。');return;}const id='series-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);state.series.push({id,name,packs:emptyPacks(10),poses:defaultPoses.slice(0,3),inventory:[],coverMembers:{}});state.currentSeriesId=id;document.getElementById('newSeriesName').value='';document.getElementById('packCount').value='10';persist();renderEditor();renderPoseSettings();renderInventory();render();};
+document.getElementById('deleteSeries').onclick=()=>{const sr=currentSeries();if(!sr)return;if(state.series.length<=1){alert('最後の1シリーズは削除できません。別のシリーズを追加してから削除してください。');return;}if(!confirm(`シリーズ「${sr.name}」と、そのシリーズ内の全パック記録を削除します。元に戻せません。削除前に「設定・データ」からJSONバックアップを保存してください。よろしいですか？`))return;state.series=state.series.filter(x=>x.id!==sr.id);state.currentSeriesId=state.series[0].id;document.getElementById('packCount').value=String(Math.max(1,Math.min(500,currentSeries().packs.length||10)));persist();renderSeriesSelect();renderEditor();renderPoseSettings();renderInventory();render();};
 document.getElementById('saveMembers').onclick=()=>{const arr=document.getElementById('memberNames').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);if(!arr.length){alert('メンバー名を1人以上入力してください。');return;}if(arr.length>100){alert('メンバー数は100人以下にしてください。');return;}state.members=arr;persist();renderEditor();render();alert('メンバー一覧を保存しました。');};
 document.getElementById('resetMembers').onclick=()=>{if(confirm('メンバー一覧を仮名に戻しますか？')){state.members=defaultMembers.slice();document.getElementById('memberNames').value=state.members.join('\n');persist();renderEditor();render();}};
 function download(name,content,type){const a=document.createElement('a'),url=URL.createObjectURL(new Blob([content],{type}));a.href=url;a.download=name;a.click();URL.revokeObjectURL(url);}
@@ -216,5 +207,6 @@ document.getElementById('packCount').value=String(Math.max(1,Math.min(500,curren
 document.getElementById('memberNames').value=state.members.join('\n');
 try{renderEditor();}catch(err){console.error('入力欄の描画エラー:',err);document.getElementById('packEditor').innerHTML='<div class="notice">入力欄の表示に失敗しました。ページを再読み込みしてください。</div>';document.getElementById('packEditor').style.display='grid';}
 try{render();}catch(err){console.error('分析画面の描画エラー:',err);}
+try{renderPoseSettings();renderInventory();}catch(err){console.error('所持一覧/ポーズ設定の描画エラー:',err);}
 </script>
 </body></html>
