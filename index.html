@@ -179,6 +179,31 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
  #inventoryList .inventory-table .member-cell{white-space:normal!important;gap:4px!important;}
 }
 
+
+/* iPhone: keep the complete inventory table within the viewport, even with a long name and five poses. */
+@media(max-width:600px){
+  #inventoryList .inventory-table-wrap{display:block;width:100%;max-width:100%;overflow-x:hidden;}
+  #inventoryList .inventory-table{width:100%;min-width:0;table-layout:fixed;font-size:10px;}
+  #inventoryList .inventory-table .member-col{width:82px;min-width:0;max-width:82px;padding-left:2px;padding-right:2px;}
+  #inventoryList .inventory-table .inv-pose-head{width:auto;min-width:0;max-width:none;padding-left:0;padding-right:0;white-space:normal;overflow-wrap:anywhere;}
+  #inventoryList .inventory-table td[data-pose]{min-width:0;padding-left:0;padding-right:0;}
+  #inventoryList .inventory-table .inv-qty{min-width:0;width:100%;gap:1px;}
+  #inventoryList .inventory-table .inv-qty button{min-width:18px;width:18px;height:25px;padding:0;font-size:12px;border-radius:5px;}
+  #inventoryList .inventory-table .inv-count{min-width:10px;font-size:10px;}
+  #inventoryList .inventory-table .member-cell{gap:1px;}
+  #inventoryList .inventory-table .member-cell strong{font-size:9px;overflow-wrap:anywhere;word-break:break-word;}
+}
+@media(max-width:380px){
+  #inventoryList .inventory-table .member-col{width:72px;max-width:72px;}
+  #inventoryList .inventory-table .inv-qty button{min-width:16px;width:16px;height:23px;font-size:11px;}
+  #inventoryList .inventory-table .inv-count{font-size:9px;}
+}
+/* Make zero-count cells quieter without changing the headings. */
+.inventory-table td.inv-empty{background:#fcfcfd!important;}
+.inventory-table tbody tr:nth-child(even) td[data-pose].inv-empty{background:#f8f8fa!important;}
+.inventory-table td.inv-empty .inv-qty button{background:transparent!important;color:#d0d2d9!important;border-color:#f0f0f3!important;}
+.inventory-table .inv-count.zero{color:#d1d3da!important;font-weight:400!important;}
+
 </style>
 </head>
 <body>
