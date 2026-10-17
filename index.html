@@ -255,8 +255,8 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
  #inventoryList .inventory-table.compact-poses td[data-pose]{width:52px!important;min-width:52px!important;max-width:62px!important;}
 }
 
-/* 3・4ポーズの表でも、ロック・お気に入り・メンバー名を必ず1行に収める */
-#inventoryList .inventory-table.compact-poses .member-col{width:124px!important;min-width:124px!important;max-width:124px!important;}
+/* メンバー欄は必要最小限の幅に抑え、ポーズ欄の寸法は維持する */
+#inventoryList .inventory-table.compact-poses .member-col{width:88px!important;min-width:88px!important;max-width:88px!important;}
 #inventoryList .inventory-table.compact-poses .member-cell{display:flex!important;flex-wrap:nowrap!important;white-space:nowrap!important;gap:2px!important;min-width:0!important;overflow:visible!important;}
 #inventoryList .inventory-table.compact-poses .member-cell .inv-lock{flex:0 0 13px!important;width:13px!important;min-width:13px!important;height:13px!important;}
 #inventoryList .inventory-table.compact-poses .member-cell .inv-fav{flex:0 0 13px!important;width:13px!important;min-width:13px!important;}
@@ -264,7 +264,7 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 #inventoryList .inventory-table.compact-poses .inv-pose-head,
 #inventoryList .inventory-table.compact-poses td[data-pose]{width:48px!important;min-width:48px!important;max-width:48px!important;padding-left:1px!important;padding-right:1px!important;}
 @media(max-width:380px){
- #inventoryList .inventory-table.compact-poses .member-col{width:120px!important;min-width:120px!important;max-width:120px!important;}
+ #inventoryList .inventory-table.compact-poses .member-col{width:86px!important;min-width:86px!important;max-width:86px!important;}
  #inventoryList .inventory-table.compact-poses .inv-pose-head,
  #inventoryList .inventory-table.compact-poses td[data-pose]{width:46px!important;min-width:46px!important;max-width:46px!important;}
  #inventoryList .inventory-table.compact-poses .member-cell strong{font-size:7.5px!important;letter-spacing:-.4px!important;}
