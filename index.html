@@ -148,6 +148,23 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 }
 @media(max-width:380px){.inventory-table .inv-qty{padding:0 2px!important;}}
 
+
+/* 今回の調整：所持一覧の行を少し高くし、ポーズ列は内容に合わせた幅に */
+.inventory-table tbody td{padding-top:8px!important;padding-bottom:8px!important;}
+.inventory-table thead th{padding-top:4px!important;padding-bottom:4px!important;}
+/* ポーズ列はiPhoneの横幅いっぱいに引き伸ばさず、各列に適度な幅を確保 */
+.inventory-table{width:max-content!important;min-width:0!important;table-layout:auto!important;}
+.inventory-table .member-col{width:88px;min-width:88px;max-width:88px;}
+.inventory-table .inv-pose-head,.inventory-table td[data-pose]{width:68px;min-width:68px;max-width:68px;}
+@media(max-width:600px){
+ .inventory-table tbody td{padding-top:7px!important;padding-bottom:7px!important;}
+ .inventory-table .member-col{width:82px;min-width:82px;max-width:82px;}
+ .inventory-table .inv-pose-head,.inventory-table td[data-pose]{width:66px;min-width:66px;max-width:66px;}
+}
+@media(max-width:380px){
+ .inventory-table .inv-pose-head,.inventory-table td[data-pose]{width:61px;min-width:61px;max-width:61px;}
+}
+
 </style>
 </head>
 <body>
