@@ -500,6 +500,39 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
   box-sizing:border-box!important;overflow:hidden!important;
 }
 
+
+/* final25: メンバー列・ポーズ列の幅を全ポーズ数で統一。過去の幅指定をここで一元上書き */
+#inventoryList .inventory-table,
+#inventoryList .inventory-table.compact-poses,
+#inventoryList .inventory-table.long-member-five,
+#inventoryList .inventory-table.five-poses{
+  table-layout:fixed!important;
+  width:max-content!important;
+  min-width:0!important;
+  max-width:100%!important;
+}
+#inventoryList .inventory-table .member-col,
+#inventoryList .inventory-table.compact-poses .member-col,
+#inventoryList .inventory-table.long-member-five .member-col,
+#inventoryList .inventory-table.five-poses .member-col{
+  width:var(--member-col-width)!important;
+  min-width:var(--member-col-width)!important;
+  max-width:var(--member-col-width)!important;
+  box-sizing:border-box!important;
+}
+#inventoryList .inventory-table .inv-pose-head,
+#inventoryList .inventory-table td[data-pose],
+#inventoryList .inventory-table.compact-poses .inv-pose-head,
+#inventoryList .inventory-table.compact-poses td[data-pose],
+#inventoryList .inventory-table.long-member-five .inv-pose-head,
+#inventoryList .inventory-table.long-member-five td[data-pose],
+#inventoryList .inventory-table.five-poses .inv-pose-head,
+#inventoryList .inventory-table.five-poses td[data-pose]{
+  width:var(--pose-col-width)!important;
+  min-width:var(--pose-col-width)!important;
+  max-width:var(--pose-col-width)!important;
+  box-sizing:border-box!important;
+}
 </style>
 </head>
 <body>
@@ -647,8 +680,9 @@ function renderInventory(){
    ? Array.from('クリスティー').length
    : Math.max(0,...seriesMembers.map(m=>Array.from(String(m)).length));
  // 鍵チェックボックス・お気に入りマーク・名前・余白を確保。5文字名でも名前がボックス外へ出ない幅にする。
- const memberColWidth=Math.max(64,Math.min(120,39+longestDisplayedNameLength*8.5));
- const poseColWidth=Math.max(42,(Math.min(560,document.getElementById('inventoryList').clientWidth||560)-memberColWidth)/5);
+ const memberColWidth=hasLongMember?90:Math.max(64,Math.min(120,39+longestDisplayedNameLength*8.5));
+ // ポーズ列は「吉田綾乃クリスティーがいる5ポーズ表示」を基準に全シリーズ・全ポーズ数で統一
+ const poseColWidth=Math.max(42,(Math.min(560,document.getElementById('inventoryList').clientWidth||560)-90)/5);
  const inventoryLayoutClass=(poses.length===5?'five-poses ':'compact-poses ')+(poses.length===5&&hasLongMember?'long-member-five':'');
  const bulkLockButton=document.getElementById('toggleAllLocks');if(bulkLockButton)bulkLockButton.textContent=allLocked?'全メンバーのロックを解除':'全メンバーをロック';
  const filterButton=document.getElementById('cycleInventoryFilter');if(filterButton){const labels={all:'表示：全メンバー',favorite:'表示：お気に入りのみ',nonfavorite:'表示：お気に入り以外'};filterButton.textContent=labels[inventoryFilter]||labels.all;}
