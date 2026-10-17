@@ -72,10 +72,12 @@ const KEY='nogizakaPhotoAnalyzerV1';
 const poses=['ヨリ','チュウ','ヒキ'];
 const defaultMembers=["伊藤理々杏", "岩本蓮加", "遠藤さくら", "賀喜遥香", "金川紗耶", "黒見明香", "柴田柚菜", "田村真佑", "筒井あやめ", "林瑠奈", "弓木奈於", "五百城茉央", "池田瑛紗", "一ノ瀬美空", "井上和", "岡本姫奈", "小川彩", "奥田いろは", "川﨑桜", "菅原咲月", "冨里奈央", "中西アルノ", "愛宕心響", "大越ひなの", "小津玲奈", "海邉朱莉", "川端晃菜", "鈴木佑捺", "瀬戸口心月", "長嶋凛桜", "増田三莉音", "森平麗心", "矢田萌華"];
 const emptyPacks=n=>Array.from({length:n},()=>Array.from({length:5},()=>({member:'',pose:''})));
-let state={members:defaultMembers,series:[{id:'series-1',name:'シリーズ1',packs:emptyPacks(10),coverMembers:{}}],currentSeriesId:'series-1'};
+let state={members:defaultMembers,series:[{id:'series-1',name:'フレンチガーリー',packs:emptyPacks(10),coverMembers:{}}],currentSeriesId:'series-1'};
 function normalizeSeriesData(s){
  if(Array.isArray(s.series)&&s.series.length){state={members:Array.isArray(s.members)?s.members:defaultMembers.slice(),series:s.series.map((x,i)=>({id:String(x.id||`series-${i+1}`),name:String(x.name||`シリーズ${i+1}`),packs:Array.isArray(x.packs)?x.packs:emptyPacks(10),coverMembers:x.coverMembers&&typeof x.coverMembers==='object'?x.coverMembers:{}})),currentSeriesId:String(s.currentSeriesId||s.series[0].id||'series-1')};if(!state.series.some(x=>x.id===state.currentSeriesId))state.currentSeriesId=state.series[0].id;}
- else if(Array.isArray(s.packs)){state={members:Array.isArray(s.members)?s.members:defaultMembers.slice(),series:[{id:'series-1',name:'シリーズ1',packs:s.packs,coverMembers:s.coverMembers&&typeof s.coverMembers==='object'?s.coverMembers:{}}],currentSeriesId:'series-1'};}
+ else if(Array.isArray(s.packs)){state={members:Array.isArray(s.members)?s.members:defaultMembers.slice(),series:[{id:'series-1',name:'フレンチガーリー',packs:s.packs,coverMembers:s.coverMembers&&typeof s.coverMembers==='object'?s.coverMembers:{}}],currentSeriesId:'series-1'};}
+ // 既存データの初期シリーズ名を変更し、記録はそのまま保持する。
+ state.series.forEach(sr=>{if(sr.name==='シリーズ1')sr.name='フレンチガーリー';});
  const placeholders=state.members.length>0&&state.members.every(m=>/^メンバー\d+$/.test(m));const noEntries=state.series.every(sr=>sr.packs.every(p=>p.every(c=>!c.member&&!c.pose)));if(placeholders&&noEntries)state.members=defaultMembers.slice();
 }
 function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&Array.isArray(s.members)&&(Array.isArray(s.packs)||Array.isArray(s.series)))normalizeSeriesData(s);}catch(e){}}
