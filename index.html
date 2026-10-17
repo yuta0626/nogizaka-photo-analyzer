@@ -522,7 +522,7 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 </div>
 </section>
 <section class="panel active" id="inventory">
-<div class="card"><div class="panel-heading"><h2>所持生写真一覧</h2><button type="button" class="btn secondary undo-button" data-undo>↶ 1つ戻る</button></div><p class="muted">上のプルダウンからシリーズを選択できます。開封記録の枚数に、手入力分とトレード調整を加えて所持枚数を表示します。「＋」はトレード等で増えた枚数、「−」はトレード等で手放した枚数として調整できます。🔒ロック中は誤操作防止のため、所持数・お気に入りを変更できません。</p><div class="row" style="margin:10px 0"><div class="field"><label for="inventorySeriesSelect">表示するシリーズ</label><select id="inventorySeriesSelect"></select></div></div><div class="row inventory-actions" style="align-items:center;margin:10px 0"><button type="button" class="btn secondary" id="toggleAllLocks">全メンバーをロック</button><button type="button" class="btn secondary" id="cycleInventoryFilter">表示：お気に入りのみ</button></div><div id="inventorySummary" style="margin:12px 0"></div><div id="inventoryList"></div></div>
+<div class="card"><div class="panel-heading"><h2>所持生写真一覧</h2><button type="button" class="btn secondary undo-button" data-undo>↶ 1つ戻る</button></div><p class="muted">上のプルダウンからシリーズを選択できます。登録済みの写真と枚数調整を反映して所持枚数を表示します。🔒ロック中は誤操作防止のため、所持数・お気に入りを変更できません。</p><div class="row" style="margin:10px 0"><div class="field"><label for="inventorySeriesSelect">表示するシリーズ</label><select id="inventorySeriesSelect"></select></div></div><div class="row inventory-actions" style="align-items:center;margin:10px 0"><button type="button" class="btn secondary" id="toggleAllLocks">全メンバーをロック</button><button type="button" class="btn secondary" id="cycleInventoryFilter">表示：お気に入りのみ</button></div><div id="inventorySummary" style="margin:12px 0"></div><div id="inventoryList"></div></div>
 </section>
 <section class="panel" id="overview">
 <div class="stats" id="overviewStats"></div>
@@ -637,7 +637,7 @@ function renderInventory(){
  const manualTotal=Object.values(manual).reduce((a,b)=>a+b,0);const recordedTotal=Object.values(recorded).reduce((a,b)=>a+b,0);
  const totalForSeries=x=>{const r={},m={},a=x.inventoryAdjustments||{};(x.packs||[]).forEach(pack=>pack.forEach(c=>{if(c.member&&c.pose){const k=c.member+'\u0000'+c.pose;r[k]=(r[k]||0)+1;}}));(x.inventory||[]).forEach(it=>{const k=it.member+'\u0000'+it.pose;m[k]=(m[k]||0)+1;});return Math.max(0,Object.keys({...r,...m,...a}).reduce((sum,k)=>sum+Math.max(0,(r[k]||0)+(m[k]||0)+(Number(a[k])||0)),0));};
  const grandTotal=state.series.reduce((sum,x)=>sum+totalForSeries(x),0);
- document.getElementById('inventorySummary').innerHTML=`<span class="pill">${escapeHtml(sr.name)}</span><div class="inventory-total-line"><strong>${allTotal}枚 / ${grandTotal}枚</strong><span>選択中のシリーズ / 全シリーズの所持枚数</span></div><p class="muted" style="margin:5px 0 0">開封記録：${recordedTotal}枚／手入力：${manualTotal}枚／トレード調整：${adjustmentTotal>=0?'+':''}${adjustmentTotal}枚</p>`;
+ document.getElementById('inventorySummary').innerHTML=`<span class="pill">${escapeHtml(sr.name)}</span><div class="inventory-total-line"><strong>${allTotal}枚 / ${grandTotal}枚</strong><span>選択中のシリーズ / 全シリーズの所持枚数</span></div>`;
  const seriesMembers=Array.isArray(sr.members)&&sr.members.length?sr.members:state.members;const members=seriesMembers.filter(m=>{const favorite=state.favoriteMembers.includes(m);return inventoryFilter==='all'||(inventoryFilter==='favorite'&&favorite)||(inventoryFilter==='nonfavorite'&&!favorite);});
  const allLocked=seriesMembers.length>0&&seriesMembers.every(m=>(sr.inventoryPrefs[m]||{}).locked);
  const hasLongMember=seriesMembers.includes('吉田綾乃クリスティー');
