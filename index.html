@@ -204,6 +204,28 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 .inventory-table td.inv-empty .inv-qty button{background:transparent!important;color:#d0d2d9!important;border-color:#f0f0f3!important;}
 .inventory-table .inv-count.zero{color:#d1d3da!important;font-weight:400!important;}
 
+
+/* iPhoneの所持一覧：表は画面幅内に収め、余白がある場合は中央配置。横スクロール禁止。 */
+#inventoryList .inventory-table-wrap{display:flex!important;justify-content:center!important;width:100%!important;max-width:100%!important;overflow-x:hidden!important;box-sizing:border-box!important;}
+#inventoryList .inventory-table{width:min(100%,560px)!important;min-width:0!important;max-width:100%!important;table-layout:fixed!important;margin-left:auto!important;margin-right:auto!important;box-sizing:border-box!important;}
+#inventoryList .inventory-table .member-col{width:82px!important;min-width:0!important;max-width:82px!important;}
+#inventoryList .inventory-table .inv-pose-head,#inventoryList .inventory-table td[data-pose]{width:auto!important;min-width:0!important;max-width:none!important;}
+#inventoryList .inventory-table th,#inventoryList .inventory-table td{box-sizing:border-box!important;overflow-wrap:anywhere!important;}
+#inventoryList .inventory-table .member-cell,#inventoryList .inventory-table .member-cell strong{white-space:normal!important;min-width:0!important;max-width:100%!important;overflow-wrap:anywhere!important;word-break:break-word!important;}
+@media(max-width:600px){
+ #inventoryList .inventory-table{width:100%!important;max-width:520px!important;font-size:9px!important;}
+ #inventoryList .inventory-table .member-col{width:76px!important;max-width:76px!important;padding-left:2px!important;padding-right:2px!important;}
+ #inventoryList .inventory-table th,#inventoryList .inventory-table td{padding-left:1px!important;padding-right:1px!important;}
+ #inventoryList .inventory-table .inv-pose-head{font-size:8px!important;line-height:1.1!important;white-space:normal!important;}
+ #inventoryList .inventory-table .inv-qty{grid-template-columns:minmax(9px,13px) minmax(5px,1fr) minmax(9px,13px)!important;gap:0!important;padding:0!important;}
+ #inventoryList .inventory-table .inv-qty button{font-size:10px!important;}
+}
+@media(max-width:380px){
+ #inventoryList .inventory-table .member-col{width:68px!important;max-width:68px!important;}
+ #inventoryList .inventory-table .member-cell strong{font-size:8px!important;}
+ #inventoryList .inventory-table .inv-qty{grid-template-columns:9px minmax(4px,1fr) 9px!important;}
+}
+
 </style>
 </head>
 <body>
@@ -217,7 +239,7 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 <div class="card">
 <div class="panel-heading"><h2>開封結果を入力</h2><button type="button" class="btn secondary undo-button" data-undo>↶ 1つ戻る</button></div>
 <p class="muted">シリーズごとに開封結果を記録できます。分析タブでは全シリーズを合算して集計します。各パック5枚です。各パック5枚分の入力欄を常に表示します。不要な場合はシリーズ単位で開封結果全体を非表示にできます。</p>
-<div class="card" style="background:#faf9ff;margin:12px 0"><h3>シリーズ管理</h3><div class="row"><div class="field"><label for="seriesSelect">記録するシリーズ</label><select id="seriesSelect"></select></div><button class="btn secondary" id="toggleOpeningVisibility">このシリーズの開封結果を非表示</button><button class="btn danger" id="deleteSeries">選択中のシリーズを削除</button></div><div class="row" style="margin-top:10px"><div class="field"><label for="editSeriesName">選択中のシリーズ名を編集</label><input id="editSeriesName" placeholder="新しいシリーズ名" /></div><button class="btn secondary" id="renameSeries">シリーズ名を保存</button></div><div class="row" style="margin-top:10px"><div class="field"><label for="newSeriesName">新しいシリーズ名</label><input id="newSeriesName" placeholder="例：2026 Halloween" /></div><button class="btn" id="addSeries">新規シリーズを追加</button></div><p class="muted" style="margin-bottom:0">シリーズ名は自由に設定できます。シリーズごとに開封結果の表示／非表示を切り替えられます。非表示にしても記録は削除されず、分析・所持枚数には反映されます。</p></div>
+
 <div id="openingRecordContent">
 <div class="row"><div class="field"><label for="packCount">表示するパック数（現在のシリーズ）</label><input id="packCount" type="number" inputmode="numeric" min="1" max="500" step="1" value="10" autocomplete="off" /></div><button class="btn" id="buildPacks">パック欄を更新</button><button class="btn secondary" id="clearPacks">このシリーズの入力を全消去</button></div><p class="muted">パック数は1〜500の範囲で自由に指定できます。表示数を減らしても、隠れたパックの記録は削除されません。</p>
 <div class="notice" style="margin-top:12px">メンバー名は乃木坂46公式サイト掲載の現メンバー33人を初期設定しています。各パックの1枚目に入力したメンバーを表紙メンバーとして自動判定し、残り4枚を分析します。すべての分析結果はシリーズを問わず全記録を合算します。</div>
@@ -253,6 +275,7 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 <div class="card"><h2>パック間の類似度</h2><p class="muted">共通メンバー数とJaccard類似度（共通メンバー数 ÷ どちらかに出たメンバー数）で比較します。</p><div id="similarityTable"></div></div>
 </section>
 <section class="panel" id="settings"><div class="card"><div class="panel-heading"><h2>設定・データ</h2><button type="button" class="btn secondary undo-button" data-undo>↶ 1つ戻る</button></div><p class="muted">誤操作した場合は、変更を1段階戻せます。</p></div>
+<div class="card" style="background:#faf9ff;margin:12px 0"><h2>シリーズ管理</h2><div class="row"><div class="field"><label for="seriesSelect">記録するシリーズ</label><select id="seriesSelect"></select></div><button class="btn secondary" id="toggleOpeningVisibility">このシリーズの開封結果を非表示</button><button class="btn danger" id="deleteSeries">選択中のシリーズを削除</button></div><div class="row" style="margin-top:10px"><div class="field"><label for="editSeriesName">選択中のシリーズ名を編集</label><input id="editSeriesName" placeholder="新しいシリーズ名" /></div><button class="btn secondary" id="renameSeries">シリーズ名を保存</button></div><div class="row" style="margin-top:10px"><div class="field"><label for="newSeriesName">新しいシリーズ名</label><input id="newSeriesName" placeholder="例：2026 Halloween" /></div><button class="btn" id="addSeries">新規シリーズを追加</button></div><p class="muted" style="margin-bottom:0">シリーズ名は自由に設定できます。シリーズごとに開封結果の表示／非表示を切り替えられます。非表示にしても記録は削除されず、分析・所持枚数には反映されます。</p></div>
 <div class="card"><h2>シリーズの表示順</h2><p class="muted">ここで順番を変更すると、所持生写真一覧や設定・データ内のシリーズ選択プルダウンに反映されます。開封記録のシリーズ順も同じ順番になります。データや記録内容は変更されません。</p><div class="row"><div class="field"><label for="seriesOrderSelect">並び替えるシリーズ</label><select id="seriesOrderSelect"></select></div><button type="button" class="btn secondary" id="moveSeriesUp">↑ 上へ</button><button type="button" class="btn secondary" id="moveSeriesDown">↓ 下へ</button></div><p class="muted" id="seriesOrderHint" style="margin-bottom:0">シリーズを選び、上下ボタンで順番を変更してください。</p></div><div class="card"><h2>シリーズごとのメンバー設定</h2><p class="muted">シリーズを選んで、そのシリーズで登場するメンバーを1行に1人ずつ設定します。開封記録のメンバー選択肢と所持生写真一覧に反映されます。お気に入りに設定したメンバーは、開封記録のメンバー欄が黄色で表示されます。</p><div class="row"><div class="field"><label for="memberSeries">シリーズ</label><select id="memberSeries"></select></div></div><textarea id="seriesMemberNames" style="margin-top:10px" placeholder="1行に1人ずつ入力"></textarea><div class="row" style="margin-top:10px"><button class="btn" id="saveSeriesMembers">このシリーズのメンバーを保存</button><button class="btn secondary" id="resetSeriesMembers">全メンバー設定に戻す</button></div></div><div class="card"><h2>お気に入りメンバー設定（全シリーズ共通）</h2><p class="muted">お気に入りはシリーズ共通です。ここで選択すると、開封記録のメンバー欄が色付きになり、所持生写真一覧のお気に入り表示・絞り込みにも反映されます。所持生写真一覧から個別に設定する必要はありません。</p><div id="favoriteMemberSettings" class="favorite-member-settings"></div></div><div class="card"><h2>全体のメンバー一覧（分析用）</h2><p class="muted">全シリーズの分析で使用するメンバー一覧です。通常はシリーズごとの設定を使ってください。</p><textarea id="memberNames"></textarea><div class="row" style="margin-top:10px"><button class="btn" id="saveMembers">分析用メンバー一覧を保存</button><button class="btn secondary" id="resetMembers">公式掲載の初期メンバーに戻す</button></div></div>
 <div class="card"><h2>シリーズごとのポーズ設定</h2><p class="muted">シリーズを選び、使用するポーズを3〜5種類に設定できます。4種目・5種目は仮の名前で、あとから変更できます。</p><div class="row"><div class="field"><label for="poseSeries">シリーズ</label><select id="poseSeries"></select></div></div><div class="pose-settings" id="poseSettings" style="margin-top:12px"></div><div class="row" style="margin-top:10px"><button class="btn" id="savePoses">ポーズ設定を保存</button></div></div><div class="card"><h2>データのバックアップ</h2><p class="muted">JSONで保存・復元できます。CSVは記録済みの50枚以上のデータを表計算ソフトで分析するのに便利です。</p><div class="row"><button class="btn" id="exportJson">JSONを書き出す</button><button class="btn secondary" id="exportCsv">CSVを書き出す</button><div class="field"><label>JSONファイルを読み込む</label><input type="file" id="importJson" accept=".json,application/json"></div></div></div>
 <div class="card"><h2>分析上の注意</h2><ul class="muted"><li>10パックでは偶然の偏りが大きく出ることがあります。</li><li>同時封入はパック単位の観測です。カード配置順が不明なら、封入順や隣接関係は分析できません。</li><li>次のパックの確率は、封入方式が分からない限り過去の頻度から正確には予測できません。</li><li>全体分析はシリーズを合算します。シリーズ間で封入条件が異なる場合、全体の頻度は参考値として解釈してください。</li></ul></div>
