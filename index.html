@@ -560,20 +560,17 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 </section>
 <section class="panel" id="overview">
 <div class="stats" id="overviewStats"></div>
-<div class="card"><h2>全体分析の考察</h2><div id="overviewInsights" class="muted"></div></div>
 <div class="card"><h2>ポーズ構成パターン</h2><p class="muted">各パックのヨリ・チュウ・ヒキ枚数の組み合わせ。記録済みパックのみ対象。</p><div id="posePatterns"></div></div>
 <div class="card"><h2>シリーズごとのポーズ種類数</h2><p class="muted">シリーズに設定されているポーズ数の内訳です。</p><div id="overviewNotes"></div></div>
 <div class="card"><h2>ポーズ別の出現状況</h2><p class="muted">ポーズごとの記録枚数と、設定上そのポーズが入るシリーズで実際に記録されたパック数を確認します。</p><div id="poseTotals"></div></div>
 </section>
 <section class="panel" id="members">
 <div class="card"><h2>メンバー別の出現頻度</h2><p class="muted">封入枚数は記録されたカード枚数、出現パック数はそのメンバーが1枚以上含まれたパック数です。パック数がシリーズをまたいで集計されます。</p><div id="memberTable"></div></div>
-<div class="card"><h2>メンバー分析の考察</h2><div id="memberInsights" class="muted"></div></div>
 <div class="card"><h2>メンバー別ポーズ内訳</h2><div id="memberPoseTable"></div></div>
 </section>
 <section class="panel" id="pairs">
-<div class="card"><h2>一緒に出たメンバーのペア</h2><p class="muted">同じパックに入ったメンバーの組み合わせを集計します。「Aが出たパックのうちBも出た割合」と「Bが出たパックのうちAも出た割合」は分母が異なります。期待回数との比較は参考値で、封入ルールを証明するものではありません。</p><div id="pairTable"></div></div>
-<div class="card"><h2>同時封入の考察</h2><div id="pairInsights" class="muted"></div></div>
-<div class="card"><h2>同時封入マトリクス</h2><p class="muted">記録があるメンバーのみ表示。対角線はそのメンバーが出たパック数です。</p><div id="matrixTable"></div></div>
+<div class="card"><h2>一緒に出たメンバーのペア</h2><p class="muted">同じパックに入ったメンバーの組み合わせを集計します。同時封入パック数は2人が同じパックにいた回数です。A・Bそれぞれの割合は、そのメンバーが出たパックを分母にしています。</p><div id="pairTable"></div></div>
+<div class="card"><h2>同時封入マトリクス</h2><p class="muted">縦と横のメンバーが交わるセルの数字は、2人が同じパックに入っていた回数です。対角線（同じメンバー同士）は、そのメンバーが出たパック数です。数字が大きいほど、記録上いっしょに出た回数が多いことを示します。</p><div id="matrixTable"></div></div>
 <div class="notice">「一度も同時に出ない」は、今回のデータで未観測という意味です。封入仕様として共存しないと断定するには、より多くのパックや商品仕様の確認が必要です。</div>
 </section>
 <section class="panel" id="cover">
@@ -718,22 +715,17 @@ function render(){
  document.getElementById('poseTotals').innerHTML=table(['ポーズ','記録枚数','全写真に占める割合','対象パックでの出現数（出現パック数／対象パック数）'],poseStats);
  const poseTypeCounts={};state.series.forEach(sr=>{const n=seriesPoses(sr).length;poseTypeCounts[n]=(poseTypeCounts[n]||0)+1});
  document.getElementById('overviewNotes').innerHTML=`<ul><li>シリーズごとのポーズ種類数：${Object.keys(poseTypeCounts).sort((a,b)=>Number(a)-Number(b)).map(n=>`<b>${n}種類</b>のシリーズが${poseTypeCounts[n]}件`).join('、')||'データなし'}。</li></ul>`;
- const topPose=[...poses].sort((a,b)=>(poseCounts[b]||0)-(poseCounts[a]||0))[0];
- document.getElementById('overviewInsights').innerHTML=`<ul><li>記録は<strong>${packs.length}パック・${total}枚</strong>が対象です。未記録のパックやカードがある場合、実際の封入傾向と差が出る可能性があります。</li><li>${topPose&&total?`記録枚数が最も多いポーズは<strong>${escapeHtml(topPose)}</strong>（${poseCounts[topPose]||0}枚、${pct(poseCounts[topPose]||0,total)}）です。`: 'ポーズの記録がまだありません。'}シリーズごとに設定されたポーズ種類数が異なるため、全体割合だけで優劣を断定しないでください。</li></ul>`;
  const sorted=state.members.map(m=>({m,n:counts[m],p:packPresence[m]})).sort((a,b)=>b.n-a.n||a.m.localeCompare(b.m,'ja'));
  document.getElementById('memberTable').innerHTML=table(['順位','メンバー','封入枚数','全写真比','出現パック数（出現したパック／記録済みパック）'],sorted.map((x,i)=>[i+1,escapeHtml(x.m),x.n,pct(x.n,total),`${x.p}／${packs.length}パック`]));
- document.getElementById('memberInsights').innerHTML=`<ul><li>${sorted.length&&sorted[0].n?`封入枚数最多は<strong>${escapeHtml(sorted[0].m)}</strong>で${sorted[0].n}枚（全記録の${pct(sorted[0].n,total)}）、${sorted[0].p}/${packs.length}パックに登場しています。`:'メンバーの記録がまだありません。'}</li><li>封入枚数は写真単位、出現パック数はパック単位の指標です。複数枚の記録がある場合は、両方を見て傾向を判断してください。</li></ul>`;
- document.getElementById('memberPoseTable').innerHTML=table(['メンバー',...poses.flatMap(p=>[`${p}枚数`,`${p}割合`]),'合計'],state.members.filter(m=>counts[m]).sort((a,b)=>counts[b]-counts[a]).map(m=>[escapeHtml(m),...poses.flatMap(p=>[memberPose[m][p]||0,pct(memberPose[m][p]||0,counts[m])]),counts[m]]));
+ document.getElementById('memberPoseTable').innerHTML=table(['メンバー',...poses.map(p=>`${p}割合`)],state.members.filter(m=>counts[m]).sort((a,b)=>counts[b]-counts[a]).map(m=>[escapeHtml(m),...poses.map(p=>pct(memberPose[m][p]||0,counts[m]))]));
  const pairData=[];
  for(let i=0;i<used.length;i++)for(let j=i+1;j<used.length;j++){
    const a=used[i],b=used[j];let together=0;
    packs.forEach(p=>{const set=new Set(p.cards.map(c=>c.member));if(set.has(a)&&set.has(b))together++});
-   const expected=packs.length?(packPresence[a]*packPresence[b]/packs.length):0;
-   pairData.push({a,b,together,condA:packPresence[a]?together/packPresence[a]:0,condB:packPresence[b]?together/packPresence[b]:0,expected,ratio:expected?together/expected:null});
+   pairData.push({a,b,together,condA:packPresence[a]?together/packPresence[a]:0,condB:packPresence[b]?together/packPresence[b]:0});
  }
- pairData.sort((a,b)=>b.together-a.together||(b.ratio||0)-(a.ratio||0));
- document.getElementById('pairTable').innerHTML=table(['メンバーA','メンバーB','同時封入','Aが出た時Bも','Bが出た時Aも','独立時期待回数','実績/期待'],pairData.slice(0,100).map(x=>[escapeHtml(x.a),escapeHtml(x.b),x.together,pct(x.together,packPresence[x.a]),pct(x.together,packPresence[x.b]),x.expected.toFixed(2),x.ratio===null?'—':x.ratio.toFixed(2)+'倍']));
- const strongestPair=pairData.find(x=>x.together>0);document.getElementById('pairInsights').innerHTML=`<ul><li>${strongestPair?`今回もっとも同時封入回数が多い組み合わせは<strong>${escapeHtml(strongestPair.a)} × ${escapeHtml(strongestPair.b)}</strong>で${strongestPair.together}パックです。`:'同時封入の記録がまだありません。'}</li><li>同時封入回数は、各メンバーの出現頻度や記録パック数の影響を受けます。回数だけで特別な封入ルールがあるとは判断できません。</li></ul>`;
+ pairData.sort((a,b)=>b.together-a.together||a.a.localeCompare(b.a,'ja')||a.b.localeCompare(b.b,'ja'));
+ document.getElementById('pairTable').innerHTML=table(['メンバーA','メンバーB','同時封入パック数','Aが出たパックのうちBも','Bが出たパックのうちAも'],pairData.slice(0,100).map(x=>[escapeHtml(x.a),escapeHtml(x.b),x.together,pct(x.together,packPresence[x.a]),pct(x.together,packPresence[x.b])]));
  const zero=pairData.filter(x=>x.together===0);
  document.getElementById('matrixTable').innerHTML=used.length?`<div class="tablewrap"><table class="matrix"><thead><tr><th>メンバー</th>${used.map(m=>`<th>${escapeHtml(m)}</th>`).join('')}</tr></thead><tbody>${used.map(a=>`<tr><th>${escapeHtml(a)}</th>${used.map(b=>{let n;if(a===b)n=packPresence[a];else n=pairData.find(x=>(x.a===a&&x.b===b)||(x.a===b&&x.b===a))?.together||0;return `<td style="background:rgba(116,87,217,${.04+.7*n/Math.max(1,packs.length)});">${n}</td>`}).join('')}</tr>`).join('')}</tbody></table></div><p class="muted">未同時封入のペア：${zero.length}組（記録されたメンバー間）。</p>`:'<div class="empty">まだ記録がありません。</div>';
  // 1枚目の表紙カードを除いた2〜5枚目を分析
