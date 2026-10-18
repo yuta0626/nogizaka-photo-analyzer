@@ -560,16 +560,19 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 </section>
 <section class="panel" id="overview">
 <div class="stats" id="overviewStats"></div>
+<div class="card"><h2>全体分析の考察</h2><div id="overviewInsights" class="muted"></div></div>
 <div class="card"><h2>ポーズ構成パターン</h2><p class="muted">各パックのヨリ・チュウ・ヒキ枚数の組み合わせ。記録済みパックのみ対象。</p><div id="posePatterns"></div></div>
 <div class="card"><h2>シリーズごとのポーズ種類数</h2><p class="muted">シリーズに設定されているポーズ数の内訳です。</p><div id="overviewNotes"></div></div>
-<div class="card"><h2>ポーズ別の出現状況</h2><p class="muted">ポーズの種類数がシリーズごとに異なるため、単純な枚数割合だけでなく、そのポーズを封入できるシリーズのパック数を分母にした出現率も表示します。</p><div id="poseTotals"></div></div>
+<div class="card"><h2>ポーズ別の出現状況</h2><p class="muted">ポーズごとの記録枚数と、設定上そのポーズが入るシリーズで実際に記録されたパック数を確認します。</p><div id="poseTotals"></div></div>
 </section>
 <section class="panel" id="members">
 <div class="card"><h2>メンバー別の出現頻度</h2><p class="muted">封入枚数は記録されたカード枚数、出現パック数はそのメンバーが1枚以上含まれたパック数です。パック数がシリーズをまたいで集計されます。</p><div id="memberTable"></div></div>
+<div class="card"><h2>メンバー分析の考察</h2><div id="memberInsights" class="muted"></div></div>
 <div class="card"><h2>メンバー別ポーズ内訳</h2><div id="memberPoseTable"></div></div>
 </section>
 <section class="panel" id="pairs">
 <div class="card"><h2>一緒に出たメンバーのペア</h2><p class="muted">同じパックに入ったメンバーの組み合わせを集計します。「Aが出たパックのうちBも出た割合」と「Bが出たパックのうちAも出た割合」は分母が異なります。期待回数との比較は参考値で、封入ルールを証明するものではありません。</p><div id="pairTable"></div></div>
+<div class="card"><h2>同時封入の考察</h2><div id="pairInsights" class="muted"></div></div>
 <div class="card"><h2>同時封入マトリクス</h2><p class="muted">記録があるメンバーのみ表示。対角線はそのメンバーが出たパック数です。</p><div id="matrixTable"></div></div>
 <div class="notice">「一度も同時に出ない」は、今回のデータで未観測という意味です。封入仕様として共存しないと断定するには、より多くのパックや商品仕様の確認が必要です。</div>
 </section>
@@ -586,7 +589,7 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 <div class="card" style="background:#faf9ff;margin:12px 0"><h2>シリーズ管理</h2><div class="row"><button class="btn danger" id="deleteSeries">選択中のシリーズを削除</button></div><div class="row" style="margin-top:10px"><div class="field"><label for="editSeriesName">選択中のシリーズ名を編集</label><input id="editSeriesName" placeholder="新しいシリーズ名" /></div><button class="btn secondary" id="renameSeries">シリーズ名を保存</button></div><div class="row" style="margin-top:10px"><div class="field"><label for="newSeriesName">新しいシリーズ名</label><input id="newSeriesName" placeholder="例：2026 Halloween" /></div><button class="btn" id="addSeries">新規シリーズを追加</button></div><p class="muted" style="margin-bottom:0">シリーズ名は自由に設定できます。シリーズの選択と開封結果の表示／非表示は「開封記録」タブで行います。非表示にしても記録は削除されず、分析・所持枚数には反映されます。</p></div>
 <div class="card"><h2>シリーズの表示順</h2><p class="muted">ここで順番を変更すると、所持生写真一覧や設定・データ内のシリーズ選択プルダウンに反映されます。開封記録のシリーズ順も同じ順番になります。データや記録内容は変更されません。</p><div class="row"><div class="field"><label for="seriesOrderSelect">並び替えるシリーズ</label><select id="seriesOrderSelect"></select></div><button type="button" class="btn secondary" id="moveSeriesUp">↑ 上へ</button><button type="button" class="btn secondary" id="moveSeriesDown">↓ 下へ</button></div><p class="muted" id="seriesOrderHint" style="margin-bottom:0">シリーズを選び、上下ボタンで順番を変更してください。</p></div><div class="card"><h2>シリーズごとのメンバー設定</h2><p class="muted">シリーズを選んで、そのシリーズで登場するメンバーを1行に1人ずつ設定します。開封記録のメンバー選択肢と所持生写真一覧に反映されます。お気に入りに設定したメンバーは、開封記録のメンバー欄が黄色で表示されます。</p><div class="row"><div class="field"><label for="memberSeries">シリーズ</label><select id="memberSeries"></select></div></div><textarea id="seriesMemberNames" style="margin-top:10px" placeholder="1行に1人ずつ入力"></textarea><div class="row" style="margin-top:10px"><button class="btn" id="saveSeriesMembers">このシリーズのメンバーを保存</button><button class="btn secondary" id="resetSeriesMembers">全メンバー設定に戻す</button></div></div><div class="card"><h2>お気に入りメンバー設定（全シリーズ共通）</h2><p class="muted">お気に入りはシリーズ共通です。ここで選択すると、開封記録のメンバー欄が色付きになり、所持生写真一覧のお気に入り表示・絞り込みにも反映されます。所持生写真一覧から個別に設定する必要はありません。</p><div id="favoriteMemberSettings" class="favorite-member-settings"></div></div><div class="card"><h2>全体のメンバー一覧（分析用）</h2><p class="muted">全シリーズの分析で使用するメンバー一覧です。通常はシリーズごとの設定を使ってください。</p><textarea id="memberNames"></textarea><div class="row" style="margin-top:10px"><button class="btn" id="saveMembers">分析用メンバー一覧を保存</button><button class="btn secondary" id="resetMembers">公式掲載の初期メンバーに戻す</button></div></div>
 <div class="card"><h2>データのバックアップ</h2><p class="muted">JSONで保存・復元できます。CSVは記録済みの50枚以上のデータを表計算ソフトで分析するのに便利です。</p><div class="row"><button class="btn" id="exportJson">JSONを書き出す</button><button class="btn secondary" id="exportCsv">CSVを書き出す</button><div class="field"><label>JSONファイルを読み込む</label><input type="file" id="importJson" accept=".json,application/json"></div></div></div>
-<div class="card"><h2>分析上の注意</h2><ul class="muted"><li>シリーズごとにポーズ種類数が3〜5種類で異なるため、ポーズの単純な全体割合は封入対象の違いを含みます。「ポーズ別の出現状況」では、そのポーズが設定されたシリーズの対象パックに対する出現率も確認してください。</li><li>記録数が少ない場合は偶然の偏りが大きく出ます。</li><li>同時封入はパック単位の観測です。カード配置順が不明なら、封入順や隣接関係は分析できません。</li><li>次のパックの確率は、封入方式が分からない限り過去の頻度から正確には予測できません。</li><li>全体分析はシリーズを合算します。シリーズ間で封入条件が異なる場合、全体の頻度は参考値として解釈してください。</li></ul></div>
+<div class="card"><h2>分析上の注意</h2><ul class="muted"><li>シリーズごとにポーズ種類数が3〜5種類で異なるため、ポーズの単純な全体割合は封入対象の違いを含みます。ポーズの対象パック数はシリーズごとの設定差を含みます。出現率を単純比較するのではなく、対象パック数と記録枚数を合わせて確認してください。</li><li>記録数が少ない場合は偶然の偏りが大きく出ます。</li><li>同時封入はパック単位の観測です。カード配置順が不明なら、封入順や隣接関係は分析できません。</li><li>次のパックの確率は、封入方式が分からない限り過去の頻度から正確には予測できません。</li><li>全体分析はシリーズを合算します。シリーズ間で封入条件が異なる場合、全体の頻度は参考値として解釈してください。</li></ul></div>
 </section>
 </main>
 <footer class="muted" style="padding:0 0 30px">データは端末内のブラウザーに保存されます。共有端末ではJSONバックアップを安全に管理してください。</footer>
@@ -711,13 +714,16 @@ function render(){
  ['記録済みパック',packs.length,'パック'],['記録済み写真',total,'枚'],['出現したメンバー',used.length,`/ ${state.members.length}人`]
  ].map(x=>`<div class="stat"><span>${x[0]}</span><strong>${x[1]}</strong><span>${x[2]}</span></div>`).join('');
  document.getElementById('posePatterns').innerHTML=table(['構成パターン','パック数','記録済みパック比'],Object.entries(poseKeys).sort((a,b)=>b[1]-a[1]).map(([k,v])=>[k,v,pct(v,packs.length)]));
- const poseStats=poses.map(p=>{const eligible=packs.filter(pack=>{const sr=state.series.find(x=>x.id===pack.seriesId);return sr&&seriesPoses(sr).includes(p)});const packsWithPose=eligible.filter(pack=>pack.cards.some(c=>c.pose===p)).length;return [p,poseCounts[p]||0,pct(poseCounts[p]||0,total),`${packsWithPose}/${eligible.length}パック`,pct(packsWithPose,eligible.length),`<div class="bar"><i style="width:${eligible.length?100*packsWithPose/eligible.length:0}%"></i></div>`]});
- document.getElementById('poseTotals').innerHTML=table(['ポーズ','記録枚数','全写真に占める割合','対象パックでの出現数','対象パックでの出現率','出現率'],poseStats);
+ const poseStats=poses.map(p=>{const eligible=packs.filter(pack=>{const sr=state.series.find(x=>x.id===pack.seriesId);return sr&&seriesPoses(sr).includes(p)});const packsWithPose=eligible.filter(pack=>pack.cards.some(c=>c.pose===p)).length;return [p,poseCounts[p]||0,pct(poseCounts[p]||0,total),`${packsWithPose}/${eligible.length}パック`]});
+ document.getElementById('poseTotals').innerHTML=table(['ポーズ','記録枚数','全写真に占める割合','対象パックでの出現数（出現パック数／対象パック数）'],poseStats);
  const poseTypeCounts={};state.series.forEach(sr=>{const n=seriesPoses(sr).length;poseTypeCounts[n]=(poseTypeCounts[n]||0)+1});
  document.getElementById('overviewNotes').innerHTML=`<ul><li>シリーズごとのポーズ種類数：${Object.keys(poseTypeCounts).sort((a,b)=>Number(a)-Number(b)).map(n=>`<b>${n}種類</b>のシリーズが${poseTypeCounts[n]}件`).join('、')||'データなし'}。</li></ul>`;
+ const topPose=[...poses].sort((a,b)=>(poseCounts[b]||0)-(poseCounts[a]||0))[0];
+ document.getElementById('overviewInsights').innerHTML=`<ul><li>記録は<strong>${packs.length}パック・${total}枚</strong>が対象です。未記録のパックやカードがある場合、実際の封入傾向と差が出る可能性があります。</li><li>${topPose&&total?`記録枚数が最も多いポーズは<strong>${escapeHtml(topPose)}</strong>（${poseCounts[topPose]||0}枚、${pct(poseCounts[topPose]||0,total)}）です。`: 'ポーズの記録がまだありません。'}シリーズごとに設定されたポーズ種類数が異なるため、全体割合だけで優劣を断定しないでください。</li></ul>`;
  const sorted=state.members.map(m=>({m,n:counts[m],p:packPresence[m]})).sort((a,b)=>b.n-a.n||a.m.localeCompare(b.m,'ja'));
- document.getElementById('memberTable').innerHTML=table(['順位','メンバー','封入枚数','全写真比','出現パック数','パック出現率','頻度'],sorted.map((x,i)=>[i+1,escapeHtml(x.m),x.n,pct(x.n,total),x.p,pct(x.p,packs.length),`<div class="bar"><i style="width:${used.length?100*x.n/Math.max(1,sorted[0].n):0}%"></i></div>`]));
- document.getElementById('memberPoseTable').innerHTML=table(['メンバー',...poses,'合計'],state.members.filter(m=>counts[m]).sort((a,b)=>counts[b]-counts[a]).map(m=>[escapeHtml(m),...poses.map(p=>memberPose[m][p]||0),counts[m]]));
+ document.getElementById('memberTable').innerHTML=table(['順位','メンバー','封入枚数','全写真比','出現パック数（出現したパック／記録済みパック）'],sorted.map((x,i)=>[i+1,escapeHtml(x.m),x.n,pct(x.n,total),`${x.p}／${packs.length}パック`]));
+ document.getElementById('memberInsights').innerHTML=`<ul><li>${sorted.length&&sorted[0].n?`封入枚数最多は<strong>${escapeHtml(sorted[0].m)}</strong>で${sorted[0].n}枚（全記録の${pct(sorted[0].n,total)}）、${sorted[0].p}/${packs.length}パックに登場しています。`:'メンバーの記録がまだありません。'}</li><li>封入枚数は写真単位、出現パック数はパック単位の指標です。複数枚の記録がある場合は、両方を見て傾向を判断してください。</li></ul>`;
+ document.getElementById('memberPoseTable').innerHTML=table(['メンバー',...poses.flatMap(p=>[`${p}枚数`,`${p}割合`]),'合計'],state.members.filter(m=>counts[m]).sort((a,b)=>counts[b]-counts[a]).map(m=>[escapeHtml(m),...poses.flatMap(p=>[memberPose[m][p]||0,pct(memberPose[m][p]||0,counts[m])]),counts[m]]));
  const pairData=[];
  for(let i=0;i<used.length;i++)for(let j=i+1;j<used.length;j++){
    const a=used[i],b=used[j];let together=0;
@@ -727,6 +733,7 @@ function render(){
  }
  pairData.sort((a,b)=>b.together-a.together||(b.ratio||0)-(a.ratio||0));
  document.getElementById('pairTable').innerHTML=table(['メンバーA','メンバーB','同時封入','Aが出た時Bも','Bが出た時Aも','独立時期待回数','実績/期待'],pairData.slice(0,100).map(x=>[escapeHtml(x.a),escapeHtml(x.b),x.together,pct(x.together,packPresence[x.a]),pct(x.together,packPresence[x.b]),x.expected.toFixed(2),x.ratio===null?'—':x.ratio.toFixed(2)+'倍']));
+ const strongestPair=pairData.find(x=>x.together>0);document.getElementById('pairInsights').innerHTML=`<ul><li>${strongestPair?`今回もっとも同時封入回数が多い組み合わせは<strong>${escapeHtml(strongestPair.a)} × ${escapeHtml(strongestPair.b)}</strong>で${strongestPair.together}パックです。`:'同時封入の記録がまだありません。'}</li><li>同時封入回数は、各メンバーの出現頻度や記録パック数の影響を受けます。回数だけで特別な封入ルールがあるとは判断できません。</li></ul>`;
  const zero=pairData.filter(x=>x.together===0);
  document.getElementById('matrixTable').innerHTML=used.length?`<div class="tablewrap"><table class="matrix"><thead><tr><th>メンバー</th>${used.map(m=>`<th>${escapeHtml(m)}</th>`).join('')}</tr></thead><tbody>${used.map(a=>`<tr><th>${escapeHtml(a)}</th>${used.map(b=>{let n;if(a===b)n=packPresence[a];else n=pairData.find(x=>(x.a===a&&x.b===b)||(x.a===b&&x.b===a))?.together||0;return `<td style="background:rgba(116,87,217,${.04+.7*n/Math.max(1,packs.length)});">${n}</td>`}).join('')}</tr>`).join('')}</tbody></table></div><p class="muted">未同時封入のペア：${zero.length}組（記録されたメンバー間）。</p>`:'<div class="empty">まだ記録がありません。</div>';
  // 1枚目の表紙カードを除いた2〜5枚目を分析
