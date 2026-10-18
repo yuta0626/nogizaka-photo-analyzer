@@ -561,15 +561,15 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 <section class="panel" id="overview">
 <div class="stats" id="overviewStats"></div>
 <div class="card"><h2>ポーズ構成パターン</h2><p class="muted">各パックのヨリ・チュウ・ヒキ枚数の組み合わせ。記録済みパックのみ対象。</p><div id="posePatterns"></div></div>
-<div class="card"><h2>メンバー重複・パック内の特徴</h2><div id="overviewNotes"></div></div>
-<div class="card"><h2>ポーズ別の総枚数</h2><div id="poseTotals"></div></div>
+<div class="card"><h2>パック記録の充実度・構成</h2><p class="muted">記録の入力状況と、シリーズごとのポーズ種類数を確認します。</p><div id="overviewNotes"></div></div>
+<div class="card"><h2>ポーズ別の出現状況</h2><p class="muted">ポーズの種類数がシリーズごとに異なるため、単純な枚数割合だけでなく、そのポーズを封入できるシリーズのパック数を分母にした出現率も表示します。</p><div id="poseTotals"></div></div>
 </section>
 <section class="panel" id="members">
-<div class="card"><h2>メンバー別の出現頻度</h2><p class="muted">「出現パック数」は同じパックに同一メンバーが複数枚あっても1パックとして数えます。</p><div id="memberTable"></div></div>
+<div class="card"><h2>メンバー別の出現頻度</h2><p class="muted">封入枚数は記録されたカード枚数、出現パック数はそのメンバーが1枚以上含まれたパック数です。パック数がシリーズをまたいで集計されます。</p><div id="memberTable"></div></div>
 <div class="card"><h2>メンバー別ポーズ内訳</h2><div id="memberPoseTable"></div></div>
 </section>
 <section class="panel" id="pairs">
-<div class="card"><h2>一緒に出たメンバーのペア</h2><p class="muted">同時封入回数、Aが出たパックでBも出た割合、独立と仮定した期待回数との比率を表示します。重複枚数ではなく「同じパックにいたか」で判定します。</p><div id="pairTable"></div></div>
+<div class="card"><h2>一緒に出たメンバーのペア</h2><p class="muted">同じパックに入ったメンバーの組み合わせを集計します。「Aが出たパックのうちBも出た割合」と「Bが出たパックのうちAも出た割合」は分母が異なります。期待回数との比較は参考値で、封入ルールを証明するものではありません。</p><div id="pairTable"></div></div>
 <div class="card"><h2>同時封入マトリクス</h2><p class="muted">記録があるメンバーのみ表示。対角線はそのメンバーが出たパック数です。</p><div id="matrixTable"></div></div>
 <div class="notice">「一度も同時に出ない」は、今回のデータで未観測という意味です。封入仕様として共存しないと断定するには、より多くのパックや商品仕様の確認が必要です。</div>
 </section>
@@ -586,7 +586,7 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 <div class="card" style="background:#faf9ff;margin:12px 0"><h2>シリーズ管理</h2><div class="row"><button class="btn danger" id="deleteSeries">選択中のシリーズを削除</button></div><div class="row" style="margin-top:10px"><div class="field"><label for="editSeriesName">選択中のシリーズ名を編集</label><input id="editSeriesName" placeholder="新しいシリーズ名" /></div><button class="btn secondary" id="renameSeries">シリーズ名を保存</button></div><div class="row" style="margin-top:10px"><div class="field"><label for="newSeriesName">新しいシリーズ名</label><input id="newSeriesName" placeholder="例：2026 Halloween" /></div><button class="btn" id="addSeries">新規シリーズを追加</button></div><p class="muted" style="margin-bottom:0">シリーズ名は自由に設定できます。シリーズの選択と開封結果の表示／非表示は「開封記録」タブで行います。非表示にしても記録は削除されず、分析・所持枚数には反映されます。</p></div>
 <div class="card"><h2>シリーズの表示順</h2><p class="muted">ここで順番を変更すると、所持生写真一覧や設定・データ内のシリーズ選択プルダウンに反映されます。開封記録のシリーズ順も同じ順番になります。データや記録内容は変更されません。</p><div class="row"><div class="field"><label for="seriesOrderSelect">並び替えるシリーズ</label><select id="seriesOrderSelect"></select></div><button type="button" class="btn secondary" id="moveSeriesUp">↑ 上へ</button><button type="button" class="btn secondary" id="moveSeriesDown">↓ 下へ</button></div><p class="muted" id="seriesOrderHint" style="margin-bottom:0">シリーズを選び、上下ボタンで順番を変更してください。</p></div><div class="card"><h2>シリーズごとのメンバー設定</h2><p class="muted">シリーズを選んで、そのシリーズで登場するメンバーを1行に1人ずつ設定します。開封記録のメンバー選択肢と所持生写真一覧に反映されます。お気に入りに設定したメンバーは、開封記録のメンバー欄が黄色で表示されます。</p><div class="row"><div class="field"><label for="memberSeries">シリーズ</label><select id="memberSeries"></select></div></div><textarea id="seriesMemberNames" style="margin-top:10px" placeholder="1行に1人ずつ入力"></textarea><div class="row" style="margin-top:10px"><button class="btn" id="saveSeriesMembers">このシリーズのメンバーを保存</button><button class="btn secondary" id="resetSeriesMembers">全メンバー設定に戻す</button></div></div><div class="card"><h2>お気に入りメンバー設定（全シリーズ共通）</h2><p class="muted">お気に入りはシリーズ共通です。ここで選択すると、開封記録のメンバー欄が色付きになり、所持生写真一覧のお気に入り表示・絞り込みにも反映されます。所持生写真一覧から個別に設定する必要はありません。</p><div id="favoriteMemberSettings" class="favorite-member-settings"></div></div><div class="card"><h2>全体のメンバー一覧（分析用）</h2><p class="muted">全シリーズの分析で使用するメンバー一覧です。通常はシリーズごとの設定を使ってください。</p><textarea id="memberNames"></textarea><div class="row" style="margin-top:10px"><button class="btn" id="saveMembers">分析用メンバー一覧を保存</button><button class="btn secondary" id="resetMembers">公式掲載の初期メンバーに戻す</button></div></div>
 <div class="card"><h2>データのバックアップ</h2><p class="muted">JSONで保存・復元できます。CSVは記録済みの50枚以上のデータを表計算ソフトで分析するのに便利です。</p><div class="row"><button class="btn" id="exportJson">JSONを書き出す</button><button class="btn secondary" id="exportCsv">CSVを書き出す</button><div class="field"><label>JSONファイルを読み込む</label><input type="file" id="importJson" accept=".json,application/json"></div></div></div>
-<div class="card"><h2>分析上の注意</h2><ul class="muted"><li>10パックでは偶然の偏りが大きく出ることがあります。</li><li>同時封入はパック単位の観測です。カード配置順が不明なら、封入順や隣接関係は分析できません。</li><li>次のパックの確率は、封入方式が分からない限り過去の頻度から正確には予測できません。</li><li>全体分析はシリーズを合算します。シリーズ間で封入条件が異なる場合、全体の頻度は参考値として解釈してください。</li></ul></div>
+<div class="card"><h2>分析上の注意</h2><ul class="muted"><li>シリーズごとにポーズ種類数が3〜5種類で異なるため、ポーズの単純な全体割合は封入対象の違いを含みます。「ポーズ別の出現状況」では、そのポーズが設定されたシリーズの対象パックに対する出現率も確認してください。</li><li>記録数が少ない場合は偶然の偏りが大きく出ます。</li><li>同時封入はパック単位の観測です。カード配置順が不明なら、封入順や隣接関係は分析できません。</li><li>次のパックの確率は、封入方式が分からない限り過去の頻度から正確には予測できません。</li><li>全体分析はシリーズを合算します。シリーズ間で封入条件が異なる場合、全体の頻度は参考値として解釈してください。</li></ul></div>
 </section>
 </main>
 <footer class="muted" style="padding:0 0 30px">データは端末内のブラウザーに保存されます。共有端末ではJSONバックアップを安全に管理してください。</footer>
@@ -703,21 +703,21 @@ function render(){
  const counts=Object.fromEntries(state.members.map(m=>[m,0]));
  const packPresence=Object.fromEntries(state.members.map(m=>[m,0]));
  const poseCounts=Object.fromEntries(poses.map(p=>[p,0]));
- const memberPose=Object.fromEntries(state.members.map(m=>[m,{ヨリ:0,チュウ:0,ヒキ:0}]));
+ const memberPose=Object.fromEntries(state.members.map(m=>[m,Object.fromEntries(poses.map(p=>[p,0]))]));
  packs.forEach(p=>{const seen=new Set();p.cards.forEach(c=>{counts[c.member]=(counts[c.member]||0)+1;memberPose[c.member][c.pose]++;poseCounts[c.pose]++;seen.add(c.member)});seen.forEach(m=>packPresence[m]=(packPresence[m]||0)+1)});
  const used=state.members.filter(m=>counts[m]>0);
- const repeatedPacks=packs.filter(p=>{const ms=p.cards.map(c=>c.member);return new Set(ms).size<ms.length}).length;
- const poseKeys={};packs.forEach(p=>{const n={ヨリ:0,チュウ:0,ヒキ:0};p.cards.forEach(c=>n[c.pose]++);const k=`ヨリ${n.ヨリ}・チュウ${n.チュウ}・ヒキ${n.ヒキ}`;poseKeys[k]=(poseKeys[k]||0)+1;});
+ const poseKeys={};packs.forEach(p=>{const n={};p.cards.forEach(c=>{n[c.pose]=(n[c.pose]||0)+1});const sr=state.series.find(x=>x.id===p.seriesId);const k=(sr?seriesPoses(sr):poses).map(pose=>`${pose}${n[pose]||0}`).join('・');poseKeys[k]=(poseKeys[k]||0)+1;});
  document.getElementById('overviewStats').innerHTML=[
- ['記録済みパック',packs.length,'パック'],['記録済み写真',total,'枚'],['出現したメンバー',used.length,'/ 33人'],['同一メンバー重複パック',repeatedPacks,'パック']
+ ['記録済みパック',packs.length,'パック'],['記録済み写真',total,'枚'],['出現したメンバー',used.length,`/ ${state.members.length}人`],['1パック平均の記録枚数',packs.length?(total/packs.length).toFixed(2):'0.00','枚']
  ].map(x=>`<div class="stat"><span>${x[0]}</span><strong>${x[1]}</strong><span>${x[2]}</span></div>`).join('');
  document.getElementById('posePatterns').innerHTML=table(['構成パターン','パック数','記録済みパック比'],Object.entries(poseKeys).sort((a,b)=>b[1]-a[1]).map(([k,v])=>[k,v,pct(v,packs.length)]));
- document.getElementById('poseTotals').innerHTML=table(['ポーズ','枚数','写真全体に占める割合','内訳'],poses.map(p=>[p,poseCounts[p],pct(poseCounts[p],total),`<div class="bar"><i style="width:${total?100*poseCounts[p]/total:0}%"></i></div>`]));
- const full=packs.filter(p=>p.cards.length===5).length;
- document.getElementById('overviewNotes').innerHTML=`<ul><li>5枚すべて入力済みのパック：<b>${full}</b> / ${packs.length}</li><li>同一メンバーが同じパックに複数枚入ったパック：<b>${repeatedPacks}</b></li><li>記録上のメンバー平均出現枚数（33人）：<b>${(total/33).toFixed(2)}</b>枚</li><li>全員均等と仮定した単純期待値：1人あたり約${(total/33).toFixed(2)}枚。ただし封入方式や重複可否により、この比較は参考値です。</li></ul>`;
+ const poseStats=poses.map(p=>{const eligible=packs.filter(pack=>{const sr=state.series.find(x=>x.id===pack.seriesId);return sr&&seriesPoses(sr).includes(p)});const packsWithPose=eligible.filter(pack=>pack.cards.some(c=>c.pose===p)).length;return [p,poseCounts[p]||0,pct(poseCounts[p]||0,total),`${packsWithPose}/${eligible.length}パック`,pct(packsWithPose,eligible.length),`<div class="bar"><i style="width:${eligible.length?100*packsWithPose/eligible.length:0}%"></i></div>`]});
+ document.getElementById('poseTotals').innerHTML=table(['ポーズ','記録枚数','全写真に占める割合','対象パックでの出現数','対象パックでの出現率','出現率'],poseStats);
+ const full=packs.filter(p=>p.cards.length===5).length;const partial=packs.filter(p=>p.cards.length>0&&p.cards.length<5).length;const blank=state.series.reduce((n,sr)=>n+sr.packs.filter(pack=>!pack.some(c=>c.member&&c.pose)).length,0);const poseTypeCounts={};state.series.forEach(sr=>{const n=seriesPoses(sr).length;poseTypeCounts[n]=(poseTypeCounts[n]||0)+1});const mostCommonPattern=Object.entries(poseKeys).sort((a,b)=>b[1]-a[1])[0];
+ document.getElementById('overviewNotes').innerHTML=`<ul><li>5枚すべて記録済み：<b>${full}</b>パック（記録済みパックの${pct(full,packs.length)}）</li><li>一部のみ記録済み：<b>${partial}</b>パック。入力途中の可能性があります。</li><li>未入力のパック欄：<b>${blank}</b>パック（未開封・未入力の区別は記録だけではできません）。</li><li>シリーズのポーズ種類数：${Object.keys(poseTypeCounts).sort().map(n=>`<b>${n}種類</b>が${poseTypeCounts[n]}シリーズ`).join('、')||'データなし'}。</li><li>最も多い記録上のポーズ構成：<b>${mostCommonPattern?escapeHtml(mostCommonPattern[0]):'—'}</b>（${mostCommonPattern?mostCommonPattern[1]:0}パック）。</li></ul>`;
  const sorted=state.members.map(m=>({m,n:counts[m],p:packPresence[m]})).sort((a,b)=>b.n-a.n||a.m.localeCompare(b.m,'ja'));
  document.getElementById('memberTable').innerHTML=table(['順位','メンバー','封入枚数','全写真比','出現パック数','パック出現率','頻度'],sorted.map((x,i)=>[i+1,escapeHtml(x.m),x.n,pct(x.n,total),x.p,pct(x.p,packs.length),`<div class="bar"><i style="width:${used.length?100*x.n/Math.max(1,sorted[0].n):0}%"></i></div>`]));
- document.getElementById('memberPoseTable').innerHTML=table(['メンバー','ヨリ','チュウ','ヒキ','合計'],state.members.filter(m=>counts[m]).sort((a,b)=>counts[b]-counts[a]).map(m=>[escapeHtml(m),memberPose[m].ヨリ,memberPose[m].チュウ,memberPose[m].ヒキ,counts[m]]));
+ document.getElementById('memberPoseTable').innerHTML=table(['メンバー',...poses,'合計'],state.members.filter(m=>counts[m]).sort((a,b)=>counts[b]-counts[a]).map(m=>[escapeHtml(m),...poses.map(p=>memberPose[m][p]||0),counts[m]]));
  const pairData=[];
  for(let i=0;i<used.length;i++)for(let j=i+1;j<used.length;j++){
    const a=used[i],b=used[j];let together=0;
@@ -741,7 +741,7 @@ function render(){
  document.getElementById('coverPoseTable').innerHTML=selectedCover?table(['ポーズ','残り4枚での枚数','残りカードに占める割合'],poses.map(p=>[p,coverPoses[p]||0,pct(coverPoses[p]||0,remainingCards.length)])):'<div class="empty">表紙メンバーを選択してください。</div>';
  const coverPairRows=[];for(const cover of state.members){const rs=validCoverRecords.filter(x=>x.cover===cover);if(!rs.length)continue;for(const m of state.members){let n=0;rs.forEach(x=>{if(x.remaining.some(c=>c.member===m))n++});if(n>0)coverPairRows.push([cover,m,rs.length,n,pct(n,rs.length)]);}}
  document.getElementById('coverPairTable').innerHTML=table(['表紙メンバー（1枚目）','残り4枚のメンバー','表紙パック数','同封パック数','同封率'],coverPairRows.sort((a,b)=>b[4].localeCompare(a[4])||b[3]-a[3]).map(r=>[escapeHtml(r[0]),escapeHtml(r[1]),r[2],r[3],r[4]]));
- document.getElementById('packSummary').innerHTML=table(['シリーズ','パック','入力枚数','ヨリ','チュウ','ヒキ','メンバー重複','メンバー一覧'],packs.map(p=>{const n={ヨリ:0,チュウ:0,ヒキ:0};p.cards.forEach(c=>n[c.pose]++);const ms=p.cards.map(c=>c.member);return [escapeHtml(p.seriesName),p.index+1, p.cards.length,n.ヨリ,n.チュウ,n.ヒキ,new Set(ms).size<ms.length?'あり':'なし',ms.map(escapeHtml).join('、')]}));
+ document.getElementById('packSummary').innerHTML=table(['シリーズ','パック','入力枚数','ポーズ構成','メンバー一覧'],packs.map(p=>{const n={};p.cards.forEach(c=>n[c.pose]=(n[c.pose]||0)+1);return [escapeHtml(p.seriesName),p.index+1,p.cards.length,Object.entries(n).map(([pose,count])=>`${escapeHtml(pose)} ${count}`).join(' / '),p.cards.map(c=>escapeHtml(c.member)).join('、')]}));
  const sims=[];
  for(let i=0;i<packs.length;i++)for(let j=i+1;j<packs.length;j++){const a=new Set(packs[i].cards.map(c=>c.member)),b=new Set(packs[j].cards.map(c=>c.member));const inter=[...a].filter(x=>b.has(x)).length,union=new Set([...a,...b]).size;sims.push([packs[i].label,packs[j].label,inter,union?`${(100*inter/union).toFixed(1)}%`:'—',inter===0?'共通なし':'共通あり']);}
  sims.sort((a,b)=>b[2]-a[2]);
