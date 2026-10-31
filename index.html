@@ -565,6 +565,33 @@ table th{background:#eeeae0;color:#33435a}
  nav button{border-radius:8px;font-size:10px;font-weight:700;letter-spacing:0}
  .inventory-series-bar{top:92px;padding:7px 8px;margin-bottom:8px!important}
 }
+
+/* final40: iPhoneの所持一覧で、シリーズ選択欄の下に表ヘッダーを固定 */
+@media (max-width:720px) {
+  #inventoryList .inventory-table-wrap {
+    overflow: visible !important;
+    overflow-x: visible !important;
+    max-height: none !important;
+    height: auto !important;
+    -webkit-overflow-scrolling: auto !important;
+  }
+  #inventoryList .inventory-table thead th {
+    position: sticky !important;
+    top: 145px !important;
+    z-index: 20 !important;
+    background: #eeeae0 !important;
+  }
+  #inventoryList .inventory-table thead th.member-col {
+    left: 0 !important;
+    z-index: 22 !important;
+  }
+  #inventoryList .inventory-table tbody td.member-col {
+    position: sticky !important;
+    left: 0 !important;
+    z-index: 5 !important;
+  }
+}
+
 </style>
 </head>
 <body>
