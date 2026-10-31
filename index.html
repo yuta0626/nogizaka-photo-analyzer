@@ -533,6 +533,38 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
   max-width:var(--pose-col-width)!important;
   box-sizing:border-box!important;
 }
+
+/* final39: 上質感のあるネイビー×シャンパンゴールド */
+:root{--bg:#f3f1eb;--card:#fffefa;--ink:#242b38;--muted:#777b83;--line:#dedbd1;--accent:#263b57;--accent2:#eee8d8;--good:#39745d;--warn:#9b7130;--bad:#a94b55}
+body{background:linear-gradient(180deg,#f1efe8 0%,#f7f6f2 38%,#f3f1eb 100%);color:var(--ink);letter-spacing:.012em}
+header{background:linear-gradient(112deg,#17283d 0%,#263d58 58%,#806d4d 130%);color:#fff;padding-top:24px;padding-bottom:22px;border-bottom:3px solid #b59a62;box-shadow:0 5px 20px #18283a22}
+header h1{letter-spacing:.055em;font-weight:750}
+header p{color:#e5e0d5;letter-spacing:.02em}
+nav{background:rgba(247,246,242,.96);backdrop-filter:blur(12px);border-bottom:1px solid #d8d2c4;box-shadow:0 5px 16px #1d2a3b10}
+nav button{background:#fffefa;border:1px solid #d9d3c5;color:#394456;border-radius:9px;box-shadow:0 1px 2px #18283a08;transition:background .15s,border-color .15s}
+nav button.active{background:linear-gradient(135deg,#263b57,#405777);border-color:#b59a62;color:#fff;box-shadow:0 2px 7px #1c304b30}
+.card{background:rgba(255,254,250,.97);border:1px solid #e0dbcf;border-radius:15px;box-shadow:0 5px 18px #2934470b}
+h2{color:#24364e;letter-spacing:.025em}
+h3{color:#39485b}
+.btn{background:linear-gradient(135deg,#263b57,#405777);border:1px solid #b59a62;box-shadow:0 2px 5px #1d2d4215}
+.btn.secondary{background:#f1ecdf;color:#35445a;border:1px solid #d9ceb5;box-shadow:none}
+.btn.danger{background:#fff2f0;border-color:#e7c8c1;color:#984c49}
+input,select,textarea{border-color:#d5d0c4;background:#fffefa;color:#29364a}
+input:focus,select:focus,textarea:focus{outline:2px solid #b59a6266;border-color:#a58c5c}
+.stat,.pack,.inventory-item{background:#fffefa;border-color:#e0dbcf;box-shadow:0 2px 8px #27364a08}
+.inventory-series-bar{position:sticky;top:82px;z-index:30;background:rgba(255,254,250,.97);backdrop-filter:blur(10px);padding:9px 10px;margin:0 -2px 10px!important;border:1px solid #d8cfbc;border-radius:11px;box-shadow:0 4px 12px #26364b18}
+.inventory-series-bar label{color:#6c624f;font-weight:700}
+.inventory-series-bar select{border-color:#b9a77f;font-weight:650;background:#fffefa}
+.inventory-table-wrap{border-color:#d9d3c5;box-shadow:inset 0 1px 3px #26364b08}
+.inventory-table th{background:#eeeae0;color:#33435a}
+.tablewrap{border-color:#ded8ca}
+table th{background:#eeeae0;color:#33435a}
+@media(max-width:720px){
+ header{padding:15px 12px 13px}
+ nav{background:rgba(247,246,242,.97)}
+ nav button{border-radius:8px;font-size:10px;font-weight:700;letter-spacing:0}
+ .inventory-series-bar{top:92px;padding:7px 8px;margin-bottom:8px!important}
+}
 </style>
 </head>
 <body>
@@ -545,7 +577,7 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 <section class="panel" id="record">
 <div class="card">
 <div class="panel-heading"><h2>開封結果を入力</h2><button type="button" class="btn secondary undo-button" data-undo>↶ 1つ戻る</button></div>
-<p class="muted">シリーズごとに開封結果を記録できます。分析タブでは全シリーズを合算して集計します。各パック5枚です。同じパック内で同じメンバーが重複しないように選択肢を制御します。</p>
+
 <div class="row" style="margin:10px 0;align-items:end"><div class="field"><label for="seriesSelect">開封記録を編集するシリーズ</label><select id="seriesSelect"></select></div><button class="btn secondary" id="toggleOpeningVisibility">このシリーズの開封結果を非表示</button></div>
 <div class="card" style="margin:12px 0"><h3>シリーズごとのポーズ設定</h3><p class="muted">現在選択中のシリーズのポーズを3〜5種類に設定できます。4種目・5種目は仮の名前で、あとから変更できます。</p><div class="pose-settings" id="poseSettings" style="margin-top:12px"></div><div class="row" style="margin-top:10px"><button class="btn" id="savePoses">ポーズ設定を保存</button></div></div>
 <div id="openingRecordContent">
@@ -556,7 +588,7 @@ label{font-size:13px;color:var(--muted);display:block;margin-bottom:5px}input,se
 </div>
 </section>
 <section class="panel active" id="inventory">
-<div class="card"><div class="panel-heading"><h2>所持生写真一覧</h2><button type="button" class="btn secondary undo-button" data-undo>↶ 1つ戻る</button></div><p class="muted">上のプルダウンからシリーズを選択できます。登録済みの写真と枚数調整を反映して所持枚数を表示します。🔒ロック中は誤操作防止のため、所持数・お気に入りを変更できません。</p><div class="row" style="margin:10px 0"><div class="field"><label for="inventorySeriesSelect">表示するシリーズ</label><select id="inventorySeriesSelect"></select></div></div><div class="row inventory-actions" style="align-items:center;margin:10px 0"><button type="button" class="btn secondary" id="toggleAllLocks">全メンバーをロック</button><button type="button" class="btn secondary" id="cycleInventoryFilter">表示：お気に入りのみ</button></div><div id="inventorySummary" style="margin:12px 0"></div><div id="inventoryList"></div></div>
+<div class="card"><div class="panel-heading"><h2>所持生写真一覧</h2><button type="button" class="btn secondary undo-button" data-undo>↶ 1つ戻る</button></div><div class="row inventory-series-bar" id="inventorySeriesBar"><div class="field"><label for="inventorySeriesSelect">表示するシリーズ</label><select id="inventorySeriesSelect"></select></div></div><div class="row inventory-actions" style="align-items:center;margin:10px 0"><button type="button" class="btn secondary" id="toggleAllLocks">全メンバーをロック</button><button type="button" class="btn secondary" id="cycleInventoryFilter">表示：お気に入りのみ</button></div><div id="inventorySummary" style="margin:12px 0"></div><div id="inventoryList"></div></div>
 </section>
 <section class="panel" id="overview">
 <div class="stats" id="overviewStats"></div>
