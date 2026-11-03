@@ -566,8 +566,14 @@ table th{background:#eeeae0;color:#33435a}
  .inventory-series-bar{top:92px;padding:7px 8px;margin-bottom:8px!important}
 }
 
-/* final40: iPhoneの所持一覧で、シリーズ選択欄の下に表ヘッダーを固定 */
+/* final41: iPhoneでは、シリーズ選択バーと表見出しをナビゲーションの直下に連続して固定 */
 @media (max-width:720px) {
+  .inventory-series-bar {
+    position: sticky !important;
+    top: var(--inventory-nav-height, 0px) !important;
+    z-index: 950 !important;
+    background: rgba(247,246,242,.98) !important;
+  }
   #inventoryList .inventory-table-wrap {
     overflow: visible !important;
     overflow-x: visible !important;
@@ -577,13 +583,13 @@ table th{background:#eeeae0;color:#33435a}
   }
   #inventoryList .inventory-table thead th {
     position: sticky !important;
-    top: 145px !important;
-    z-index: 20 !important;
+    top: calc(var(--inventory-nav-height, 0px) + var(--inventory-series-height, 0px)) !important;
+    z-index: 930 !important;
     background: #eeeae0 !important;
   }
   #inventoryList .inventory-table thead th.member-col {
     left: 0 !important;
-    z-index: 22 !important;
+    z-index: 940 !important;
   }
   #inventoryList .inventory-table tbody td.member-col {
     position: sticky !important;
@@ -839,6 +845,21 @@ document.getElementById('exportCsv').onclick=()=>{const rows=[['series','pack','
 document.getElementById('importJson').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(!Array.isArray(d.members)||(!Array.isArray(d.packs)&&!Array.isArray(d.series)))throw Error('形式');if(!confirm('現在の記録を読み込んだデータで置き換えますか？'))return;normalizeSeriesData(d);persist();document.getElementById('packCount').value=String(Math.max(1,Math.min(500,currentSeries().packs.length||10)));document.getElementById('memberNames').value=state.members.join('\n');renderSeriesMemberSettings();renderFavoriteMemberSettings();renderEditor();renderInventory();render();alert('データを読み込みました。');}catch(err){alert('読み込めませんでした。対応するJSONファイルを選んでください。');}e.target.value='';};
 load();
 if(!lastPersistedSnapshot)lastPersistedSnapshot=JSON.stringify(state);
+
+// iPhone用固定ヘッダーの位置を、実際のナビゲーションとシリーズバーの高さから算出
+function updateInventoryStickyOffsets(){
+ const nav=document.querySelector('nav');
+ const seriesBar=document.getElementById('inventorySeriesBar');
+ if(!nav||!seriesBar)return;
+ const navHeight=Math.ceil(nav.getBoundingClientRect().height);
+ const seriesHeight=Math.ceil(seriesBar.getBoundingClientRect().height);
+ document.documentElement.style.setProperty('--inventory-nav-height',navHeight+'px');
+ document.documentElement.style.setProperty('--inventory-series-height',seriesHeight+'px');
+}
+updateInventoryStickyOffsets();
+window.addEventListener('resize',updateInventoryStickyOffsets,{passive:true});
+window.addEventListener('orientationchange',()=>setTimeout(updateInventoryStickyOffsets,120),{passive:true});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(updateInventoryStickyOffsets);
 document.getElementById('packCount').value=String(Math.max(1,Math.min(500,currentSeries().packs.length||10)));
 document.getElementById('memberNames').value=state.members.join('\n');
 document.getElementById('editSeriesName').value=currentSeries().name;
